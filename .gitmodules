@@ -1,3 +1,6 @@
 [submodule "nimble"]
 	path = nimble
 	url = https://github.com/apache/mynewt-nimble.git
+[submodule "freertos"]
+	path = freertos
+	url = https://github.com/aws/amazon-freertos.git
