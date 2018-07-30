@@ -70,6 +70,9 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
 
+  console_init();
+  hci_remap_init();
+
   /* Infinite loop */
   while (1)
   {
