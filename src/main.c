@@ -48,16 +48,25 @@
 #include "timers.h"
 #include "semphr.h"
 
-/* Private variables ---------------------------------------------------------*/
+/* Private define ------------------------------------------------------------*/
 
+/**< Size of the BLE application task. */
+#define APP_TASK_BLE_APP_SIZE           (configMINIMAL_STACK_SIZE * 4)
+/**< Priority of the BLE application task. */
+#define APP_TASK_BLE_APP_PRIORITY       (configMAX_PRIORITIES - 2)
+/**< Size of the BLE host task.*/
+#define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 4)
+/**< Priority of the BLE host task. */
+#define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 1)
 
 /* Private variables ---------------------------------------------------------*/
 
 
 /* Private function prototypes -----------------------------------------------*/
 
-void SystemClock_Config(void);
-static void MX_GPIO_Init(void);
+static void system_clock_config(void);
+static void led_init(void);
+static void ble_app_thread(void * arg);
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -72,27 +81,36 @@ int main(void)
   HAL_Init();
 
   /* Configure the system clock */
-  SystemClock_Config();
+  system_clock_config();
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
+  /* Initialize LED */
+  led_init();
 
+  /* Initialize console output */
   console_init();
+
+  /* Initialize remap for HCI */
   hci_remap_init();
 
-  /* Infinite loop */
-  while (1)
+  /* Application task definition */
+  if (pdPASS != xTaskCreate(ble_app_thread, "ble_app", APP_TASK_BLE_APP_SIZE,
+                            NULL, APP_TASK_BLE_APP_PRIORITY, NULL)) 
   {
-    HAL_Delay(500);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+    Error_Handler();
   }
+
+  /* Start scheduler */
+  vTaskStartScheduler();
+
+  /* We should never get here as control is now taken by the scheduler */
+  Error_Handler();
 }
 
 /**
   * @brief System Clock Configuration
   * @retval None
   */
-void SystemClock_Config(void)
+static void system_clock_config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
@@ -125,7 +143,7 @@ void SystemClock_Config(void)
 
   /**Configure the Systick interrupt time 
     */
-  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq()/1000);
+  HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / configTICK_RATE_HZ);
 
   /**Configure the Systick 
     */
@@ -142,34 +160,15 @@ void SystemClock_Config(void)
         * EVENT_OUT
         * EXTI
 */
-static void MX_GPIO_Init(void)
+static void led_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
-  __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOC_CLK_ENABLE();
-  __HAL_RCC_GPIOF_CLK_ENABLE();
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOF, GPIO_PIN_1, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-
-  /*Configure GPIO pin : PF1 */
-  GPIO_InitStruct.Pin = GPIO_PIN_1;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
-
-  /*Configure GPIO pins : PF2 PF3 PF4 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_4;
-  GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(GPIOF, &GPIO_InitStruct);
 
   /*Configure GPIO pin : PA2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -177,6 +176,20 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+/**
+  * @brief  Handle BLE application thread
+  * @param  thread not used
+  * @retval None
+  */
+static void ble_app_thread(void * arg)
+{
+  while(1)
+  {
+    vTaskDelay(500 / portTICK_PERIOD_MS);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+  }
 }
 
 /**
@@ -193,10 +206,13 @@ static void MX_GPIO_Init(void)
 void vApplicationStackOverflowHook( TaskHandle_t xTask,
                                     char * pcTaskName )
 {
-    portDISABLE_INTERRUPTS();
+  portDISABLE_INTERRUPTS();
 
-    /* Loop forever */
-    for( ; ; );
+  /* Loop forever */
+  while(1) {
+    HAL_Delay(100);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+  }
 }
 
 /**
