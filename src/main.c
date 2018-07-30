@@ -40,6 +40,13 @@
 
 #include "main.h"
 #include "stm32f1xx_hal.h"
+#include "console.h"
+#include "hci_remap.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
+#include "semphr.h"
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -170,6 +177,26 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+/**
+ * @brief Loop forever if stack overflow is detected.
+ *
+ * If configCHECK_FOR_STACK_OVERFLOW is set to 1,
+ * this hook provides a location for applications to
+ * define a response to a stack overflow.
+ *
+ * Use this hook to help identify that a stack overflow
+ * has occurred.
+ *
+ */
+void vApplicationStackOverflowHook( TaskHandle_t xTask,
+                                    char * pcTaskName )
+{
+    portDISABLE_INTERRUPTS();
+
+    /* Loop forever */
+    for( ; ; );
 }
 
 /**

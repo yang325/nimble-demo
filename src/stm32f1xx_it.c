@@ -126,7 +126,7 @@ void SysTick_Handler(void)
  */
 void HAL_SYSTICK_Callback( void )
 {
-  //xPortSysTickHandler();
+  xPortSysTickHandler();
 }
 
 /******************************************************************************/
