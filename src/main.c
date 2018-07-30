@@ -193,29 +193,6 @@ static void ble_app_thread(void * arg)
 }
 
 /**
- * @brief Loop forever if stack overflow is detected.
- *
- * If configCHECK_FOR_STACK_OVERFLOW is set to 1,
- * this hook provides a location for applications to
- * define a response to a stack overflow.
- *
- * Use this hook to help identify that a stack overflow
- * has occurred.
- *
- */
-void vApplicationStackOverflowHook( TaskHandle_t xTask,
-                                    char * pcTaskName )
-{
-  portDISABLE_INTERRUPTS();
-
-  /* Loop forever */
-  while(1) {
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-  }
-}
-
-/**
   * @brief  This function is executed in case of error occurrence.
   * @param  file: The file name as string.
   * @param  line: The line in file as a number.
