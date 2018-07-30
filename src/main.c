@@ -200,12 +200,11 @@ static void ble_app_thread(void * arg)
   */
 void _Error_Handler(char *file, int line)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
-  /* User can add his own implementation to report the HAL error return state */
   while(1)
   {
+    HAL_Delay(100);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
   }
-  /* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT
