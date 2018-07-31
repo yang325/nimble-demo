@@ -1,6 +1,11 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdarg.h>
 #include "stm32f1xx_hal.h"
+
+/* Private define ------------------------------------------------------------*/
+
+#define CONSOLE_BUFFER_LEN                             128
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -38,10 +43,16 @@ int console_printf(const char *fmt, ...)
 {
     va_list args;
     int num_chars;
+    char buffer[CONSOLE_BUFFER_LEN];
 
     va_start(args, fmt);
-    num_chars += vprintf(fmt, args);
+    num_chars = vsnprintf(buffer, CONSOLE_BUFFER_LEN, fmt, args);
     va_end(args);
+
+    if (num_chars > 0)
+    {
+      num_chars = (num_chars > CONSOLE_BUFFER_LEN) ? CONSOLE_BUFFER_LEN : num_chars;
+    }
 
     return num_chars;
 }

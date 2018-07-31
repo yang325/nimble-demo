@@ -1,0 +1,25 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/inc",
+                "${workspaceFolder}/driver/inc",
+                "${workspaceFolder}/cmsis/include",
+                "${workspaceFolder}/cmsis/device",
+                "${workspaceFolder}/freertos/lib/include",
+                "${workspaceFolder}/freertos/lib/include/private",
+                "${workspaceFolder}/freertos/lib/FreeRTOS/portable/GCC/ARM_CM3"
+            ],
+            "defines": [
+                "STM32F103xE",
+                "USE_HAL_DRIVER"
+            ],
+            "compilerPath": "/usr/bin/clang",
+            "cStandard": "c11",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "clang-x64"
+        }
+    ],
+    "version": 4
+}
