@@ -4,6 +4,6 @@
 /* Exported functions --------------------------------------------------------*/
 
 void console_init(void);
-
+int  console_printf(const char *fmt, ...);
 
 #endif

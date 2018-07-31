@@ -26,3 +26,23 @@ void console_init(void)
   }
 }
 
+/**
+ * Prints the specified format string to the console.
+ *
+ * @return                      The number of characters that would have been
+ *                                  printed if the console buffer were
+ *                                  unlimited.  This return value is analogous
+ *                                  to that of snprintf.
+ */
+int console_printf(const char *fmt, ...)
+{
+    va_list args;
+    int num_chars;
+
+    va_start(args, fmt);
+    num_chars += vprintf(fmt, args);
+    va_end(args);
+
+    return num_chars;
+}
+
