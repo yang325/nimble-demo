@@ -86,12 +86,6 @@ int main(void)
   /* Initialize LED */
   led_init();
 
-  /* Initialize console output */
-  console_init();
-
-  /* Initialize remap for HCI */
-  hci_remap_init();
-
   /* Application task definition */
   if (pdPASS != xTaskCreate(ble_app_thread, "ble_app", APP_TASK_BLE_APP_SIZE,
                             NULL, APP_TASK_BLE_APP_PRIORITY, NULL)) 
@@ -216,14 +210,10 @@ void _Error_Handler(char *file, int line)
   * @retval None
   */
 void assert_failed(uint8_t* file, uint32_t line)
-{ 
+{
+  console_printf("Wrong parameters value: file %s on line %d\n", file, line);
   vTaskSuspendAll();
-  console_printf("Wrong parameters value: file %s on line %d\r\n", file, line);
-  while(1)
-  {
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-  }
+  _Error_Handler(file, line);
 }
 #endif /* USE_FULL_ASSERT */
 
