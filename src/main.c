@@ -40,8 +40,6 @@
 
 #include "main.h"
 #include "stm32f1xx_hal.h"
-#include "console.h"
-#include "hci_remap.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -179,6 +177,7 @@ static void led_init(void)
   */
 static void ble_app_thread(void * arg)
 {
+  printf("Start APP task.\n");
   while(1)
   {
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -211,15 +210,25 @@ void _Error_Handler(char *file, int line)
   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-  console_printf("Wrong parameters value: file %s on line %d\n", file, line);
+  //console_printf("Wrong parameters value: file %s on line %d\n", file, line);
   vTaskSuspendAll();
-  _Error_Handler(file, line);
 }
 #endif /* USE_FULL_ASSERT */
 
 /**
   * @}
   */
+int _write(int file, char *ptr, int len)
+{
+  int idx;
+
+  for(idx = 0; idx < len; ++idx)
+  {
+    ITM_SendChar(ptr[idx]);
+  }
+
+  return len;
+}
 
 /**
   * @}
