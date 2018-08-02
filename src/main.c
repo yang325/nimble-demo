@@ -63,6 +63,7 @@
 /* Private function prototypes -----------------------------------------------*/
 
 static void system_clock_config(void);
+static void system_info_output(void);
 static void led_init(void);
 static void ble_app_thread(void * arg);
 
@@ -145,6 +146,23 @@ static void system_clock_config(void)
   HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/**
+  * @}
+  */
+static void system_info_output(void)
+{
+  uint8_t varient, revision;
+
+  printf("\n");
+
+  varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
+  revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
+  SystemCoreClockUpdate();
+
+  printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+  printf("- Core Frequency = %d Hz -\n", SystemCoreClock);
+}
+
 /** Configure pins as 
         * Analog 
         * Input 
@@ -177,7 +195,7 @@ static void led_init(void)
   */
 static void ble_app_thread(void * arg)
 {
-  printf("Start APP task.\n");
+  system_info_output();
   while(1)
   {
     vTaskDelay(500 / portTICK_PERIOD_MS);
@@ -193,11 +211,9 @@ static void ble_app_thread(void * arg)
   */
 void _Error_Handler(char *file, int line)
 {
-  while(1)
-  {
-    HAL_Delay(100);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-  }
+  printf("Error occurred: file %s on line %d\n", file, line);
+  /* Generate breakpoint if debugger is connected */
+  __BKPT(0);
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -210,8 +226,13 @@ void _Error_Handler(char *file, int line)
   */
 void assert_failed(uint8_t* file, uint32_t line)
 {
-  //console_printf("Wrong parameters value: file %s on line %d\n", file, line);
   vTaskSuspendAll();
+  printf("Wrong parameters value: file %s on line %d\n", file, line);
+  while(1)
+  {
+    HAL_Delay(100);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+  }
 }
 #endif /* USE_FULL_ASSERT */
 
@@ -220,11 +241,11 @@ void assert_failed(uint8_t* file, uint32_t line)
   */
 int _write(int file, char *ptr, int len)
 {
-  int idx;
+  int idx = 0;
 
-  for(idx = 0; idx < len; ++idx)
+  while(idx < len)
   {
-    ITM_SendChar(ptr[idx]);
+    ITM_SendChar(ptr[idx++]);
   }
 
   return len;
