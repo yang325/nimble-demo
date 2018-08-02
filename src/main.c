@@ -160,7 +160,7 @@ static void system_info_output(void)
   SystemCoreClockUpdate();
 
   printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  printf("- Core Frequency = %d Hz -\n", SystemCoreClock);
+  printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
 }
 
 /** Configure pins as 
@@ -227,7 +227,7 @@ void _Error_Handler(char *file, int line)
 void assert_failed(uint8_t* file, uint32_t line)
 {
   vTaskSuspendAll();
-  printf("Wrong parameters value: file %s on line %d\n", file, line);
+  printf("Wrong parameters value: file %s on line %lu\n", file, line);
   while(1)
   {
     HAL_Delay(100);
