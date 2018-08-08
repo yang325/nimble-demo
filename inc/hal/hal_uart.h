@@ -34,6 +34,21 @@ extern "C" {
 
 #include <inttypes.h>
 
+enum hal_uart_parity {
+    /** No Parity */
+    HAL_UART_PARITY_NONE = 0,
+    /** Odd parity */
+    HAL_UART_PARITY_ODD = 1,
+    /** Even parity */
+    HAL_UART_PARITY_EVEN = 2
+};
+
+enum hal_uart_flow_ctl {
+    /** No Flow Control */
+    HAL_UART_FLOW_CTL_NONE = 0,
+    /** RTS/CTS */
+    HAL_UART_FLOW_CTL_RTS_CTS = 1
+};
 
 /**
  * Function prototype for UART driver to ask for more data to send.
@@ -63,33 +78,6 @@ typedef int (*hal_uart_rx_char)(void *arg, uint8_t byte);
  */
 int hal_uart_init_cbs(int uart, hal_uart_tx_char tx_func,
   hal_uart_tx_done tx_done, hal_uart_rx_char rx_func, void *arg);
-
-enum hal_uart_parity {
-    /** No Parity */
-    HAL_UART_PARITY_NONE = 0,
-    /** Odd parity */
-    HAL_UART_PARITY_ODD = 1,
-    /** Even parity */
-    HAL_UART_PARITY_EVEN = 2
-};
-
-enum hal_uart_flow_ctl {
-    /** No Flow Control */
-    HAL_UART_FLOW_CTL_NONE = 0,
-    /** RTS/CTS */
-    HAL_UART_FLOW_CTL_RTS_CTS = 1
-};
-
-/**
- * Initialize the HAL uart.
- *
- * @param uart  The uart number to configure
- * @param cfg   Hardware specific uart configuration.  This is passed from BSP
- *              directly to the MCU specific driver.
- *
- * @return 0 on success, non-zero error code on failure
- */
-int hal_uart_init(int uart, void *cfg);
 
 /**
  * Applies given configuration to UART.
