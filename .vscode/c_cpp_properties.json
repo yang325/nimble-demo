@@ -9,7 +9,11 @@
                 "${workspaceFolder}/cmsis/device",
                 "${workspaceFolder}/freertos/lib/include",
                 "${workspaceFolder}/freertos/lib/include/private",
-                "${workspaceFolder}/freertos/lib/FreeRTOS/portable/GCC/ARM_CM3"
+                "${workspaceFolder}/freertos/lib/FreeRTOS/portable/GCC/ARM_CM3",
+                "${workspaceFolder}/nimble/nimble/include",
+                "${workspaceFolder}/nimble/porting/nimble/include",
+                "${workspaceFolder}/nimble/porting/npl/freertos/include",
+                "${workspaceFolder}/nimble/nimble/transport/uart/include"
             ],
             "defines": [
                 "STM32F103xE",
