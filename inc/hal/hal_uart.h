@@ -119,16 +119,6 @@ void hal_uart_start_tx(int uart);
  */
 void hal_uart_start_rx(int uart);
 
-/**
- * This is type of write where UART has to block until character has been sent.
- * Used when printing diag output from system crash.
- * Must be called with interrupts disabled.
- *
- * @param uart The UART number to TX on
- * @param byte The byte to TX on the UART
- */
-void hal_uart_blocking_tx(int uart, uint8_t byte);
-
 #ifdef __cplusplus
 }
 #endif
