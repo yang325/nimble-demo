@@ -254,5 +254,15 @@ int _write(int file, char *ptr, int len)
 /**
   * @}
   */
+void __assert_func(const char *file, int line, const char *func, const char *condition)
+{
+  vTaskSuspendAll();
+  printf("Wrong parameters value: file %s on line %d\n", file, line);
+  while(1)
+  {
+    HAL_Delay(100);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+  }
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
