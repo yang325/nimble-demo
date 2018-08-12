@@ -27,16 +27,6 @@
 
 #define UART_CNT           (sizeof(uarts) / sizeof(uarts[0]))
 
-struct hal_uart {
-    UART_HandleTypeDef u_regs;
-    uint8_t u_tx_data;
-    uint8_t u_rx_data;
-    hal_uart_rx_char u_rx_func;
-    hal_uart_tx_char u_tx_func;
-    hal_uart_tx_done u_tx_done;
-    void *u_func_arg;
-};
-
 struct hal_uart uarts[] = {
     {.u_regs.Instance = USART3}
 };
@@ -49,7 +39,7 @@ hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
     struct hal_uart *u;
 
     u = &uarts[port];
-    if (port >= UART_CNT || u->u_open) {
+    if (port >= UART_CNT) {
         return -1;
     }
     u->u_rx_func = rx_func;

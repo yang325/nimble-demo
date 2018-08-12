@@ -33,6 +33,7 @@ extern "C" {
 #endif
 
 #include <inttypes.h>
+#include "stm32f1xx_hal.h"
 
 enum hal_uart_parity {
     /** No Parity */
@@ -71,6 +72,18 @@ typedef void (*hal_uart_tx_done)(void *arg);
  * Driver must call this with interrupts disabled.
  */
 typedef int (*hal_uart_rx_char)(void *arg, uint8_t byte);
+
+struct hal_uart {
+    UART_HandleTypeDef u_regs;
+    uint8_t u_tx_data;
+    uint8_t u_rx_data;
+    hal_uart_rx_char u_rx_func;
+    hal_uart_tx_char u_tx_func;
+    hal_uart_tx_done u_tx_done;
+    void *u_func_arg;
+};
+
+extern struct hal_uart uarts[];
 
 /**
  * Initializes given uart. Mapping of logical UART number to physical
