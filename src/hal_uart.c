@@ -28,10 +28,8 @@
 #define UART_CNT           (sizeof(uarts) / sizeof(uarts[0]))
 
 struct hal_uart {
-    USART_TypeDef *u_regs;
-    uint8_t u_open:1;
-    uint8_t u_rx_stall:1;
-    uint8_t u_tx_end:1;
+    UART_HandleTypeDef u_regs;
+    uint8_t u_tx_data;
     uint8_t u_rx_data;
     hal_uart_rx_char u_rx_func;
     hal_uart_tx_char u_tx_func;
@@ -40,16 +38,12 @@ struct hal_uart {
 };
 
 struct hal_uart uarts[] = {
-    {.u_regs = USART1}
-};
-
-struct hal_uart_irq {
-    struct hal_uart *ui_uart;
-    volatile uint32_t ui_cnt;
+    {.u_regs.Instance = USART3}
 };
 
 
-int hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
+int
+hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
                       hal_uart_rx_char rx_func, void *arg)
 {
     struct hal_uart *u;
@@ -65,63 +59,56 @@ int hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_do
     return 0;
 }
 
-void hal_uart_start_rx(int port)
+void
+hal_uart_start_rx(int port)
 {
-    struct hal_uart *u;
-    int sr;
-    int rc;
+    if (port >= UART_CNT || NULL == uarts[port].u_rx_func) {
+        return;
+    }
 
-    u = &uarts[port];
-    if (u->u_rx_stall) {
-        __HAL_DISABLE_INTERRUPTS(sr);
-        rc = u->u_rx_func(u->u_func_arg, u->u_rx_data);
-        if (rc == 0) {
-            u->u_rx_stall = 0;
-            u->u_regs->CR1 |= USART_CR1_RXNEIE;
+    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&uarts[port].u_regs,
+                        &uarts[port].u_rx_data, sizeof(uarts[port].u_rx_data));
+    assert(status == HAL_OK);
+}
+
+void
+hal_uart_start_tx(int port)
+{
+    if (port >= UART_CNT || NULL == uarts[port].u_tx_func) {
+        return;
+    }
+
+    int value = uarts[port].u_tx_func(uarts[port].u_func_arg);
+    if (-1 == value) {
+        if (uarts[port].u_tx_done) {
+            uarts[port].u_tx_done(uarts[port].u_func_arg);
         }
-        __HAL_ENABLE_INTERRUPTS(sr);
+    } else {
+        uarts[port].u_tx_data = (uint8_t)value;
+        HAL_StatusTypeDef status = HAL_UART_Transmit_IT(&uarts[port].u_regs,
+                        &uarts[port].u_tx_data, sizeof(uarts[port].u_tx_data));
+        assert(status == HAL_OK);
     }
 }
 
-void hal_uart_start_tx(int port)
-{
-    struct hal_uart *u;
-    int sr;
-
-    u = &uarts[port];
-    __HAL_DISABLE_INTERRUPTS(sr);
-    u->u_regs->CR1 &= ~USART_CR1_TCIE;
-    u->u_regs->CR1 |= USART_CR1_TXEIE;
-    u->u_tx_end = 0;
-    __HAL_ENABLE_INTERRUPTS(sr);
-}
-
-int hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbits,
+int
+hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbits,
                     enum hal_uart_parity parity, enum hal_uart_flow_ctl flow_ctl)
 {
-    struct hal_uart *u;
-    const struct stm32_uart_cfg *cfg;
-    uint32_t cr1, cr2, cr3;
-
     if (port >= UART_CNT) {
         return -1;
     }
 
-    u = &uarts[port];
-    if (u->u_open) {
-        return -1;
-    }
-    cfg = u->u_cfg;
-    assert(cfg);
-
-    
+    uarts[port].u_regs.Init.BaudRate = baudrate;
+    uarts[port].u_regs.Init.Mode = UART_MODE_TX_RX;
+    uarts[port].u_regs.Init.OverSampling = UART_OVERSAMPLING_16;
 
     switch (databits) {
     case 8:
-        cr1 |= UART_WORDLENGTH_8B;
+        uarts[port].u_regs.Init.WordLength = UART_WORDLENGTH_8B;
         break;
     case 9:
-        cr1 |= UART_WORDLENGTH_9B;
+        uarts[port].u_regs.Init.WordLength = UART_WORDLENGTH_9B;
         break;
     default:
         assert(0);
@@ -130,10 +117,10 @@ int hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbi
 
     switch (stopbits) {
     case 1:
-        cr2 |= UART_STOPBITS_1;
+        uarts[port].u_regs.Init.StopBits = UART_STOPBITS_1;
         break;
     case 2:
-        cr2 |= UART_STOPBITS_2;
+        uarts[port].u_regs.Init.StopBits = UART_STOPBITS_2;
         break;
     default:
         return -1;
@@ -141,32 +128,29 @@ int hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbi
 
     switch (parity) {
     case HAL_UART_PARITY_NONE:
-        cr1 |= UART_PARITY_NONE;
+        uarts[port].u_regs.Init.Parity = UART_PARITY_NONE;
         break;
     case HAL_UART_PARITY_ODD:
-        cr1 |= UART_PARITY_ODD;
+        uarts[port].u_regs.Init.Parity = UART_PARITY_ODD;
         break;
     case HAL_UART_PARITY_EVEN:
-        cr1 |= UART_PARITY_EVEN;
+        uarts[port].u_regs.Init.Parity = UART_PARITY_EVEN;
         break;
     }
 
     switch (flow_ctl) {
     case HAL_UART_FLOW_CTL_NONE:
-        cr3 |= UART_HWCONTROL_NONE;
+        uarts[port].u_regs.Init.HwFlowCtl = UART_HWCONTROL_NONE;
         break;
     case HAL_UART_FLOW_CTL_RTS_CTS:
-        cr3 |= UART_HWCONTROL_RTS_CTS;
-        if (cfg->suc_pin_rts < 0 || cfg->suc_pin_cts < 0) {
-            /*
-             * Can't turn on HW flow control if pins to do that are not
-             * defined.
-             */
-            assert(0);
-            return -1;
-        }
+        uarts[port].u_regs.Init.HwFlowCtl = UART_HWCONTROL_RTS_CTS;
         break;
     }
+
+    HAL_StatusTypeDef status = HAL_UART_Init(&uarts[port].u_regs);
+    assert(status == HAL_OK);
+
+    hal_uart_start_rx(port);
 
     return 0;
 }
@@ -174,15 +158,46 @@ int hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbi
 int
 hal_uart_close(int port)
 {
-    struct hal_uart *u;
-
     if (port >= UART_CNT) {
         return -1;
     }
-    u = &uarts[port];
 
-    u->u_open = 0;
-    u->u_regs->CR1 = 0;
+    HAL_StatusTypeDef status = HAL_UART_DeInit(&uarts[port].u_regs);
+    assert(status == HAL_OK);
 
     return 0;
 }
+
+/**
+  * @brief  Tx Transfer completed callbacks.
+  * @param  huart: pointer to a UART_HandleTypeDef structure that contains
+  *                the configuration information for the specified UART module.
+  * @retval None
+  */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    for (int port = 0; port < UART_CNT; ++port) {
+        if (huart == &uarts[port].u_regs) {
+            hal_uart_start_tx(port);
+            break;
+        }
+    }
+}
+
+/**
+  * @brief Rx Transfer completed callback.
+  * @param huart: UART handle.
+  * @retval None
+  */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+    for (int port = 0; port < UART_CNT; ++port) {
+        if (huart == &uarts[port].u_regs &&
+            0 == uarts[port].u_rx_func(uarts[port].u_func_arg, uarts[port].u_rx_data)) {
+
+            hal_uart_start_rx(port);
+            break;
+        }
+    }
+}
+

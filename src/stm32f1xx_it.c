@@ -136,5 +136,14 @@ void HAL_SYSTICK_Callback( void )
 /* please refer to the startup file (startup_stm32f1xx.s).                    */
 /******************************************************************************/
 
+/**
+  * @brief  This function handles USART interrupt request.
+  * @param  None
+  * @retval None
+  */
+void USART3_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&uarts[0].u_regs);
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
