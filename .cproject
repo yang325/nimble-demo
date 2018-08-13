@@ -53,6 +53,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/gap/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/ram/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/dis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/config/include}&quot;"/>
 								</option>
 								<inputType id="com.atollic.truestudio.as.input.1089305282" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
@@ -60,6 +61,7 @@
 								<option id="com.atollic.truestudio.gcc.symbols.defined.1371657510" name="Defined symbols" superClass="com.atollic.truestudio.gcc.symbols.defined" useByScannerDiscovery="false" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="STM32F103xE"/>
 									<listOptionValue builtIn="false" value="USE_HAL_DRIVER"/>
+									<listOptionValue builtIn="false" value="MYNEWT_VAL_BLE_MESH_SETTINGS=1"/>
 								</option>
 								<option id="com.atollic.truestudio.gcc.directories.select.1516146432" name="Include path" superClass="com.atollic.truestudio.gcc.directories.select" useByScannerDiscovery="false" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/device}&quot;"/>
@@ -87,6 +89,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/gap/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/ram/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/dis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/config/include}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.196966249" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.1717121234" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" useByScannerDiscovery="false" value="STM32F103ZE" valueType="enumerated"/>
@@ -95,7 +98,7 @@
 								<option id="com.atollic.truestudio.common_options.target.fpu.18305080" name="Floating point" superClass="com.atollic.truestudio.common_options.target.fpu" useByScannerDiscovery="false"/>
 								<option id="com.atollic.truestudio.gcc.optimization.prep_garbage.1073860749" name="Prepare dead code removal " superClass="com.atollic.truestudio.gcc.optimization.prep_garbage" useByScannerDiscovery="false" value="true" valueType="boolean"/>
 								<option id="com.atollic.truestudio.gcc.optimization.prep_data.1146908472" name="Prepare dead data removal" superClass="com.atollic.truestudio.gcc.optimization.prep_data" useByScannerDiscovery="false" value="true" valueType="boolean"/>
-								<option id="com.atollic.truestudio.gcc.misc.otherflags.516598863" name="Other options" superClass="com.atollic.truestudio.gcc.misc.otherflags" useByScannerDiscovery="false" value="-imacros &quot;${workspace_loc:/${ProjName}/inc/autoconf.h}&quot;" valueType="string"/>
+								<option id="com.atollic.truestudio.gcc.misc.otherflags.516598863" name="Other options" superClass="com.atollic.truestudio.gcc.misc.otherflags" useByScannerDiscovery="false" value="" valueType="string"/>
 								<inputType id="com.atollic.truestudio.gcc.input.1086572495" superClass="com.atollic.truestudio.gcc.input"/>
 							</tool>
 							<tool id="com.atollic.truestudio.exe.debug.toolchain.ld.1041616938" name="C Linker" superClass="com.atollic.truestudio.exe.debug.toolchain.ld">
@@ -149,7 +152,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="driver"/>
 						<entry excluding="lib/FreeRTOS/portable/MemMang/heap_5.c|lib/FreeRTOS/portable/MemMang/heap_3.c|lib/FreeRTOS/portable/MemMang/heap_2.c|lib/FreeRTOS/portable/MemMang/heap_1.c|lib/FreeRTOS/portable/GCC/ARM_CM0|lib/FreeRTOS/portable/GCC/ARM_CA9|lib/FreeRTOS/portable/GCC/ARM_CA53_64_BIT|lib/FreeRTOS/portable/GCC/TriCore_1782|lib/FreeRTOS/portable/GCC/stubs|lib/FreeRTOS/portable/GCC/STR75x|lib/FreeRTOS/portable/GCC/RX600v2|lib/FreeRTOS/portable/GCC/RX600|lib/FreeRTOS/portable/GCC/RX100|lib/FreeRTOS/portable/GCC/RL78|lib/FreeRTOS/portable/GCC/PPC440_Xilinx|lib/FreeRTOS/portable/GCC/PPC405_Xilinx|lib/FreeRTOS/portable/GCC/NiosII|lib/FreeRTOS/portable/GCC/MSP430F449|lib/FreeRTOS/portable/GCC/MicroBlazeV9|lib/FreeRTOS/portable/GCC/MicroBlazeV8|lib/FreeRTOS/portable/GCC/MicroBlaze|lib/FreeRTOS/portable/GCC/MCF5235|lib/FreeRTOS/portable/GCC/IA32_flat|lib/FreeRTOS/portable/GCC/HCS12|lib/FreeRTOS/portable/GCC/H8S2329|lib/FreeRTOS/portable/GCC/CORTUS_APS3|lib/FreeRTOS/portable/GCC/ColdFire_V2|lib/FreeRTOS/portable/GCC/AVR32_UC3|lib/FreeRTOS/portable/GCC/ATMega323|lib/FreeRTOS/portable/GCC/ARM7_LPC23xx|lib/FreeRTOS/portable/GCC/ARM7_LPC2000|lib/FreeRTOS/portable/GCC/ARM7_AT91SAM7S|lib/FreeRTOS/portable/GCC/ARM7_AT91FR40008|lib/FreeRTOS/portable/GCC/ARM_CRx_No_GIC|lib/FreeRTOS/portable/GCC/ARM_CR5|lib/FreeRTOS/portable/GCC/ARM_CM7|lib/FreeRTOS/portable/GCC/ARM_CM4F|lib/FreeRTOS/portable/GCC/ARM_CM4_MPU|lib/FreeRTOS/portable/GCC/ARM_CM3_MPU|lib/FreeRTOS/portable/Compiler|lib/FreeRTOS/portable/Common|lib/FreeRTOS/portable/CCS|lib/FreeRTOS/portable/ThirdParty|lib/FreeRTOS/portable/Tasking|lib/FreeRTOS/portable/Softune|lib/FreeRTOS/portable/RVDS|lib/FreeRTOS/portable/Rowley|lib/FreeRTOS/portable/Renesas|lib/FreeRTOS/portable/Paradigm|lib/FreeRTOS/portable/MSVC-MingW|lib/FreeRTOS/portable/MPLAB|lib/FreeRTOS/portable/MikroC|lib/FreeRTOS/portable/Keil|lib/FreeRTOS/portable/IAR|lib/wifi|lib/utils|lib/tls|lib/third_party|lib/shadow|lib/secure_sockets|lib/pkcs11|lib/ota|lib/mqtt|lib/greengrass|lib/FreeRTOS-Plus-TCP|lib/crypto|lib/bufferpool|demos" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="freertos"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="inc"/>
-						<entry excluding="porting/nimble/src/hal_timer.c|nimble/host/test|nimble/drivers|nimble/transport/socket|nimble/transport/ram|nimble/transport/emspi|nimble/controller|porting/examples|porting/npl/dummy|porting/npl/mynewt|porting/npl/riot|apps" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nimble"/>
+						<entry excluding="nimble/host/services/bleuart|nimble/host/services/dis|porting/nimble/src/hal_timer.c|nimble/host/test|nimble/drivers|nimble/transport/socket|nimble/transport/ram|nimble/transport/emspi|nimble/controller|porting/examples|porting/npl/dummy|porting/npl/mynewt|porting/npl/riot|apps" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nimble"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
 					</sourceEntries>
@@ -216,6 +219,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/gap/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/ram/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/dis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/config/include}&quot;"/>
 								</option>
 								<inputType id="com.atollic.truestudio.as.input.2133269946" name="Input" superClass="com.atollic.truestudio.as.input"/>
 							</tool>
@@ -254,6 +258,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/gap/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/ram/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/services/dis/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/nimble/nimble/host/store/config/include}&quot;"/>
 								</option>
 								<option id="com.atollic.truestudio.common_options.target.endianess.960023769" name="Endianess" superClass="com.atollic.truestudio.common_options.target.endianess"/>
 								<option id="com.atollic.truestudio.common_options.target.mcpu.268030165" name="Microcontroller" superClass="com.atollic.truestudio.common_options.target.mcpu" value="STM32F103ZE" valueType="enumerated"/>
@@ -315,7 +320,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="driver"/>
 						<entry excluding="lib/FreeRTOS/portable/MemMang/heap_5.c|lib/FreeRTOS/portable/MemMang/heap_3.c|lib/FreeRTOS/portable/MemMang/heap_2.c|lib/FreeRTOS/portable/MemMang/heap_1.c|lib/FreeRTOS/portable/GCC/ARM_CM0|lib/FreeRTOS/portable/GCC/ARM_CA9|lib/FreeRTOS/portable/GCC/ARM_CA53_64_BIT|lib/FreeRTOS/portable/GCC/TriCore_1782|lib/FreeRTOS/portable/GCC/stubs|lib/FreeRTOS/portable/GCC/STR75x|lib/FreeRTOS/portable/GCC/RX600v2|lib/FreeRTOS/portable/GCC/RX600|lib/FreeRTOS/portable/GCC/RX100|lib/FreeRTOS/portable/GCC/RL78|lib/FreeRTOS/portable/GCC/PPC440_Xilinx|lib/FreeRTOS/portable/GCC/PPC405_Xilinx|lib/FreeRTOS/portable/GCC/NiosII|lib/FreeRTOS/portable/GCC/MSP430F449|lib/FreeRTOS/portable/GCC/MicroBlazeV9|lib/FreeRTOS/portable/GCC/MicroBlazeV8|lib/FreeRTOS/portable/GCC/MicroBlaze|lib/FreeRTOS/portable/GCC/MCF5235|lib/FreeRTOS/portable/GCC/IA32_flat|lib/FreeRTOS/portable/GCC/HCS12|lib/FreeRTOS/portable/GCC/H8S2329|lib/FreeRTOS/portable/GCC/CORTUS_APS3|lib/FreeRTOS/portable/GCC/ColdFire_V2|lib/FreeRTOS/portable/GCC/AVR32_UC3|lib/FreeRTOS/portable/GCC/ATMega323|lib/FreeRTOS/portable/GCC/ARM7_LPC23xx|lib/FreeRTOS/portable/GCC/ARM7_LPC2000|lib/FreeRTOS/portable/GCC/ARM7_AT91SAM7S|lib/FreeRTOS/portable/GCC/ARM7_AT91FR40008|lib/FreeRTOS/portable/GCC/ARM_CRx_No_GIC|lib/FreeRTOS/portable/GCC/ARM_CR5|lib/FreeRTOS/portable/GCC/ARM_CM7|lib/FreeRTOS/portable/GCC/ARM_CM4F|lib/FreeRTOS/portable/GCC/ARM_CM4_MPU|lib/FreeRTOS/portable/GCC/ARM_CM3_MPU|lib/FreeRTOS/portable/Compiler|lib/FreeRTOS/portable/Common|lib/FreeRTOS/portable/CCS|lib/FreeRTOS/portable/ThirdParty|lib/FreeRTOS/portable/Tasking|lib/FreeRTOS/portable/Softune|lib/FreeRTOS/portable/RVDS|lib/FreeRTOS/portable/Rowley|lib/FreeRTOS/portable/Renesas|lib/FreeRTOS/portable/Paradigm|lib/FreeRTOS/portable/MSVC-MingW|lib/FreeRTOS/portable/MPLAB|lib/FreeRTOS/portable/MikroC|lib/FreeRTOS/portable/Keil|lib/FreeRTOS/portable/IAR|lib/wifi|lib/utils|lib/tls|lib/third_party|lib/shadow|lib/secure_sockets|lib/pkcs11|lib/ota|lib/mqtt|lib/greengrass|lib/FreeRTOS-Plus-TCP|lib/crypto|lib/bufferpool|demos" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="freertos"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="inc"/>
-						<entry excluding="porting/nimble/src/hal_timer.c|nimble/host/test|nimble/drivers|nimble/transport/socket|nimble/transport/ram|nimble/transport/emspi|nimble/controller|porting/examples|porting/npl/dummy|porting/npl/mynewt|porting/npl/riot|apps" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nimble"/>
+						<entry excluding="nimble/host/services/bleuart|nimble/host/services/dis|porting/nimble/src/hal_timer.c|nimble/host/test|nimble/drivers|nimble/transport/socket|nimble/transport/ram|nimble/transport/emspi|nimble/controller|porting/examples|porting/npl/dummy|porting/npl/mynewt|porting/npl/riot|apps" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="nimble"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="startup"/>
 					</sourceEntries>
