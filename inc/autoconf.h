@@ -1,0 +1,13 @@
+#define MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT                             1
+#define MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT                           2
+#define MYNEWT_VAL_BLE_MESH_APP_KEY_COUNT                               2
+#define MYNEWT_VAL_BLE_MESH_SUBNET_COUNT                                2
+#define MYNEWT_VAL_BLE_MESH_CRPL                                        10
+#define MYNEWT_VAL_BLE_MESH_MSG_CACHE_SIZE                              10
+#define MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT                               20
+#define MYNEWT_VAL_BLE_MESH_TX_SEG_MSG_COUNT                            1
+#define MYNEWT_VAL_BLE_MESH_RX_SEG_MSG_COUNT                            1
+#define MYNEWT_VAL_BLE_MESH_DEBUG_TRANS                                 1
+#define MYNEWT_VAL_BLE_MESH_FRIEND                                      1
+#define MYNEWT_VAL_BLE_MESH_LOW_POWER                                   0
+#define MYNEWT_VAL_BLE_MESH_SETTINGS                                    1
