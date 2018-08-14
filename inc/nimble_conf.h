@@ -1,7 +1,7 @@
 #ifndef __SYS_CONFIG_H_
 #define __SYS_CONFIG_H_
 
-#include "core_cm3.h"
+#include <stdio.h>
 
 #define MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT                             1
 #define MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT                           2
@@ -53,5 +53,22 @@
 #define MYNEWT_VAL_BLE_MESH_RPL_STORE_TIMEOUT                           5
 #define MYNEWT_VAL_BLE_MESH_STORE_TIMEOUT                               2
 
+/**
+ * Configuration handler, used to register a config item/subtree.
+ */
+struct conf_handler {
+    /**
+     * The name of the conifguration item/subtree
+     */
+    char *ch_name;
+    /** Get configuration value */
+    conf_get_handler_t ch_get;
+    /** Set configuration value */
+    conf_set_handler_t ch_set;
+    /** Commit configuration value */
+    conf_commit_handler_t ch_commit;
+    /** Export configuration value */
+    conf_export_handler_t ch_export;
+};
 
 #endif
