@@ -1,5 +1,7 @@
-#ifndef _MESH_____CONF_
-#define _MESH_____CONF_
+#ifndef __SYS_CONFIG_H_
+#define __SYS_CONFIG_H_
+
+#include "core_cm3.h"
 
 #define MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT                             1
 #define MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT                           2
