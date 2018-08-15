@@ -59,13 +59,19 @@
 
 /* Private variables ---------------------------------------------------------*/
 
+static uint32_t dev_uuid[4];
 
 /* Private function prototypes -----------------------------------------------*/
 
 static void system_clock_config(void);
 static void system_info_output(void);
+
 static void led_init(void);
-static void ble_app_thread(void * arg);
+static void led_handler(TimerHandle_t timer);
+
+static void ble_app_on_sync(void);
+
+static void ble_host_thread(void * arg);
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -82,12 +88,22 @@ int main(void)
   /* Configure the system clock */
   system_clock_config();
 
+  /* Output system information */
+  system_info_output();
+
   /* Initialize LED */
   led_init();
 
-  /* Application task definition */
-  if (pdPASS != xTaskCreate(ble_app_thread, "ble_app", APP_TASK_BLE_APP_SIZE,
-                            NULL, APP_TASK_BLE_APP_PRIORITY, NULL)) 
+  /* LED handler definition */
+  if (NULL == xTimerCreate("led", 500 / portTICK_PERIOD_MS, pdTRUE, NULL, 
+                            led_handler))
+  {
+    Error_Handler();
+  }
+
+  /* NimBLE host task definition */
+  if (pdPASS != xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
+                            NULL, APP_TASK_BLE_HS_PRIORITY, NULL)) 
   {
     Error_Handler();
   }
@@ -155,12 +171,17 @@ static void system_info_output(void)
 
   printf("\n");
 
+  HAL_GetUID(&dev_uuid[0]);
+  dev_uuid[3] = HAL_GetHalVersion();
+
   varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
   SystemCoreClockUpdate();
 
   printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
   printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+  printf("- Device UUID = %08x:%08x:%08x:%08x -\n",
+         dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
 /** Configure pins as 
@@ -188,19 +209,39 @@ static void led_init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
+static void led_handler(TimerHandle_t timer)
+{
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+}
+
 /**
-  * @brief  Handle BLE application thread
-  * @param  thread not used
+  * @brief  Handle BLE sync event
+  * @param  None
   * @retval None
   */
-static void ble_app_thread(void * arg)
+static void ble_app_on_sync(void)
 {
-  system_info_output();
-  while(1)
-  {
-    vTaskDelay(500 / portTICK_PERIOD_MS);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-  }
+  printf("The host and controller are in sync\n");
+}
+
+/**@brief Thread for handling the Application's BLE Stack events.
+ *
+ * @details This thread is responsible for handling BLE Stack events sent 
+from on_ble_evt().
+ *
+ * @param[in]   arg   Pointer used for passing some arbitrary information (
+context) from the
+ *                    osThreadCreate() call to the thread.
+ */
+static void ble_host_thread(void * arg)
+{
+  ble_hci_uart_init();
+  nimble_port_init();
+
+  /* Initialize the NimBLE host configuration */
+  ble_hs_cfg.sync_cb = ble_app_on_sync;
+
+  nimble_port_run();
 }
 
 /**
