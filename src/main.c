@@ -46,6 +46,10 @@
 #include "timers.h"
 #include "semphr.h"
 
+#include "transport/uart/ble_hci_uart.h"
+#include "nimble/nimble_port.h"
+#include "host/ble_hs.h"
+
 /* Private define ------------------------------------------------------------*/
 
 /**< Size of the BLE application task. */
@@ -180,7 +184,7 @@ static void system_info_output(void)
 
   printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
   printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
-  printf("- Device UUID = %08x:%08x:%08x:%08x -\n",
+  printf("- Device UUID = %08lx:%08lx:%08lx:%08lx -\n",
          dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
