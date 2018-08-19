@@ -30,6 +30,13 @@ extern "C" {
 
 #define SYSINIT_PANIC_ASSERT(rc)        assert(rc);
 
+#define SYSINIT_PANIC_ASSERT_MSG(rc, msg) do \
+{                                            \
+    if (!(rc)) {                             \
+        printf(msg "\n");                    \
+    }                                        \
+} while (0)
+
 #ifdef __cplusplus
 }
 #endif
