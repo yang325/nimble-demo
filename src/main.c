@@ -49,6 +49,7 @@
 #include "transport/uart/ble_hci_uart.h"
 #include "nimble/nimble_port.h"
 #include "host/ble_hs.h"
+#include "modlog/modlog.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -173,7 +174,7 @@ static void system_info_output(void)
 {
   uint8_t varient, revision;
 
-  printf("\n");
+  MODLOG_INFO("\n");
 
   HAL_GetUID(&dev_uuid[0]);
   dev_uuid[3] = HAL_GetHalVersion();
@@ -182,9 +183,9 @@ static void system_info_output(void)
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
   SystemCoreClockUpdate();
 
-  printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
-  printf("- Device UUID = %08lx:%08lx:%08lx:%08lx -\n",
+  MODLOG_INFO("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+  MODLOG_INFO("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+  MODLOG_INFO("- Device UUID = %08lx:%08lx:%08lx:%08lx -\n",
          dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
@@ -225,7 +226,7 @@ static void led_handler(TimerHandle_t timer)
   */
 static void ble_app_on_sync(void)
 {
-  printf("The host and controller are in sync\n");
+  MODLOG_DEBUG("The host and controller are in sync\n");
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
@@ -256,7 +257,7 @@ static void ble_host_thread(void * arg)
   */
 void _Error_Handler(char *file, int line)
 {
-  printf("Error occurred: file %s on line %d\n", file, line);
+  MODLOG_ERROR("Error occurred: file %s on line %d\n", file, line);
   /* Generate breakpoint if debugger is connected */
   __BKPT(0);
 }
@@ -272,7 +273,7 @@ void _Error_Handler(char *file, int line)
 void assert_failed(uint8_t* file, uint32_t line)
 {
   vTaskSuspendAll();
-  printf("Wrong parameters value: file %s on line %lu\n", file, line);
+  MODLOG_ERROR("Wrong parameters value: file %s on line %lu\n", file, line);
   while(1)
   {
     HAL_Delay(100);
@@ -302,7 +303,7 @@ int _write(int file, char *ptr, int len)
 void __assert_func(const char *file, int line, const char *func, const char *condition)
 {
   vTaskSuspendAll();
-  printf("Wrong parameters value: file %s on line %d\n", file, line);
+  MODLOG_ERROR("Wrong parameters value: file %s on line %d\n", file, line);
   while(1)
   {
     HAL_Delay(100);

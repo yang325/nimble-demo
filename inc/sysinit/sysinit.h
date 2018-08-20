@@ -21,6 +21,7 @@
 #define __SYSINIT_H__
 
 #include <assert.h>
+#include "modlog/modlog.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -33,7 +34,7 @@ extern "C" {
 #define SYSINIT_PANIC_ASSERT_MSG(rc, msg) do \
 {                                            \
     if (!(rc)) {                             \
-        printf(msg "\n");                    \
+        MODLOG_ERROR(msg "\n");              \
     }                                        \
 } while (0)
 
