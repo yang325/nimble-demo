@@ -21,6 +21,7 @@
 #define H_MODLOG_
 
 #include <stdio.h>
+#include "log/log.h"
 
 #define LOG_COLOR_DEFAULT           "\x1B[0m"
 #define LOG_COLOR_BLACK             "\x1B[1;30m"
@@ -33,19 +34,19 @@
 #define LOG_COLOR_WHITE             "\x1B[1;37m"
 
 #define MODLOG_DEBUG(ml_mod_, ml_msg_, ...) \
-    printf(LOG_COLOR_DEFAULT (ml_msg_), ##__VA_ARGS__)
+    printf((LOG_COLOR_DEFAULT ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_INFO(ml_mod_, ml_msg_, ...) \
-    printf(LOG_COLOR_GREEN (ml_msg_), ##__VA_ARGS__)
+    printf((LOG_COLOR_GREEN ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_WARN(ml_mod_, ml_msg_, ...) \
-    printf(LOG_COLOR_MAGENTA (ml_msg_), ##__VA_ARGS__)
+    printf((LOG_COLOR_MAGENTA ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_ERROR(ml_mod_, ml_msg_, ...) \
-    printf(LOG_COLOR_RED (ml_msg_), ##__VA_ARGS__)
+    printf((LOG_COLOR_RED ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_CRITICAL(ml_mod_, ml_msg_, ...) \
-    printf(LOG_COLOR_YELLOW (ml_msg_), ##__VA_ARGS__)
+    printf((LOG_COLOR_YELLOW ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG(ml_lvl_, ml_mod_, ...) \
     MODLOG_ ## ml_lvl_((ml_mod_), __VA_ARGS__)

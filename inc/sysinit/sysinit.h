@@ -34,7 +34,7 @@ extern "C" {
 #define SYSINIT_PANIC_ASSERT_MSG(rc, msg) do \
 {                                            \
     if (!(rc)) {                             \
-        MODLOG_ERROR(msg "\n");              \
+        MODLOG_ERROR(0, msg "\n");           \
     }                                        \
 } while (0)
 
