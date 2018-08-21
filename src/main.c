@@ -101,7 +101,7 @@ int main(void)
 
   /* LED handler definition */
   if (NULL == xTimerCreate("led", 500 / portTICK_PERIOD_MS, pdTRUE, NULL, 
-                            led_handler))
+                           led_handler))
   {
     Error_Handler();
   }
@@ -164,7 +164,7 @@ static void system_clock_config(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
 }
 
 /**
@@ -177,7 +177,7 @@ static void system_info_output(void)
   MODLOG_INFO(0, "\n");
 
   HAL_GetUID(&dev_uuid[0]);
-  dev_uuid[3] = HAL_GetHalVersion();
+  dev_uuid[3] = SCB->CPUID;
 
   varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
@@ -185,7 +185,7 @@ static void system_info_output(void)
 
   MODLOG_INFO(0, "- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
   MODLOG_INFO(0, "- Core Frequency = %lu Hz -\n", SystemCoreClock);
-  MODLOG_INFO(0, "- Device UUID = %08lx:%08lx:%08lx:%08lx -\n",
+  MODLOG_INFO(0, "- Device UUID = %08lX:%08lX:%08lX:%08lX -\n",
          dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
