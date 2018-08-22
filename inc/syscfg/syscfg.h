@@ -810,7 +810,7 @@
 
 /* Overridden by targets/porting-nimble (defined by nimble/transport/uart) */
 #ifndef MYNEWT_VAL_BLE_HCI_UART_BAUD
-#define MYNEWT_VAL_BLE_HCI_UART_BAUD (115200)
+#define MYNEWT_VAL_BLE_HCI_UART_BAUD (1000000)
 #endif
 
 #ifndef MYNEWT_VAL_BLE_HCI_UART_DATA_BITS
@@ -819,7 +819,7 @@
 
 /* Overridden by targets/porting-nimble (defined by nimble/transport/uart) */
 #ifndef MYNEWT_VAL_BLE_HCI_UART_FLOW_CTRL
-#define MYNEWT_VAL_BLE_HCI_UART_FLOW_CTRL (0)
+#define MYNEWT_VAL_BLE_HCI_UART_FLOW_CTRL (HAL_UART_FLOW_CTL_RTS_CTS)
 #endif
 
 #ifndef MYNEWT_VAL_BLE_HCI_UART_PARITY
@@ -836,7 +836,7 @@
 
 /*** sys/console/stub */
 #ifndef MYNEWT_VAL_CONSOLE_UART_BAUD
-#define MYNEWT_VAL_CONSOLE_UART_BAUD (115200)
+#define MYNEWT_VAL_CONSOLE_UART_BAUD (1000000)
 #endif
 
 #ifndef MYNEWT_VAL_CONSOLE_UART_DEV
@@ -844,7 +844,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_CONSOLE_UART_FLOW_CONTROL
-#define MYNEWT_VAL_CONSOLE_UART_FLOW_CONTROL (UART_FLOW_CTL_NONE)
+#define MYNEWT_VAL_CONSOLE_UART_FLOW_CONTROL (HAL_UART_FLOW_CTL_RTS_CTS)
 #endif
 
 /*** sys/flash_map */

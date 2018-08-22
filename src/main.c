@@ -53,10 +53,6 @@
 
 /* Private define ------------------------------------------------------------*/
 
-/**< Size of the BLE application task. */
-#define APP_TASK_BLE_APP_SIZE           (configMINIMAL_STACK_SIZE * 4)
-/**< Priority of the BLE application task. */
-#define APP_TASK_BLE_APP_PRIORITY       (configMAX_PRIORITIES - 2)
 /**< Size of the BLE host task.*/
 #define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 4)
 /**< Priority of the BLE host task. */
@@ -72,7 +68,6 @@ static void system_clock_config(void);
 static void system_info_output(void);
 
 static void led_init(void);
-static void led_handler(TimerHandle_t timer);
 
 static void ble_app_on_sync(void);
 
@@ -92,19 +87,6 @@ int main(void)
 
   /* Configure the system clock */
   system_clock_config();
-
-  /* Output system information */
-  system_info_output();
-
-  /* Initialize LED */
-  led_init();
-
-  /* LED handler definition */
-  if (NULL == xTimerCreate("led", 500 / portTICK_PERIOD_MS, pdTRUE, NULL, 
-                           led_handler))
-  {
-    Error_Handler();
-  }
 
   /* NimBLE host task definition */
   if (pdPASS != xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
@@ -214,11 +196,6 @@ static void led_init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-static void led_handler(TimerHandle_t timer)
-{
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-}
-
 /**
   * @brief  Handle BLE sync event
   * @param  None
@@ -227,6 +204,7 @@ static void led_handler(TimerHandle_t timer)
 static void ble_app_on_sync(void)
 {
   MODLOG_DEBUG(0, "The host and controller are in sync\n");
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
@@ -240,12 +218,22 @@ context) from the
  */
 static void ble_host_thread(void * arg)
 {
+  /* Output system information */
+  system_info_output();
+
+  /* Initialize LED */
+  led_init();
+
+  /* Initialize UART as HCI */
   ble_hci_uart_init();
+
+  /* Initialize NimBLE modules */
   nimble_port_init();
 
   /* Initialize the NimBLE host configuration */
   ble_hs_cfg.sync_cb = ble_app_on_sync;
 
+  /* Handle NimBLE events */
   nimble_port_run();
 }
 
