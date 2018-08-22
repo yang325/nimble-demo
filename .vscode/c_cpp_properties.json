@@ -11,9 +11,22 @@
                 "${workspaceFolder}/freertos/lib/include/private",
                 "${workspaceFolder}/freertos/lib/FreeRTOS/portable/GCC/ARM_CM3",
                 "${workspaceFolder}/nimble/nimble/include",
+                "${workspaceFolder}/nimble/nimble/host/include",
+                "${workspaceFolder}/nimble/nimble/host/mesh/include",
+                "${workspaceFolder}/nimble/nimble/host/services/gap/include",
+                "${workspaceFolder}/nimble/nimble/host/services/gatt/include",
+                "${workspaceFolder}/nimble/nimble/host/services/tps/include",
+                "${workspaceFolder}/nimble/nimble/host/services/ias/include",
+                "${workspaceFolder}/nimble/nimble/host/services/ans/include",
+                "${workspaceFolder}/nimble/nimble/host/services/lls/include",
+                "${workspaceFolder}/nimble/nimble/host/services/bas/include",
+                "${workspaceFolder}/nimble/nimble/host/util/include",
+                "${workspaceFolder}/nimble/nimble/host/store/ram/include",
+                "${workspaceFolder}/nimble/nimble/host/store/config/include",
                 "${workspaceFolder}/nimble/porting/nimble/include",
                 "${workspaceFolder}/nimble/porting/npl/freertos/include",
-                "${workspaceFolder}/nimble/nimble/transport/uart/include"
+                "${workspaceFolder}/nimble/nimble/transport/uart/include",
+                "${workspaceFolder}/nimble/ext/tinycrypt/include"
             ],
             "defines": [
                 "STM32F103xE",

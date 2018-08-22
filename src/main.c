@@ -49,7 +49,6 @@
 #include "transport/uart/ble_hci_uart.h"
 #include "nimble/nimble_port.h"
 #include "host/ble_hs.h"
-#include "modlog/modlog.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -156,7 +155,7 @@ static void system_info_output(void)
 {
   uint8_t varient, revision;
 
-  MODLOG_INFO(0, "\n");
+  printf("\n");
 
   HAL_GetUID(&dev_uuid[0]);
   dev_uuid[3] = SCB->CPUID;
@@ -165,9 +164,9 @@ static void system_info_output(void)
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
   SystemCoreClockUpdate();
 
-  MODLOG_INFO(0, "- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  MODLOG_INFO(0, "- Core Frequency = %lu Hz -\n", SystemCoreClock);
-  MODLOG_INFO(0, "- Device UUID = %08lX:%08lX:%08lX:%08lX -\n",
+  printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+  printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+  printf("- Device UUID = %08lX:%08lX:%08lX:%08lX -\n",
          dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
@@ -203,7 +202,7 @@ static void led_init(void)
   */
 static void ble_app_on_sync(void)
 {
-  MODLOG_DEBUG(0, "The host and controller are in sync\n");
+  printf("The host and controller are in sync\n");
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 }
 
@@ -245,7 +244,7 @@ static void ble_host_thread(void * arg)
   */
 void _Error_Handler(char *file, int line)
 {
-  MODLOG_ERROR(0, "Error occurred: file %s on line %d\n", file, line);
+  printf("Error occurred: file %s on line %d\n", file, line);
   /* Generate breakpoint if debugger is connected */
   __BKPT(0);
 }
@@ -261,7 +260,7 @@ void _Error_Handler(char *file, int line)
 void assert_failed(uint8_t* file, uint32_t line)
 {
   vTaskSuspendAll();
-  MODLOG_ERROR(0, "Wrong parameters value: file %s on line %lu\n", file, line);
+  printf("Wrong parameters value: file %s on line %lu\n", file, line);
   while(1)
   {
     HAL_Delay(100);
@@ -291,7 +290,7 @@ int _write(int file, char *ptr, int len)
 void __assert_func(const char *file, int line, const char *func, const char *condition)
 {
   vTaskSuspendAll();
-  MODLOG_ERROR(0, "Wrong parameters value: file %s on line %d\n", file, line);
+  printf("Wrong parameters value: file %s on line %d\n", file, line);
   while(1)
   {
     HAL_Delay(100);
