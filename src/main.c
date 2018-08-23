@@ -66,6 +66,10 @@ static void system_clock_config(void);
 static void system_info_output(void);
 
 static void led_init(void);
+static void led_on(void);
+static void led_off(void);
+static void led_toggle(void);
+static bool led_state(void);
 
 static void ble_app_on_sync(void);
 
@@ -184,7 +188,7 @@ static void led_init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
 
   /*Configure GPIO pin : PA2 */
   GPIO_InitStruct.Pin = GPIO_PIN_2;
@@ -192,6 +196,26 @@ static void led_init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+}
+
+static void led_on(void)
+{
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+}
+
+static void led_off(void)
+{
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+}
+
+static void led_toggle(void)
+{
+  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
+}
+
+static bool led_state(void)
+{
+  return GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
 }
 
 /**
@@ -202,7 +226,7 @@ static void led_init(void)
 static void ble_app_on_sync(void)
 {
   printf("The host and controller are in sync\n");
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
+  led_on();
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
@@ -262,8 +286,8 @@ void assert_failed(uint8_t* file, uint32_t line)
   printf("Wrong parameters value: file %s on line %lu\n", file, line);
   while(1)
   {
+    led_toggle();
     HAL_Delay(100);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
   }
 }
 #endif /* USE_FULL_ASSERT */
@@ -292,8 +316,8 @@ void __assert_func(const char *file, int line, const char *func, const char *con
   printf("Wrong parameters value: file %s on line %d\n", file, line);
   while(1)
   {
+    led_toggle();
     HAL_Delay(100);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
   }
 }
 
