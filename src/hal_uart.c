@@ -31,7 +31,6 @@ struct hal_uart uarts[] = {
     {.u_regs.Instance = USART3}
 };
 
-
 int
 hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
                       hal_uart_rx_char rx_func, void *arg)
@@ -49,6 +48,20 @@ hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
     return 0;
 }
 
+static void
+hal_uart_thread(void * arg)
+{
+    struct hal_uart *p_uart = arg;
+    uint8_t rx_data;
+
+    while (1) {
+        if (HAL_OK == HAL_UART_Receive_IT(&p_uart->u_regs, &rx_data, 1)) {
+            xSemaphoreTake(p_uart->sem_rx_handle, portMAX_DELAY);
+            p_uart->u_rx_func(p_uart->u_func_arg, rx_data);
+        }
+    }
+}
+
 void
 hal_uart_start_rx(int port)
 {
@@ -56,9 +69,13 @@ hal_uart_start_rx(int port)
         return;
     }
 
-    HAL_StatusTypeDef status = HAL_UART_Receive_IT(&uarts[port].u_regs,
-                        &uarts[port].u_rx_data, sizeof(uarts[port].u_rx_data));
-    assert(status == HAL_OK);
+    uarts[port].sem_rx_handle = xSemaphoreCreateBinary();
+    assert(uarts[port].sem_rx_handle != NULL);
+
+    BaseType_t ret = xTaskCreate(hal_uart_thread, "uart", configMINIMAL_STACK_SIZE,
+                                 &uarts[port], configMAX_PRIORITIES - 1, 
+                                 &uarts[port].task_rx_handle);
+    assert(pdPASS == ret);
 }
 
 void
@@ -68,16 +85,18 @@ hal_uart_start_tx(int port)
         return;
     }
 
-    int value = uarts[port].u_tx_func(uarts[port].u_func_arg);
-    if (-1 == value) {
-        if (uarts[port].u_tx_done) {
-            uarts[port].u_tx_done(uarts[port].u_func_arg);
+    for (int value = uarts[port].u_tx_func(uarts[port].u_func_arg);
+         -1 != value;
+         value = uarts[port].u_tx_func(uarts[port].u_func_arg)) {
+
+        uint8_t tx_data = (uint8_t)value;
+        if (HAL_OK == HAL_UART_Transmit_IT(&uarts[port].u_regs, &tx_data, 1)) {
+            xSemaphoreTake(uarts[port].sem_tx_handle, portMAX_DELAY);
         }
-    } else {
-        uarts[port].u_tx_data = (uint8_t)value;
-        HAL_StatusTypeDef status = HAL_UART_Transmit_IT(&uarts[port].u_regs,
-                        &uarts[port].u_tx_data, sizeof(uarts[port].u_tx_data));
-        assert(status == HAL_OK);
+    }
+
+    if (uarts[port].u_tx_done) {
+        uarts[port].u_tx_done(uarts[port].u_func_arg);
     }
 }
 
@@ -140,6 +159,9 @@ hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbits,
     HAL_StatusTypeDef status = HAL_UART_Init(&uarts[port].u_regs);
     assert(status == HAL_OK);
 
+    uarts[port].sem_tx_handle = xSemaphoreCreateBinary();
+    assert(uarts[port].sem_tx_handle != NULL);
+
     hal_uart_start_rx(port);
 
     return 0;
@@ -168,7 +190,9 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 {
     for (int port = 0; port < UART_CNT; ++port) {
         if (huart == &uarts[port].u_regs) {
-            hal_uart_start_tx(port);
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+            xSemaphoreGiveFromISR(uarts[port].sem_tx_handle, &xHigherPriorityTaskWoken);
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             break;
         }
     }
@@ -182,10 +206,10 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
     for (int port = 0; port < UART_CNT; ++port) {
-        if (huart == &uarts[port].u_regs &&
-            0 == uarts[port].u_rx_func(uarts[port].u_func_arg, uarts[port].u_rx_data)) {
-
-            hal_uart_start_rx(port);
+        if (huart == &uarts[port].u_regs) {
+            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+            xSemaphoreGiveFromISR(uarts[port].sem_rx_handle, &xHigherPriorityTaskWoken);
+            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
             break;
         }
     }
