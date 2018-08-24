@@ -177,6 +177,10 @@ hal_uart_close(int port)
     HAL_StatusTypeDef status = HAL_UART_DeInit(&uarts[port].u_regs);
     assert(status == HAL_OK);
 
+    vTaskDelete(uarts[port].task_rx_handle);
+    vSemaphoreDelete(uarts[port].sem_tx_handle);
+    vSemaphoreDelete(uarts[port].sem_rx_handle);
+
     return 0;
 }
 

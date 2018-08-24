@@ -116,6 +116,9 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* huart)
     PB14     ------> USART3_RTS 
     */
     HAL_GPIO_DeInit(GPIOB, GPIO_PIN_10 | GPIO_PIN_11 | GPIO_PIN_13 | GPIO_PIN_14);
+
+    /* NVIC for USART3 */
+    HAL_NVIC_DisableIRQ(USART3_IRQn);
   }
 }
 

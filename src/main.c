@@ -118,6 +118,7 @@ static void system_clock_config(void)
   RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
   RCC_OscInitStruct.HSEPredivValue = RCC_HSE_PREDIV_DIV1;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
@@ -148,7 +149,7 @@ static void system_clock_config(void)
   HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
   /* SysTick_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(SysTick_IRQn, 15, 0);
+  HAL_NVIC_SetPriority(SysTick_IRQn, TICK_INT_PRIORITY, 0);
 }
 
 /**
