@@ -929,6 +929,6 @@
 #define MYNEWT_VAL_BLE_MESH_RPL_STORE_TIMEOUT                           5
 #define MYNEWT_VAL_BLE_MESH_STORE_TIMEOUT                               2
 #define MYNEWT_VAL_BLE_MESH_SETTINGS                                    0
-
+#define MYNEWT_VAL_BLE_MESH_TX_SEG_MAX                                  5
 
 #endif
