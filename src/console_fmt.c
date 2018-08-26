@@ -16,30 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+#include <stdarg.h>
+#include <stdio.h>
 
-#ifndef __SYSINIT_H__
-#define __SYSINIT_H__
+#include "console/console.h"
+#include "stm32f1xx_hal.h"
 
-#include <assert.h>
-#include "modlog/modlog.h"
+/**
+ * Prints the specified format string to the console.
+ *
+ * @return                      The number of characters that would have been
+ *                                  printed if the console buffer were
+ *                                  unlimited.  This return value is analogous
+ *                                  to that of snprintf.
+ */
+int console_printf(const char *fmt, ...)
+{
+    va_list args;
+    int len;
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+    va_start(args, fmt);
+    len = vprintf(fmt, args);
+    va_end(args);
 
-#define SYSINIT_ASSERT_ACTIVE()
-
-#define SYSINIT_PANIC_ASSERT(rc)        assert(rc);
-
-#define SYSINIT_PANIC_ASSERT_MSG(rc, msg) do \
-{                                            \
-    if (!(rc)) {                             \
-        console_printf(msg "\n");            \
-    }                                        \
-} while (0)
-
-#ifdef __cplusplus
+    return len;
 }
-#endif
 
-#endif /* __SYSINIT_H__ */
+int _write(int file, char *ptr, int len)
+{
+    int idx = 0;
+
+    while(idx < len)
+    {
+        ITM_SendChar(ptr[idx++]);
+    }
+
+    return len;
+}

@@ -22,21 +22,22 @@
 
 #include <stdio.h>
 #include "log/log.h"
+#include "console/console.h"
 
 #define MODLOG_DEBUG(ml_mod_, ml_msg_, ...) \
-    printf((ml_msg_), ##__VA_ARGS__)
+    console_printf((ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_INFO(ml_mod_, ml_msg_, ...) \
-    printf((ml_msg_), ##__VA_ARGS__)
+    console_printf((ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_WARN(ml_mod_, ml_msg_, ...) \
-    printf((ml_msg_), ##__VA_ARGS__)
+    console_printf((ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_ERROR(ml_mod_, ml_msg_, ...) \
-    printf((ml_msg_), ##__VA_ARGS__)
+    console_printf((ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG_CRITICAL(ml_mod_, ml_msg_, ...) \
-    printf((ml_msg_), ##__VA_ARGS__)
+    console_printf((ml_msg_), ##__VA_ARGS__)
 
 #define MODLOG(ml_lvl_, ml_mod_, ...) \
     MODLOG_ ## ml_lvl_((ml_mod_), __VA_ARGS__)
