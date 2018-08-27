@@ -54,6 +54,9 @@ hal_uart_thread(void * arg)
     struct hal_uart *p_uart = arg;
     uint8_t rx_data;
 
+    p_uart->sem_rx_handle = xSemaphoreCreateBinary();
+    assert(p_uart->sem_rx_handle != NULL);
+
     while (1) {
         if (HAL_OK == HAL_UART_Receive_IT(&p_uart->u_regs, &rx_data, 1)) {
             xSemaphoreTake(p_uart->sem_rx_handle, portMAX_DELAY);
@@ -68,9 +71,6 @@ hal_uart_start_rx(int port)
     if (port >= UART_CNT || NULL == uarts[port].u_rx_func) {
         return;
     }
-
-    uarts[port].sem_rx_handle = xSemaphoreCreateBinary();
-    assert(uarts[port].sem_rx_handle != NULL);
 
     BaseType_t ret = xTaskCreate(hal_uart_thread, "uart", configMINIMAL_STACK_SIZE,
                                  &uarts[port], configMAX_PRIORITIES - 1, 
@@ -90,8 +90,8 @@ hal_uart_start_tx(int port)
          value = uarts[port].u_tx_func(uarts[port].u_func_arg)) {
 
         uint8_t tx_data = (uint8_t)value;
-        if (HAL_OK == HAL_UART_Transmit_IT(&uarts[port].u_regs, &tx_data, 1)) {
-            xSemaphoreTake(uarts[port].sem_tx_handle, portMAX_DELAY);
+        if (HAL_OK != HAL_UART_Transmit(&uarts[port].u_regs, &tx_data, 1, 2000)) {
+            Error_Handler();
         }
     }
 
@@ -159,9 +159,6 @@ hal_uart_config(int port, int32_t baudrate, uint8_t databits, uint8_t stopbits,
     HAL_StatusTypeDef status = HAL_UART_Init(&uarts[port].u_regs);
     assert(status == HAL_OK);
 
-    uarts[port].sem_tx_handle = xSemaphoreCreateBinary();
-    assert(uarts[port].sem_tx_handle != NULL);
-
     hal_uart_start_rx(port);
 
     return 0;
@@ -178,28 +175,9 @@ hal_uart_close(int port)
     assert(status == HAL_OK);
 
     vTaskDelete(uarts[port].task_rx_handle);
-    vSemaphoreDelete(uarts[port].sem_tx_handle);
     vSemaphoreDelete(uarts[port].sem_rx_handle);
 
     return 0;
-}
-
-/**
-  * @brief  Tx Transfer completed callbacks.
-  * @param  huart: pointer to a UART_HandleTypeDef structure that contains
-  *                the configuration information for the specified UART module.
-  * @retval None
-  */
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-    for (int port = 0; port < UART_CNT; ++port) {
-        if (huart == &uarts[port].u_regs) {
-            BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-            xSemaphoreGiveFromISR(uarts[port].sem_tx_handle, &xHigherPriorityTaskWoken);
-            portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
-            break;
-        }
-    }
 }
 
 /**
