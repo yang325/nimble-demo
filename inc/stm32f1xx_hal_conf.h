@@ -77,7 +77,7 @@
 /*#define HAL_MMC_MODULE_ENABLED   */
 /*#define HAL_SDRAM_MODULE_ENABLED   */
 /*#define HAL_SMARTCARD_MODULE_ENABLED   */
-#define HAL_SPI_MODULE_ENABLED
+/*#define HAL_SPI_MODULE_ENABLED   */
 /*#define HAL_SRAM_MODULE_ENABLED   */
 /*#define HAL_TIM_MODULE_ENABLED   */
 #define HAL_UART_MODULE_ENABLED
@@ -118,12 +118,11 @@
 /**
   * @brief Internal Low Speed oscillator (LSI) value.
   */
-#if !defined  (LSI_VALUE)
+#if !defined  (LSI_VALUE) 
  #define LSI_VALUE               40000U    /*!< LSI Typical Value in Hz */
-#endif /* LSI_VALUE */
-/*!< Value of the Internal Low Speed oscillator in Hz
-     The real value may vary depending on the variations
-     in voltage and temperature. */
+#endif /* LSI_VALUE */                     /*!< Value of the Internal Low Speed oscillator in Hz
+                                                The real value may vary depending on the variations
+                                                in voltage and temperature. */
 
 /**
   * @brief External Low Speed oscillator (LSE) value.
@@ -154,7 +153,7 @@
   * @brief Uncomment the line below to expanse the "assert_param" macro in the 
   *        HAL drivers code
   */
-/* #define USE_FULL_ASSERT    1U */
+ #define USE_FULL_ASSERT    1U 
 
 /* ################## Ethernet peripheral configuration ##################### */
 
