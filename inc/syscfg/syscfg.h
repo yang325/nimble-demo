@@ -11,280 +11,6 @@
 #define MYNEWT_VAL(x)                           MYNEWT_VAL_ ## x
 
 
-/*** compiler/arm-none-eabi-m4 */
-#ifndef MYNEWT_VAL_HARDFLOAT
-#define MYNEWT_VAL_HARDFLOAT (0)
-#endif
-
-/*** hw/bsp/nrf52840pdk */
-#ifndef MYNEWT_VAL_BSP_NRF52840
-#define MYNEWT_VAL_BSP_NRF52840 (1)
-#endif
-
-#ifndef MYNEWT_VAL_I2C_0_FREQ_KHZ
-#define MYNEWT_VAL_I2C_0_FREQ_KHZ (100)
-#endif
-
-#ifndef MYNEWT_VAL_I2C_0_PIN_SCL
-#define MYNEWT_VAL_I2C_0_PIN_SCL (27)
-#endif
-
-#ifndef MYNEWT_VAL_I2C_0_PIN_SDA
-#define MYNEWT_VAL_I2C_0_PIN_SDA (26)
-#endif
-
-#ifndef MYNEWT_VAL_PWM_3
-#define MYNEWT_VAL_PWM_3 (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_MASTER_PIN_MISO
-#define MYNEWT_VAL_SPI_0_MASTER_PIN_MISO (47)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_MASTER_PIN_MOSI
-#define MYNEWT_VAL_SPI_0_MASTER_PIN_MOSI (46)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_MASTER_PIN_SCK
-#define MYNEWT_VAL_SPI_0_MASTER_PIN_SCK (45)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_SLAVE_PIN_MISO
-#define MYNEWT_VAL_SPI_0_SLAVE_PIN_MISO (47)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_SLAVE_PIN_MOSI
-#define MYNEWT_VAL_SPI_0_SLAVE_PIN_MOSI (46)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_SLAVE_PIN_SCK
-#define MYNEWT_VAL_SPI_0_SLAVE_PIN_SCK (45)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_SLAVE_PIN_SS
-#define MYNEWT_VAL_SPI_0_SLAVE_PIN_SS (44)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_0
-#define MYNEWT_VAL_TIMER_0 (1)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_1
-#define MYNEWT_VAL_TIMER_1 (0)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_2
-#define MYNEWT_VAL_TIMER_2 (0)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_3
-#define MYNEWT_VAL_TIMER_3 (0)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_4
-#define MYNEWT_VAL_TIMER_4 (0)
-#endif
-
-#ifndef MYNEWT_VAL_TIMER_5
-#define MYNEWT_VAL_TIMER_5 (0)
-#endif
-
-#ifndef MYNEWT_VAL_UART_0
-#define MYNEWT_VAL_UART_0 (1)
-#endif
-
-#ifndef MYNEWT_VAL_UART_0_PIN_CTS
-#define MYNEWT_VAL_UART_0_PIN_CTS (7)
-#endif
-
-#ifndef MYNEWT_VAL_UART_0_PIN_RTS
-#define MYNEWT_VAL_UART_0_PIN_RTS (5)
-#endif
-
-#ifndef MYNEWT_VAL_UART_0_PIN_RX
-#define MYNEWT_VAL_UART_0_PIN_RX (8)
-#endif
-
-#ifndef MYNEWT_VAL_UART_0_PIN_TX
-#define MYNEWT_VAL_UART_0_PIN_TX (6)
-#endif
-
-#ifndef MYNEWT_VAL_UART_1
-#define MYNEWT_VAL_UART_1 (0)
-#endif
-
-#ifndef MYNEWT_VAL_UART_1_PIN_CTS
-#define MYNEWT_VAL_UART_1_PIN_CTS (-1)
-#endif
-
-#ifndef MYNEWT_VAL_UART_1_PIN_RTS
-#define MYNEWT_VAL_UART_1_PIN_RTS (-1)
-#endif
-
-#ifndef MYNEWT_VAL_UART_1_PIN_RX
-#define MYNEWT_VAL_UART_1_PIN_RX (-1)
-#endif
-
-#ifndef MYNEWT_VAL_UART_1_PIN_TX
-#define MYNEWT_VAL_UART_1_PIN_TX (-1)
-#endif
-
-/*** hw/mcu/nordic/nrf52xxx */
-#ifndef MYNEWT_VAL_ADC_0
-#define MYNEWT_VAL_ADC_0 (0)
-#endif
-
-#ifndef MYNEWT_VAL_ADC_0_REFMV_0
-#define MYNEWT_VAL_ADC_0_REFMV_0 (0)
-#endif
-
-#ifndef MYNEWT_VAL_I2C_0
-#define MYNEWT_VAL_I2C_0 (0)
-#endif
-
-#ifndef MYNEWT_VAL_I2C_1
-#define MYNEWT_VAL_I2C_1 (0)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_MCU_DCDC_ENABLED
-#define MYNEWT_VAL_MCU_DCDC_ENABLED (1)
-#endif
-
-#ifndef MYNEWT_VAL_MCU_FLASH_MIN_WRITE_SIZE
-#define MYNEWT_VAL_MCU_FLASH_MIN_WRITE_SIZE (1)
-#endif
-
-#ifndef MYNEWT_VAL_PWM_0
-#define MYNEWT_VAL_PWM_0 (0)
-#endif
-
-#ifndef MYNEWT_VAL_PWM_1
-#define MYNEWT_VAL_PWM_1 (0)
-#endif
-
-#ifndef MYNEWT_VAL_PWM_2
-#define MYNEWT_VAL_PWM_2 (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_ADDRMODE
-#define MYNEWT_VAL_QSPI_ADDRMODE (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_DPMCONFIG
-#define MYNEWT_VAL_QSPI_DPMCONFIG (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_ENABLE
-#define MYNEWT_VAL_QSPI_ENABLE (0)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_FLASH_PAGE_SIZE
-#define MYNEWT_VAL_QSPI_FLASH_PAGE_SIZE (256)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_FLASH_SECTOR_COUNT
-#define MYNEWT_VAL_QSPI_FLASH_SECTOR_COUNT (4096)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_FLASH_SECTOR_SIZE
-#define MYNEWT_VAL_QSPI_FLASH_SECTOR_SIZE (4096)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_CS
-#define MYNEWT_VAL_QSPI_PIN_CS (17)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_DIO0
-#define MYNEWT_VAL_QSPI_PIN_DIO0 (20)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_DIO1
-#define MYNEWT_VAL_QSPI_PIN_DIO1 (21)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_DIO2
-#define MYNEWT_VAL_QSPI_PIN_DIO2 (22)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_DIO3
-#define MYNEWT_VAL_QSPI_PIN_DIO3 (23)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_QSPI_PIN_SCK
-#define MYNEWT_VAL_QSPI_PIN_SCK (19)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_READOC
-#define MYNEWT_VAL_QSPI_READOC (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_SCK_DELAY
-#define MYNEWT_VAL_QSPI_SCK_DELAY (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_SCK_FREQ
-#define MYNEWT_VAL_QSPI_SCK_FREQ (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_SPI_MODE
-#define MYNEWT_VAL_QSPI_SPI_MODE (0)
-#endif
-
-#ifndef MYNEWT_VAL_QSPI_WRITEOC
-#define MYNEWT_VAL_QSPI_WRITEOC (0)
-#endif
-
-#ifndef MYNEWT_VAL_SOFT_PWM
-#define MYNEWT_VAL_SOFT_PWM (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_MASTER
-#define MYNEWT_VAL_SPI_0_MASTER (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_0_SLAVE
-#define MYNEWT_VAL_SPI_0_SLAVE (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_1_MASTER
-#define MYNEWT_VAL_SPI_1_MASTER (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_1_SLAVE
-#define MYNEWT_VAL_SPI_1_SLAVE (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_2_MASTER
-#define MYNEWT_VAL_SPI_2_MASTER (0)
-#endif
-
-#ifndef MYNEWT_VAL_SPI_2_SLAVE
-#define MYNEWT_VAL_SPI_2_SLAVE (0)
-#endif
-
-/* Overridden by hw/bsp/nrf52840pdk (defined by hw/mcu/nordic/nrf52xxx) */
-#ifndef MYNEWT_VAL_XTAL_32768
-#define MYNEWT_VAL_XTAL_32768 (1)
-#endif
-
-#ifndef MYNEWT_VAL_XTAL_32768_SYNTH
-#define MYNEWT_VAL_XTAL_32768_SYNTH (0)
-#endif
-
-#ifndef MYNEWT_VAL_XTAL_RC
-#define MYNEWT_VAL_XTAL_RC (0)
-#endif
-
 /*** kernel/os */
 #ifndef MYNEWT_VAL_FLOAT_USER
 #define MYNEWT_VAL_FLOAT_USER (0)
@@ -360,15 +86,6 @@
 
 #ifndef MYNEWT_VAL_WATCHDOG_INTERVAL
 #define MYNEWT_VAL_WATCHDOG_INTERVAL (30000)
-#endif
-
-/*** libc/baselibc */
-#ifndef MYNEWT_VAL_BASELIBC_ASSERT_FILE_LINE
-#define MYNEWT_VAL_BASELIBC_ASSERT_FILE_LINE (0)
-#endif
-
-#ifndef MYNEWT_VAL_BASELIBC_PRESENT
-#define MYNEWT_VAL_BASELIBC_PRESENT (1)
 #endif
 
 /*** nimble */
@@ -761,24 +478,6 @@
 #endif
 
 /*** nimble/transport */
-#ifndef MYNEWT_VAL_BLE_HCI_TRANSPORT_EMSPI
-#define MYNEWT_VAL_BLE_HCI_TRANSPORT_EMSPI (0)
-#endif
-
-/* Overridden by targets/porting-nimble (defined by nimble/transport) */
-#ifndef MYNEWT_VAL_BLE_HCI_TRANSPORT_NIMBLE_BUILTIN
-#define MYNEWT_VAL_BLE_HCI_TRANSPORT_NIMBLE_BUILTIN (0)
-#endif
-
-#ifndef MYNEWT_VAL_BLE_HCI_TRANSPORT_RAM
-#define MYNEWT_VAL_BLE_HCI_TRANSPORT_RAM (0)
-#endif
-
-#ifndef MYNEWT_VAL_BLE_HCI_TRANSPORT_SOCKET
-#define MYNEWT_VAL_BLE_HCI_TRANSPORT_SOCKET (0)
-#endif
-
-/* Overridden by targets/porting-nimble (defined by nimble/transport) */
 #ifndef MYNEWT_VAL_BLE_HCI_TRANSPORT_UART
 #define MYNEWT_VAL_BLE_HCI_TRANSPORT_UART (1)
 #endif
@@ -817,7 +516,6 @@
 #define MYNEWT_VAL_BLE_HCI_UART_DATA_BITS (8)
 #endif
 
-/* Overridden by targets/porting-nimble (defined by nimble/transport/uart) */
 #ifndef MYNEWT_VAL_BLE_HCI_UART_FLOW_CTRL
 #define MYNEWT_VAL_BLE_HCI_UART_FLOW_CTRL (HAL_UART_FLOW_CTL_RTS_CTS)
 #endif
@@ -834,101 +532,286 @@
 #define MYNEWT_VAL_BLE_HCI_UART_STOP_BITS (1)
 #endif
 
-/*** sys/console/stub */
-#ifndef MYNEWT_VAL_CONSOLE_UART_BAUD
-#define MYNEWT_VAL_CONSOLE_UART_BAUD (1000000)
+/*** @apache-mynewt-nimble/nimble/host/mesh */
+#ifndef MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT
+#define MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT (10)
 #endif
 
-#ifndef MYNEWT_VAL_CONSOLE_UART_DEV
-#define MYNEWT_VAL_CONSOLE_UART_DEV ("uart0")
+#ifndef MYNEWT_VAL_BLE_MESH_ADV_TASK_PRIO
+#define MYNEWT_VAL_BLE_MESH_ADV_TASK_PRIO (9)
 #endif
 
-#ifndef MYNEWT_VAL_CONSOLE_UART_FLOW_CONTROL
-#define MYNEWT_VAL_CONSOLE_UART_FLOW_CONTROL (HAL_UART_FLOW_CTL_RTS_CTS)
+#ifndef MYNEWT_VAL_BLE_MESH_APP_KEY_COUNT
+#define MYNEWT_VAL_BLE_MESH_APP_KEY_COUNT (1)
 #endif
 
-/*** sys/flash_map */
-#ifndef MYNEWT_VAL_FLASH_MAP_MAX_AREAS
-#define MYNEWT_VAL_FLASH_MAP_MAX_AREAS (10)
+#ifndef MYNEWT_VAL_BLE_MESH_CFG_CLI
+#define MYNEWT_VAL_BLE_MESH_CFG_CLI (0)
 #endif
 
-/*** sys/log/stub */
-#ifndef MYNEWT_VAL_LOG_CONSOLE
-#define MYNEWT_VAL_LOG_CONSOLE (1)
+#ifndef MYNEWT_VAL_BLE_MESH_CRPL
+#define MYNEWT_VAL_BLE_MESH_CRPL (10)
 #endif
 
-#ifndef MYNEWT_VAL_LOG_FCB
-#define MYNEWT_VAL_LOG_FCB (0)
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG
+#define MYNEWT_VAL_BLE_MESH_DEBUG (1)
 #endif
 
-#ifndef MYNEWT_VAL_LOG_LEVEL
-#define MYNEWT_VAL_LOG_LEVEL (255)
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_ACCESS
+#define MYNEWT_VAL_BLE_MESH_DEBUG_ACCESS (1)
 #endif
 
-/*** sys/sysinit */
-#ifndef MYNEWT_VAL_SYSINIT_CONSTRAIN_INIT
-#define MYNEWT_VAL_SYSINIT_CONSTRAIN_INIT (1)
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_ADV
+#define MYNEWT_VAL_BLE_MESH_DEBUG_ADV (1)
 #endif
 
-#ifndef MYNEWT_VAL_SYSINIT_PANIC_FILE_LINE
-#define MYNEWT_VAL_SYSINIT_PANIC_FILE_LINE (0)
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_BEACON
+#define MYNEWT_VAL_BLE_MESH_DEBUG_BEACON (1)
 #endif
 
-#ifndef MYNEWT_VAL_SYSINIT_PANIC_MESSAGE
-#define MYNEWT_VAL_SYSINIT_PANIC_MESSAGE (0)
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_CRYPTO
+#define MYNEWT_VAL_BLE_MESH_DEBUG_CRYPTO (1)
 #endif
 
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_FRIEND
+#define MYNEWT_VAL_BLE_MESH_DEBUG_FRIEND (1)
+#endif
 
-#define MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT                             1
-#define MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT                           2
-#define MYNEWT_VAL_BLE_MESH_APP_KEY_COUNT                               2
-#define MYNEWT_VAL_BLE_MESH_SUBNET_COUNT                                2
-#define MYNEWT_VAL_BLE_MESH_CRPL                                        10
-#define MYNEWT_VAL_BLE_MESH_MSG_CACHE_SIZE                              10
-#define MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT                               20
-#define MYNEWT_VAL_BLE_MESH_TX_SEG_MSG_COUNT                            1
-#define MYNEWT_VAL_BLE_MESH_RX_SEG_MSG_COUNT                            1
-#define MYNEWT_VAL_BLE_MESH_DEBUG_TRANS                                 1
-#define MYNEWT_VAL_BLE_MESH_FRIEND                                      1
-#define MYNEWT_VAL_BLE_MESH_LOW_POWER                                   0
-#define MYNEWT_VAL_BLE_MESH_FRIEND_SUB_LIST_SIZE                        3
-#define MYNEWT_VAL_BLE_MESH_FRIEND_SEG_RX                               1
-#define MYNEWT_VAL_BLE_MESH_FRIEND_LPN_COUNT                            2
-#define MYNEWT_VAL_BLE_MESH_DEBUG_BEACON                                0
-#define MYNEWT_VAL_BLE_MESH_DEBUG_CRYPTO                                0
-#define MYNEWT_VAL_BLE_MESH_PROV                                        1
-#define MYNEWT_VAL_BLE_MESH_DEBUG_MODEL                                 0
-#define MYNEWT_VAL_BLE_MESH_DEBUG_ADV                                   0
-#define MYNEWT_VAL_BLE_MESH_DEBUG                                       0
-#define MYNEWT_VAL_BLE_MESH_PB_GATT                                     1
-#define MYNEWT_VAL_BLE_MESH_LABEL_COUN                                  3
-#define MYNEWT_VAL_BLE_MESH_RELAY                                       1
-#define MYNEWT_VAL_BLE_MESH_GATT_PROXY                                  1
-#define MYNEWT_VAL_BLE_MESH_TESTING                                     0
-#define MYNEWT_VAL_BLE_MESH_DEBUG_NET                                   0
-#define MYNEWT_VAL_BLE_MESH_IV_UPDATE_TEST                              0
-#define MYNEWT_VAL_BLE_MESH_IVU_DIVIDER                                 4
-#define MYNEWT_VAL_BLE_MESH_DEBUG_PROV                                  0
-#define MYNEWT_VAL_BLE_MESH_FRIEND_QUEUE_SIZE                           16
-#define MYNEWT_VAL_BLE_MESH_DEBUG_FRIEND                                0
-#define MYNEWT_VAL_BLE_MESH_FRIEND_RECV_WIN                             255
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_LOW_POWER
+#define MYNEWT_VAL_BLE_MESH_DEBUG_LOW_POWER (1)
+#endif
 
-#define MYNEWT_VAL_BLE_MESH_RX_SDU_MAX                                  384
-#define MYNEWT_VAL_BLE_MESH_PB_ADV                                      1
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_MODEL
+#define MYNEWT_VAL_BLE_MESH_DEBUG_MODEL (1)
+#endif
 
-#define MYNEWT_VAL_BLE_MESH_PROXY                                       1
-#define MYNEWT_VAL_BLE_MESH_LABEL_COUNT                                 3
-#define MYNEWT_VAL_BLE_MESH_DEBUG_ACCESS                                0
-#define MYNEWT_VAL_BLE_MESH_PROXY_FILTER_SIZE                           3
-#define MYNEWT_VAL_BLE_MESH_DEBUG_PROXY                                 0
-#define MYNEWT_VAL_BLE_MESH_NODE_ID_TIMEOUT                             60
-#define MYNEWT_VAL_BLE_MESH_DEVICE_NAME                                 "NimBLE"
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_NET
+#define MYNEWT_VAL_BLE_MESH_DEBUG_NET (1)
+#endif
 
-#define MYNEWT_VAL_BLE_MESH_DEBUG_SETTINGS                              0
-#define MYNEWT_VAL_BLE_MESH_SEQ_STORE_RATE                              128
-#define MYNEWT_VAL_BLE_MESH_RPL_STORE_TIMEOUT                           5
-#define MYNEWT_VAL_BLE_MESH_STORE_TIMEOUT                               2
-#define MYNEWT_VAL_BLE_MESH_SETTINGS                                    0
-#define MYNEWT_VAL_BLE_MESH_TX_SEG_MAX                                  5
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_PROV
+#define MYNEWT_VAL_BLE_MESH_DEBUG_PROV (1)
+#endif
+
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_PROXY
+#define MYNEWT_VAL_BLE_MESH_DEBUG_PROXY (1)
+#endif
+
+/* Overridden by @apache-mynewt-core/apps/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEBUG_TRANS
+#define MYNEWT_VAL_BLE_MESH_DEBUG_TRANS (1)
+#endif
+
+/* Overridden by targets/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_DEV_UUID
+#define MYNEWT_VAL_BLE_MESH_DEV_UUID ((uint8_t[16]){0x22, 0x20, 0})
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND
+#define MYNEWT_VAL_BLE_MESH_FRIEND (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND_LPN_COUNT
+#define MYNEWT_VAL_BLE_MESH_FRIEND_LPN_COUNT (2)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND_QUEUE_SIZE
+#define MYNEWT_VAL_BLE_MESH_FRIEND_QUEUE_SIZE (16)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND_RECV_WIN
+#define MYNEWT_VAL_BLE_MESH_FRIEND_RECV_WIN (255)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND_SEG_RX
+#define MYNEWT_VAL_BLE_MESH_FRIEND_SEG_RX (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_FRIEND_SUB_LIST_SIZE
+#define MYNEWT_VAL_BLE_MESH_FRIEND_SUB_LIST_SIZE (3)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_GATT_PROXY
+#define MYNEWT_VAL_BLE_MESH_GATT_PROXY (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_HEALTH_CLI
+#define MYNEWT_VAL_BLE_MESH_HEALTH_CLI (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_IV_UPDATE_TEST
+#define MYNEWT_VAL_BLE_MESH_IV_UPDATE_TEST (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LABEL_COUNT
+#define MYNEWT_VAL_BLE_MESH_LABEL_COUNT (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LOW_POWER
+#define MYNEWT_VAL_BLE_MESH_LOW_POWER (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_AUTO
+#define MYNEWT_VAL_BLE_MESH_LPN_AUTO (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_AUTO_TIMEOUT
+#define MYNEWT_VAL_BLE_MESH_LPN_AUTO_TIMEOUT (15)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_ESTABLISHMENT
+#define MYNEWT_VAL_BLE_MESH_LPN_ESTABLISHMENT (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_GROUPS
+#define MYNEWT_VAL_BLE_MESH_LPN_GROUPS (10)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_INIT_POLL_TIMEOUT
+#define MYNEWT_VAL_BLE_MESH_LPN_INIT_POLL_TIMEOUT (MYNEWT_VAL_BLE_MESH_LPN_POLL_TIMEOUT)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_MIN_QUEUE_SIZE
+#define MYNEWT_VAL_BLE_MESH_LPN_MIN_QUEUE_SIZE (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_POLL_TIMEOUT
+#define MYNEWT_VAL_BLE_MESH_LPN_POLL_TIMEOUT (300)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_RECV_DELAY
+#define MYNEWT_VAL_BLE_MESH_LPN_RECV_DELAY (100)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_RECV_WIN_FACTOR
+#define MYNEWT_VAL_BLE_MESH_LPN_RECV_WIN_FACTOR (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_RETRY_TIMEOUT
+#define MYNEWT_VAL_BLE_MESH_LPN_RETRY_TIMEOUT (8)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_RSSI_FACTOR
+#define MYNEWT_VAL_BLE_MESH_LPN_RSSI_FACTOR (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_LPN_SCAN_LATENCY
+#define MYNEWT_VAL_BLE_MESH_LPN_SCAN_LATENCY (10)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT
+#define MYNEWT_VAL_BLE_MESH_MODEL_GROUP_COUNT (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT
+#define MYNEWT_VAL_BLE_MESH_MODEL_KEY_COUNT (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_MSG_CACHE_SIZE
+#define MYNEWT_VAL_BLE_MESH_MSG_CACHE_SIZE (10)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_NODE_ID_TIMEOUT
+#define MYNEWT_VAL_BLE_MESH_NODE_ID_TIMEOUT (60)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_OOB_INPUT_ACTIONS
+#define MYNEWT_VAL_BLE_MESH_OOB_INPUT_ACTIONS (((BT_MESH_NO_INPUT)))
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_OOB_INPUT_SIZE
+#define MYNEWT_VAL_BLE_MESH_OOB_INPUT_SIZE (4)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_OOB_OUTPUT_ACTIONS
+#define MYNEWT_VAL_BLE_MESH_OOB_OUTPUT_ACTIONS (((BT_MESH_DISPLAY_NUMBER)))
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_OOB_OUTPUT_SIZE
+#define MYNEWT_VAL_BLE_MESH_OOB_OUTPUT_SIZE (4)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_PB_ADV
+#define MYNEWT_VAL_BLE_MESH_PB_ADV (1)
+#endif
+
+/* Overridden by targets/blemesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_PB_GATT
+#define MYNEWT_VAL_BLE_MESH_PB_GATT (1)
+#endif
+
+/* Overridden by @apache-mynewt-nimble/nimble/host/mesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_PROV
+#define MYNEWT_VAL_BLE_MESH_PROV (1)
+#endif
+
+/* Overridden by @apache-mynewt-nimble/nimble/host/mesh (defined by @apache-mynewt-nimble/nimble/host/mesh) */
+#ifndef MYNEWT_VAL_BLE_MESH_PROXY
+#define MYNEWT_VAL_BLE_MESH_PROXY (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_PROXY_FILTER_SIZE
+#define MYNEWT_VAL_BLE_MESH_PROXY_FILTER_SIZE (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_RELAY
+#define MYNEWT_VAL_BLE_MESH_RELAY (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_RX_SDU_MAX
+#define MYNEWT_VAL_BLE_MESH_RX_SDU_MAX (384)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_RX_SEG_MSG_COUNT
+#define MYNEWT_VAL_BLE_MESH_RX_SEG_MSG_COUNT (2)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_SHELL
+#define MYNEWT_VAL_BLE_MESH_SHELL (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_SHELL_MODELS
+#define MYNEWT_VAL_BLE_MESH_SHELL_MODELS (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_SUBNET_COUNT
+#define MYNEWT_VAL_BLE_MESH_SUBNET_COUNT (1)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_TESTING
+#define MYNEWT_VAL_BLE_MESH_TESTING (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_TX_SEG_MSG_COUNT
+#define MYNEWT_VAL_BLE_MESH_TX_SEG_MSG_COUNT (4)
+#endif
+
+/* need to be confirmed */
+#ifndef MYNEWT_VAL_BLE_MESH_TX_SEG_MAX
+#define MYNEWT_VAL_BLE_MESH_TX_SEG_MAX (5)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_SETTINGS
+#define MYNEWT_VAL_BLE_MESH_SETTINGS (0)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_IVU_DIVIDER
+#define MYNEWT_VAL_BLE_MESH_IVU_DIVIDER (2)
+#endif
+
+#ifndef MYNEWT_VAL_BLE_MESH_DEVICE_NAME
+#define MYNEWT_VAL_BLE_MESH_DEVICE_NAME (MYNEWT_VAL_BLE_SVC_GAP_DEVICE_NAME)
+#endif
 
 #endif

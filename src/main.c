@@ -316,7 +316,7 @@ static void ble_host_thread(void * arg)
   ble_svc_gatt_init();
 
   /* Set the default device name. */
-  ret = ble_svc_gap_device_name_set(MYNEWT_VAL_BLE_MESH_DEVICE_NAME);
+  ret = ble_svc_gap_device_name_set(MYNEWT_VAL_BLE_SVC_GAP_DEVICE_NAME);
   assert(ret == 0);
 
   /* Initialize the NimBLE host configuration */
