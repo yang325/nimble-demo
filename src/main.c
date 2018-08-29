@@ -243,19 +243,17 @@ static void ble_app_on_sync(void)
 {
   int ret;
   const char *name;
-  uint8_t own_addr_type;
+  uint8_t own_addr[6];
   struct ble_gap_adv_params adv_params;
   struct ble_hs_adv_fields fields;
 
   console_printf("The host and controller are in sync\n");
   led_on();
 
-  /* Make sure we have proper identity address set (public preferred) */
-  ret = ble_hs_util_ensure_addr(0);
-  assert(ret == 0);
-
-  /* Figure out address to use while advertising (no privacy for now) */
-  ret = ble_hs_id_infer_auto(0, &own_addr_type);
+  /* Make sure we have proper identity address set */
+  memcpy(&own_addr[0], &dev_uuid[0], 6);
+  own_addr[5] |= 0xC0;
+  ret = ble_hs_id_set_rnd(own_addr);
   assert(ret == 0);
 
   /**
@@ -283,7 +281,7 @@ static void ble_app_on_sync(void)
   memset(&adv_params, 0, sizeof adv_params);
   adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
   adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-  ret = ble_gap_adv_start(own_addr_type, NULL, BLE_HS_FOREVER,
+  ret = ble_gap_adv_start(BLE_HCI_ADV_OWN_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
                           &adv_params, ble_gap_event, NULL);
   assert(ret == 0);
 }
