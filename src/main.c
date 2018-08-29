@@ -47,7 +47,10 @@
 
 #include "transport/uart/ble_hci_uart.h"
 #include "nimble/nimble_port.h"
+#include "services/gap/ble_svc_gap.h"
+#include "services/gatt/ble_svc_gatt.h"
 #include "host/ble_hs.h"
+#include "host/util/util.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -64,6 +67,8 @@ static uint32_t dev_uuid[4];
 
 static void system_clock_config(void);
 static void system_info_output(void);
+
+static int  ble_gap_event(struct ble_gap_event *event, void *arg);
 
 static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
@@ -174,7 +179,7 @@ static void system_info_output(void)
 {
   uint8_t varient, revision;
 
-  MODLOG_INFO(0, "\n");
+  console_printf("\n");
 
   HAL_GetUID(&dev_uuid[0]);
   dev_uuid[3] = SCB->CPUID;
@@ -184,9 +189,9 @@ static void system_info_output(void)
   SystemCoreClockUpdate();
 
   console_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  console_printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+  console_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
   console_printf("- Device UUID = %08X:%08X:%08X:%08X -\n",
-         dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
+                dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
 }
 
 /** Configure pins as 
@@ -215,6 +220,20 @@ static void led_init(void)
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
+static int ble_gap_event(struct ble_gap_event *event, void *arg)
+{
+  switch (event->type) {
+    case BLE_GAP_EVENT_CONNECT:
+      break;
+    case BLE_GAP_EVENT_DISCONNECT:
+      break;
+    default:
+      break;
+  }
+
+  return 0;
+}
+
 /**
   * @brief  Handle BLE sync event
   * @param  None
@@ -222,21 +241,64 @@ static void led_init(void)
   */
 static void ble_app_on_sync(void)
 {
+  int ret;
+  const char *name;
+  uint8_t own_addr_type;
+  struct ble_gap_adv_params adv_params;
+  struct ble_hs_adv_fields fields;
+
   console_printf("The host and controller are in sync\n");
   led_on();
+
+  /* Make sure we have proper identity address set (public preferred) */
+  ret = ble_hs_util_ensure_addr(0);
+  assert(ret == 0);
+
+  /* Figure out address to use while advertising (no privacy for now) */
+  ret = ble_hs_id_infer_auto(0, &own_addr_type);
+  assert(ret == 0);
+
+  /**
+   *  Set the advertisement data included in our advertisements:
+   *     o Flags (indicates advertisement type and other general info).
+   *     o Device name.
+   */
+  memset(&fields, 0, sizeof fields);
+  /** 
+   *  Advertise two flags:
+   *     o Discoverability in forthcoming advertisement (general)
+   *     o BLE-only (BR/EDR unsupported).
+   */
+  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
+
+  name = ble_svc_gap_device_name();
+  fields.name = (uint8_t *)name;
+  fields.name_len = strlen(name);
+  fields.name_is_complete = 1;
+
+  ret = ble_gap_adv_set_fields(&fields);
+  assert(ret == 0);
+
+  /* Begin advertising. */
+  memset(&adv_params, 0, sizeof adv_params);
+  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
+  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
+  ret = ble_gap_adv_start(own_addr_type, NULL, BLE_HS_FOREVER,
+                          &adv_params, ble_gap_event, NULL);
+  assert(ret == 0);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
  *
- * @details This thread is responsible for handling BLE Stack events sent 
-from on_ble_evt().
+ * @details This thread is responsible for handling BLE Stack events sent from on_ble_evt().
  *
- * @param[in]   arg   Pointer used for passing some arbitrary information (
-context) from the
+ * @param[in]   arg   Pointer used for passing some arbitrary information (context) from the
  *                    osThreadCreate() call to the thread.
  */
 static void ble_host_thread(void * arg)
 {
+  int ret;
+
   /* Output system information */
   system_info_output();
 
@@ -248,6 +310,14 @@ static void ble_host_thread(void * arg)
 
   /* Initialize NimBLE modules */
   nimble_port_init();
+
+  /* Initialize GAP and GATT services */
+  ble_svc_gap_init();
+  ble_svc_gatt_init();
+
+  /* Set the default device name. */
+  ret = ble_svc_gap_device_name_set(MYNEWT_VAL_BLE_MESH_DEVICE_NAME);
+  assert(ret == 0);
 
   /* Initialize the NimBLE host configuration */
   ble_hs_cfg.sync_cb = ble_app_on_sync;
@@ -280,7 +350,7 @@ void _Error_Handler(char *file, int line)
 void assert_failed(uint8_t* file, uint32_t line)
 {
   vTaskSuspendAll();
-  console_printf("Wrong parameters value: file %s on line %lu\n", file, line);
+  console_printf("Wrong parameters value: file %s on line %u\n", file, line);
   while(1)
   {
     led_toggle();
