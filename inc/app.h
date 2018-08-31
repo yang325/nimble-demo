@@ -38,8 +38,8 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H__
-#define __MAIN_H__
+#ifndef __APP_H__
+#define __APP_H__
 
 /* Includes ------------------------------------------------------------------*/
 

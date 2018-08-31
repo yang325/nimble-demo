@@ -25,6 +25,8 @@
 extern "C" {
 #endif
 
+#include <stdbool.h>
+
 /* More convenient section placement macros. */
 #define bssnz_t            __attribute__((section(".bss.core.nz")))
 
@@ -34,6 +36,7 @@ void led_init(void);
 void led_on(void);
 void led_off(void);
 void led_toggle(void);
+bool led_state(void);
 
 #ifdef __cplusplus
 }

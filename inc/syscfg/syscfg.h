@@ -403,7 +403,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_BLE_SM_SC
-#define MYNEWT_VAL_BLE_SM_SC (0)
+#define MYNEWT_VAL_BLE_SM_SC (1)
 #endif
 
 #ifndef MYNEWT_VAL_BLE_SM_THEIR_KEY_DIST

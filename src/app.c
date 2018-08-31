@@ -45,6 +45,9 @@
 #include "timers.h"
 #include "semphr.h"
 
+#include "demo.h"
+#include "bsp/bsp.h"
+
 #include "transport/uart/ble_hci_uart.h"
 #include "nimble/nimble_port.h"
 #include "services/gap/ble_svc_gap.h"
@@ -181,7 +184,7 @@ static void ble_app_on_sync(void)
 
   HAL_GetUID(&uuid[0]);
   uuid[3] = SCB->CPUID;
-  mesh_demo_init(uuid);
+  mesh_demo_init((void *)&uuid[0]);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.

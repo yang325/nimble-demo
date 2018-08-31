@@ -1,8 +1,17 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include "bsp/bsp.h"
+
+#include "mesh/mesh.h"
+#include "mesh/main.h"
+#include "mesh/glue.h"
+
 /* Private define ------------------------------------------------------------*/
 
 #define CID_VENDOR                      0x038F
+#define FAULT_ARR_SIZE                  2
+#define STANDARD_TEST_ID                0x00
+#define TEST_ID                         0x01
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -28,6 +37,9 @@ static void gen_onoff_set_unack(struct bt_mesh_model *model,
 
 /* Private variables ---------------------------------------------------------*/
 
+static bool has_reg_fault = true;
+static int recent_test_id = STANDARD_TEST_ID;
+
 static uint8_t dev_uuid[16];
 
 static struct bt_mesh_cfg_srv cfg_srv = {
@@ -36,7 +48,7 @@ static struct bt_mesh_cfg_srv cfg_srv = {
 #if MYNEWT_VAL(BLE_MESH_FRIEND)
   .frnd = BT_MESH_FRIEND_ENABLED,
 #else
-  .gatt_proxy = BT_MESH_GATT_PROXY_NOT_SUPPORTED,
+  .frnd = BT_MESH_FRIEND_NOT_SUPPORTED,
 #endif
 #if MYNEWT_VAL(BLE_MESH_GATT_PROXY)
   .gatt_proxy = BT_MESH_GATT_PROXY_ENABLED,
@@ -90,7 +102,7 @@ static const struct bt_mesh_prov prov = {
   .complete = prov_complete,
 };
 
-static static const struct bt_mesh_comp comp = {
+static const struct bt_mesh_comp comp = {
   .cid = CID_VENDOR,
   .elem = elements,
   .elem_count = ARRAY_SIZE(elements),
@@ -110,6 +122,8 @@ void mesh_demo_init(uint8_t uuid[16])
   assert(ret == 0);
   ret = ble_hs_id_set_rnd(addr.val);
   assert(ret == 0);
+
+  health_pub_init();
 
   ret = bt_mesh_init(addr.type, &prov, &comp);
   if (ret) {
@@ -196,7 +210,7 @@ static int fault_test(struct bt_mesh_model *model, uint8_t test_id, uint16_t com
 
   recent_test_id = test_id;
   has_reg_fault = true;
-  bt_mesh_fault_update(model->elem);
+  bt_mesh_fault_update(bt_mesh_model_elem(model));
 
   return 0;
 }
