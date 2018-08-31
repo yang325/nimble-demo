@@ -59,41 +59,15 @@
 /**< Priority of the BLE host task. */
 #define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 2)
 
-/* Private variables ---------------------------------------------------------*/
-
-static uint32_t dev_uuid[4];
-
 /* Private function prototypes -----------------------------------------------*/
 
 static void system_clock_config(void);
 static void system_info_output(void);
 
-static int  ble_gap_event(struct ble_gap_event *event, void *arg);
-
 static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
 
-static void led_init(void);
-
-static inline void led_on(void)
-{
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-}
-
-static inline void led_off(void)
-{
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-}
-
-static inline void led_toggle(void)
-{
-  HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_2);
-}
-
-static inline bool led_state(void)
-{
-  return GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
-}
+/* Private variables ---------------------------------------------------------*/
 
 /* Exported functions --------------------------------------------------------*/
 
@@ -185,53 +159,12 @@ static void system_info_output(void)
 
   console_printf("\n");
 
-  HAL_GetUID(&dev_uuid[0]);
-  dev_uuid[3] = SCB->CPUID;
-
   varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
   SystemCoreClockUpdate();
 
   console_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
   console_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
-  console_printf("- Device UUID = %08X:%08X:%08X:%08X -\n",
-                dev_uuid[3], dev_uuid[2], dev_uuid[1], dev_uuid[0]);
-}
-
-/** Configure pins as 
-        * Analog 
-        * Input 
-        * Output
-        * EVENT_OUT
-        * EXTI
-*/
-static void led_init(void)
-{
-  GPIO_InitTypeDef GPIO_InitStruct;
-
-  /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
-
-  /*Configure GPIO pin : PA2 */
-  GPIO_InitStruct.Pin = GPIO_PIN_2;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-}
-
-static int ble_gap_event(struct ble_gap_event *event, void *arg)
-{
-  switch (event->type) {
-    case BLE_GAP_EVENT_CONNECT:
-      break;
-    case BLE_GAP_EVENT_DISCONNECT:
-      break;
-    default:
-      break;
-  }
-
-  return 0;
 }
 
 /**
@@ -241,49 +174,14 @@ static int ble_gap_event(struct ble_gap_event *event, void *arg)
   */
 static void ble_app_on_sync(void)
 {
-  int ret;
-  const char *name;
-  uint8_t own_addr[6];
-  struct ble_gap_adv_params adv_params;
-  struct ble_hs_adv_fields fields;
+  uint32_t uuid[4];
 
   console_printf("The host and controller are in sync\n");
   led_on();
 
-  /* Make sure we have proper identity address set */
-  memcpy(&own_addr[0], &dev_uuid[0], 6);
-  own_addr[5] |= 0xC0;
-  ret = ble_hs_id_set_rnd(own_addr);
-  assert(ret == 0);
-
-  /**
-   *  Set the advertisement data included in our advertisements:
-   *     o Flags (indicates advertisement type and other general info).
-   *     o Device name.
-   */
-  memset(&fields, 0, sizeof fields);
-  /** 
-   *  Advertise two flags:
-   *     o Discoverability in forthcoming advertisement (general)
-   *     o BLE-only (BR/EDR unsupported).
-   */
-  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
-
-  name = ble_svc_gap_device_name();
-  fields.name = (uint8_t *)name;
-  fields.name_len = strlen(name);
-  fields.name_is_complete = 1;
-
-  ret = ble_gap_adv_set_fields(&fields);
-  assert(ret == 0);
-
-  /* Begin advertising. */
-  memset(&adv_params, 0, sizeof adv_params);
-  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
-  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-  ret = ble_gap_adv_start(BLE_HCI_ADV_OWN_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
-                          &adv_params, ble_gap_event, NULL);
-  assert(ret == 0);
+  HAL_GetUID(&uuid[0]);
+  uuid[3] = SCB->CPUID;
+  mesh_demo_init(uuid);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
