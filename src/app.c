@@ -54,6 +54,7 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "host/ble_hs.h"
 #include "host/util/util.h"
+#include "mesh/glue.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -66,6 +67,8 @@
 
 static void system_clock_config(void);
 static void system_info_output(void);
+
+static void ble_controller_reset(void);
 
 static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
@@ -170,6 +173,21 @@ static void system_info_output(void)
   console_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
 }
 
+static void ble_controller_reset(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
+
+  /*Configure GPIO pin : PB12 */
+  GPIO_InitStruct.Pin = GPIO_PIN_12;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+}
+
 /**
   * @brief  Handle BLE sync event
   * @param  None
@@ -204,15 +222,19 @@ static void ble_host_thread(void * arg)
   /* Initialize LED */
   led_init();
 
+  /* Reset BLE controller */
+  ble_controller_reset();
+
   /* Initialize UART as HCI */
   ble_hci_uart_init();
 
   /* Initialize NimBLE modules */
   nimble_port_init();
 
-  /* Initialize GAP and GATT services */
+  /* Initialize GAP, GATT and Mesh related services */
   ble_svc_gap_init();
   ble_svc_gatt_init();
+  bt_mesh_register_gatt();
 
   /* Set the default device name. */
   ret = ble_svc_gap_device_name_set(MYNEWT_VAL_BLE_SVC_GAP_DEVICE_NAME);
