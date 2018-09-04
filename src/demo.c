@@ -131,6 +131,13 @@ void mesh_demo_init(uint8_t uuid[16])
     return;
   }
 
+  if (pdPASS != xTaskCreate(mesh_adv_thread, "adv", DEMO_TASK_MESH_ADV_SIZE,
+                            NULL, DEMO_TASK_MESH_ADV_PRIORITY, NULL)) {
+
+    console_printf("Creating advertising task failed\n");
+    return;
+  }
+
   console_printf("Mesh initialized\n");
 }
 

@@ -58,11 +58,6 @@
 
 /* Private define ------------------------------------------------------------*/
 
-/**< Size of the BLE host task.*/
-#define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 4)
-/**< Priority of the BLE host task. */
-#define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 2)
-
 /* Private function prototypes -----------------------------------------------*/
 
 static void system_clock_config(void);

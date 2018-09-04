@@ -72,8 +72,8 @@ hal_uart_start_rx(int port)
         return;
     }
 
-    BaseType_t ret = xTaskCreate(hal_uart_thread, "uart", configMINIMAL_STACK_SIZE,
-                                 &uarts[port], configMAX_PRIORITIES - 1, 
+    BaseType_t ret = xTaskCreate(hal_uart_thread, "uart", HAL_TASK_HCI_UART_SIZE,
+                                 &uarts[port], HAL_TASK_HCI_UART_PRIORITY,
                                  &uarts[port].task_rx_handle);
     assert(pdPASS == ret);
 }
