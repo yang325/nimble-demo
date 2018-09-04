@@ -1,10 +1,12 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include "app.h"
 #include "bsp/bsp.h"
 
 #include "mesh/mesh.h"
 #include "mesh/main.h"
 #include "mesh/glue.h"
+#include "mesh/porting.h"
 
 /* Private define ------------------------------------------------------------*/
 
