@@ -59,15 +59,15 @@ void _Error_Handler(char *, int);
 /**< Priority of the BLE host task. */
 #define HAL_TASK_HCI_UART_PRIORITY      (configMAX_PRIORITIES - 1)
 
-/**< Size of the BLE host task.*/
-#define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 4)
-/**< Priority of the BLE host task. */
-#define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 2)
-
 /**< Size of the Mesh adv task.*/
 #define DEMO_TASK_MESH_ADV_SIZE         (configMINIMAL_STACK_SIZE * 2)
 /**< Priority of the Mesh adv task. */
-#define DEMO_TASK_MESH_ADV_PRIORITY     (configMAX_PRIORITIES - 3)
+#define DEMO_TASK_MESH_ADV_PRIORITY     (configMAX_PRIORITIES - 2)
+
+/**< Size of the BLE host task.*/
+#define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 4)
+/**< Priority of the BLE host task. */
+#define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 3)
 
 #ifdef __cplusplus
 }
