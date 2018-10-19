@@ -63,7 +63,8 @@
 static void system_clock_config(void);
 static void system_info_output(void);
 
-static void ble_controller_reset(void);
+static void ble_controller_init(void);
+static void ble_controller_enable(void);
 
 static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
@@ -168,7 +169,7 @@ static void system_info_output(void)
   console_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
 }
 
-static void ble_controller_reset(void)
+static void ble_controller_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
 
@@ -185,6 +186,10 @@ static void ble_controller_reset(void)
   /*Reset the controller */
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_RESET);
   HAL_Delay(5);
+}
+
+static void ble_controller_enable(void)
+{
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
   HAL_Delay(5);
 }
@@ -223,14 +228,17 @@ static void ble_host_thread(void * arg)
   /* Initialize LED */
   led_init();
 
-  /* Reset BLE controller */
-  ble_controller_reset();
+  /* Initialize BLE controller */
+  ble_controller_init();
 
   /* Initialize UART as HCI */
   ble_hci_uart_init();
 
-  /* Initialize NimBLE modules */
+  /* Initialize NimBLE host */
   nimble_port_init();
+
+  /* Enable BLE controller */
+  ble_controller_enable();
 
   /* Initialize GAP, GATT and Mesh related services */
   ble_svc_gap_init();
