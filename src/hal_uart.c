@@ -90,8 +90,8 @@ hal_uart_start_tx(int port)
          value = uarts[port].u_tx_func(uarts[port].u_func_arg)) {
 
         uint8_t tx_data = (uint8_t)value;
-        if (HAL_OK != HAL_UART_Transmit(&uarts[port].u_regs, &tx_data, 1, 2000)) {
-            Error_Handler();
+        while (HAL_OK != HAL_UART_Transmit(&uarts[port].u_regs, &tx_data, 1, 2000)) {
+            console_printf("Retry to send %02x\n", tx_data);
         }
     }
 
