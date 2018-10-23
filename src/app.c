@@ -180,7 +180,7 @@ static void ble_controller_init(void)
 static void ble_controller_enable(void)
 {
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, GPIO_PIN_SET);
-  HAL_Delay(5);
+  HAL_Delay(50);
 }
 
 /**
