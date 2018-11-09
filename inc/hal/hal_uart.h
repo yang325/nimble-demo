@@ -79,6 +79,7 @@ typedef int (*hal_uart_rx_char)(void *arg, uint8_t byte);
 struct hal_uart {
     UART_HandleTypeDef u_regs;
     SemaphoreHandle_t sem_rx_handle;
+    SemaphoreHandle_t sem_tx_handle;
     TaskHandle_t task_rx_handle;
     hal_uart_rx_char u_rx_func;
     hal_uart_tx_char u_tx_func;
