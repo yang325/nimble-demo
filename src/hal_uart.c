@@ -66,7 +66,8 @@ hal_uart_thread(void * arg)
                 p_uart->u_rx_func(p_uart->u_func_arg, rx_data);
                 break;
             case HAL_BUSY:
-                vTaskDelay(10);
+                /* In case device is sending data. */
+                vTaskDelay(5);
                 break;
             default:
                 break;
@@ -103,17 +104,10 @@ hal_uart_start_tx(int port)
          value = uarts[port].u_tx_func(uarts[port].u_func_arg)) {
 
         tx_data = (uint8_t)value;
-        status = HAL_UART_Transmit_IT(&uarts[port].u_regs, &tx_data, 1);
-        switch (status) {
-            case HAL_OK:
-                xSemaphoreTake(uarts[port].sem_tx_handle, portMAX_DELAY);
-                break;
-            case HAL_BUSY:
-                vTaskDelay(10);
-                break;
-            default:
-                break;
-        }
+        do {
+            status = HAL_UART_Transmit_IT(&uarts[port].u_regs, &tx_data, 1);
+        } while (HAL_OK != status);
+        xSemaphoreTake(uarts[port].sem_tx_handle, portMAX_DELAY);
     }
 
     if (uarts[port].u_tx_done) {
