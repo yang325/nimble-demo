@@ -1,5 +1,7 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include "console/console.h"
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
