@@ -18,9 +18,16 @@
  */
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdbool.h>
 
-#include "console/console.h"
+#include "console/printk.h"
 #include "stm32f1xx_hal.h"
+
+static int console_output(int value)
+{
+    ITM_SendChar(value);
+    return value;
+}
 
 /**
  * Prints the specified format string to the console.
@@ -34,22 +41,17 @@ int console_printf(const char *fmt, ...)
 {
     va_list args;
     int len;
+    static bool init = false;
+
+    if (!init) {
+        __printk_hook_install(console_output);
+        init = true;
+    }
 
     va_start(args, fmt);
-    len = vprintf(fmt, args);
+    len = vprintk(fmt, args);
     va_end(args);
 
     return len;
 }
 
-int _write(int file, char *ptr, int len)
-{
-    int idx = 0;
-
-    while(idx < len)
-    {
-        ITM_SendChar(ptr[idx++]);
-    }
-
-    return len;
-}
