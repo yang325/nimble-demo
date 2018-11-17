@@ -41,11 +41,9 @@ int console_printf(const char *fmt, ...)
 {
     va_list args;
     int len;
-    static bool init = false;
 
-    if (!init) {
+    if (__printk_get_hook() != console_output) {
         __printk_hook_install(console_output);
-        init = true;
     }
 
     va_start(args, fmt);

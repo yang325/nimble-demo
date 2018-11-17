@@ -48,6 +48,7 @@ extern int vsnprintk(char *str, size_t size, const char *fmt, va_list ap);
 extern void _vprintk(int (*out)(int, void *), void *ctx, const char *fmt, va_list ap);
 
 extern void __printk_hook_install(int (*fn)(int));
+extern void *__printk_get_hook(void);
 
 #ifdef __cplusplus
 }
