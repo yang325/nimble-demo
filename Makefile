@@ -13,7 +13,7 @@
 ######################################
 # target
 ######################################
-TARGET = test
+TARGET = nimble_host
 
 
 ######################################
@@ -47,6 +47,120 @@ src/stm32f1xx_hal_msp.c \
 src/stm32f1xx_it.c \
 src/system_stm32f1xx.c \
 driver/src/stm32f1xx_hal.c \
+driver/src/stm32f1xx_hal_cortex.c \
+driver/src/stm32f1xx_hal_dma.c \
+driver/src/stm32f1xx_hal_flash.c \
+driver/src/stm32f1xx_hal_flash_ex.c \
+driver/src/stm32f1xx_hal_gpio.c \
+driver/src/stm32f1xx_hal_gpio_ex.c \
+driver/src/stm32f1xx_hal_pwr.c \
+driver/src/stm32f1xx_hal_rcc.c \
+driver/src/stm32f1xx_hal_rcc_ex.c \
+driver/src/stm32f1xx_hal_tim.c \
+driver/src/stm32f1xx_hal_tim_ex.c \
+driver/src/stm32f1xx_hal_uart.c \
+freertos/lib/FreeRTOS/event_groups.c \
+freertos/lib/FreeRTOS/list.c \
+freertos/lib/FreeRTOS/queue.c \
+freertos/lib/FreeRTOS/stream_buffer.c \
+freertos/lib/FreeRTOS/tasks.c \
+freertos/lib/FreeRTOS/timers.c \
+freertos/lib/FreeRTOS/portable/MemMang/heap_4.c \
+freertos/lib/FreeRTOS/portable/GCC/ARM_CM3/port.c \
+nimble/nimble/src/ble_util.c \
+nimble/nimble/transport/uart/src/ble_hci_uart.c \
+nimble/nimble/host/src/ble_att_clt.c \
+nimble/nimble/host/src/ble_att_cmd.c \
+nimble/nimble/host/src/ble_att_svr.c \
+nimble/nimble/host/src/ble_att.c \
+nimble/nimble/host/src/ble_eddystone.c \
+nimble/nimble/host/src/ble_gap.c \
+nimble/nimble/host/src/ble_gattc.c \
+nimble/nimble/host/src/ble_gatts.c \
+nimble/nimble/host/src/ble_gatts_lcl.c \
+nimble/nimble/host/src/ble_hs_adv.c \
+nimble/nimble/host/src/ble_hs_atomic.c \
+nimble/nimble/host/src/ble_hs_cfg.c \
+nimble/nimble/host/src/ble_hs_conn.c \
+nimble/nimble/host/src/ble_hs_dbg.c \
+nimble/nimble/host/src/ble_hs_flow.c \
+nimble/nimble/host/src/ble_hs_hci_cmd.c \
+nimble/nimble/host/src/ble_hs_hci_evt.c \
+nimble/nimble/host/src/ble_hs_hci_util.c \
+nimble/nimble/host/src/ble_hs_hci.c \
+nimble/nimble/host/src/ble_hs_id.c \
+nimble/nimble/host/src/ble_hs_log.c \
+nimble/nimble/host/src/ble_hs_mbuf.c \
+nimble/nimble/host/src/ble_hs_misc.c \
+nimble/nimble/host/src/ble_hs_mqueue.c \
+nimble/nimble/host/src/ble_hs_pvcy.c \
+nimble/nimble/host/src/ble_hs_startup.c \
+nimble/nimble/host/src/ble_hs.c \
+nimble/nimble/host/src/ble_ibeacon.c \
+nimble/nimble/host/src/ble_l2cap_coc.c \
+nimble/nimble/host/src/ble_l2cap_sig_cmd.c \
+nimble/nimble/host/src/ble_l2cap_sig.c \
+nimble/nimble/host/src/ble_l2cap.c \
+nimble/nimble/host/src/ble_monitor.c \
+nimble/nimble/host/src/ble_sm_alg.c \
+nimble/nimble/host/src/ble_sm_cmd.c \
+nimble/nimble/host/src/ble_sm_lgcy.c \
+nimble/nimble/host/src/ble_sm_sc.c \
+nimble/nimble/host/src/ble_sm.c \
+nimble/nimble/host/src/ble_store_util.c \
+nimble/nimble/host/src/ble_store.c \
+nimble/nimble/host/src/ble_uuid.c \
+nimble/nimble/host/services/gap/src/ble_svc_gap.c \
+nimble/nimble/host/services/gatt/src/ble_svc_gatt.c \
+nimble/nimble/host/store/ram/src/ble_store_ram.c \
+nimble/nimble/host/util/src/addr.c \
+nimble/nimble/host/mesh/src/access.c \
+nimble/nimble/host/mesh/src/adv.c \
+nimble/nimble/host/mesh/src/beacon.c \
+nimble/nimble/host/mesh/src/cfg_cli.c \
+nimble/nimble/host/mesh/src/cfg_srv.c \
+nimble/nimble/host/mesh/src/crypto.c \
+nimble/nimble/host/mesh/src/friend.c \
+nimble/nimble/host/mesh/src/glue.c \
+nimble/nimble/host/mesh/src/health_cli.c \
+nimble/nimble/host/mesh/src/health_srv.c \
+nimble/nimble/host/mesh/src/light_model.c \
+nimble/nimble/host/mesh/src/lpn.c \
+nimble/nimble/host/mesh/src/mesh.c \
+nimble/nimble/host/mesh/src/model_cli.c \
+nimble/nimble/host/mesh/src/model_srv.c \
+nimble/nimble/host/mesh/src/net.c \
+nimble/nimble/host/mesh/src/prov.c \
+nimble/nimble/host/mesh/src/proxy.c \
+nimble/nimble/host/mesh/src/settings.c \
+nimble/nimble/host/mesh/src/shell.c \
+nimble/nimble/host/mesh/src/testing.c \
+nimble/nimble/host/mesh/src/transport.c \
+nimble/porting/nimble/src/endian.c \
+nimble/porting/nimble/src/mem.c \
+nimble/porting/nimble/src/nimble_port.c \
+nimble/porting/nimble/src/os_cputime_pwr2.c \
+nimble/porting/nimble/src/os_cputime.c \
+nimble/porting/nimble/src/os_mbuf.c \
+nimble/porting/nimble/src/os_mempool.c \
+nimble/porting/nimble/src/os_msys_init.c \
+nimble/porting/npl/freertos/src/nimble_port_freertos.c \
+nimble/porting/npl/freertos/src/npl_os_freertos.c \
+nimble/ext/tinycrypt/src/aes_decrypt.c \
+nimble/ext/tinycrypt/src/aes_encrypt.c \
+nimble/ext/tinycrypt/src/cbc_mode.c \
+nimble/ext/tinycrypt/src/ccm_mode.c \
+nimble/ext/tinycrypt/src/cmac_mode.c \
+nimble/ext/tinycrypt/src/ctr_mode.c \
+nimble/ext/tinycrypt/src/ctr_prng.c \
+nimble/ext/tinycrypt/src/ecc_dh.c \
+nimble/ext/tinycrypt/src/ecc_dsa.c \
+nimble/ext/tinycrypt/src/ecc_platform_specific.c \
+nimble/ext/tinycrypt/src/ecc.c \
+nimble/ext/tinycrypt/src/hmac_prng.c \
+nimble/ext/tinycrypt/src/hmac.c \
+nimble/ext/tinycrypt/src/sha256.c \
+nimble/ext/tinycrypt/src/utils.c \
 
 
 # ASM sources
@@ -108,6 +222,21 @@ C_INCLUDES =  \
 -Idriver/inc \
 -Icmsis/device \
 -Icmsis/include \
+-Ifreertos/lib/include \
+-Ifreertos/lib/include/private \
+-Ifreertos/lib/FreeRTOS/portable/GCC/ARM_CM3 \
+-Inimble/nimble/include \
+-Inimble/nimble/host/include \
+-Inimble/nimble/host/mesh/include \
+-Inimble/nimble/host/services/gap/include \
+-Inimble/nimble/host/services/gatt/include \
+-Inimble/nimble/host/util/include \
+-Inimble/nimble/host/store/ram/include \
+-Inimble/nimble/host/store/config/include \
+-Inimble/nimble/transport/uart/include \
+-Inimble/porting/npl/freertos/include \
+-Inimble/porting/nimble/include \
+-Inimble/ext/tinycrypt/include \
 
 
 # compile gcc flags
@@ -128,7 +257,7 @@ CFLAGS += -MMD -MP -MF"$(@:%.o=%.d)"
 # LDFLAGS
 #######################################
 # link script
-LDSCRIPT = STM32F103ZETx_FLASH.ld
+LDSCRIPT = STM32F103ZE_FLASH.ld
 
 # libraries
 LIBS = -lc -lm -lnosys 
@@ -172,7 +301,7 @@ $(BUILD_DIR):
 # clean up
 #######################################
 clean:
-	-rm -fR $(BUILD_DIR)
+	-rm -rf $(BUILD_DIR)
   
 #######################################
 # dependencies
