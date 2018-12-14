@@ -7,6 +7,7 @@
 #include "mesh/main.h"
 #include "mesh/glue.h"
 #include "mesh/porting.h"
+#include "mesh/model_srv.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -29,13 +30,8 @@ static int  fault_test(struct bt_mesh_model *model, uint8_t test_id, uint16_t co
 
 static void health_pub_init(void);
 
-static void gen_onoff_status(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx);
-static void gen_onoff_get(struct bt_mesh_model *model,
-                        struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf);
-static void gen_onoff_set(struct bt_mesh_model *model,
-                        struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf);
-static void gen_onoff_set_unack(struct bt_mesh_model *model,
-                        struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf);
+static int  led_model_gen_onoff_get(struct bt_mesh_model *model, u8_t *state);
+static int  led_model_gen_onoff_set(struct bt_mesh_model *model, u8_t state);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -76,11 +72,9 @@ static struct bt_mesh_health_srv health_srv = {
 
 static struct bt_mesh_model_pub health_pub;
 
-static const struct bt_mesh_model_op gen_onoff_op[] = {
-  { BT_MESH_MODEL_OP_2(0x82, 0x01), 0, gen_onoff_get },
-  { BT_MESH_MODEL_OP_2(0x82, 0x02), 2, gen_onoff_set },
-  { BT_MESH_MODEL_OP_2(0x82, 0x03), 2, gen_onoff_set_unack },
-  BT_MESH_MODEL_OP_END,
+static struct bt_mesh_gen_onoff_srv_cb gen_onoff_srv_cb = {
+  .get = led_model_gen_onoff_get,
+  .set = led_model_gen_onoff_set,
 };
 
 static struct bt_mesh_model_pub gen_onoff_pub;
@@ -88,8 +82,7 @@ static struct bt_mesh_model_pub gen_onoff_pub;
 static struct bt_mesh_model root_models[] = {
   BT_MESH_MODEL_CFG_SRV(&cfg_srv),
   BT_MESH_MODEL_HEALTH_SRV(&health_srv, &health_pub),
-  BT_MESH_MODEL(BT_MESH_MODEL_ID_GEN_ONOFF_SRV, gen_onoff_op,
-                &gen_onoff_pub, NULL),
+  BT_MESH_MODEL_GEN_ONOFF_SRV(&gen_onoff_srv_cb, &gen_onoff_pub),
 };
 
 static struct bt_mesh_elem elements[] = {
@@ -222,55 +215,21 @@ static void health_pub_init(void)
   health_pub.msg  = BT_MESH_HEALTH_FAULT_MSG(0);
 }
 
-static void gen_onoff_status(struct bt_mesh_model *model, struct bt_mesh_msg_ctx *ctx)
+static int led_model_gen_onoff_get(struct bt_mesh_model *model, u8_t *state)
 {
-  struct os_mbuf *msg = NET_BUF_SIMPLE(3);
-  uint8_t *status;
+  *state = led_state() ? 0x01 : 0x00;
 
-  console_printf("#mesh-onoff STATUS\n");
-
-  bt_mesh_model_msg_init(msg, BT_MESH_MODEL_OP_2(0x82, 0x04));
-  status = net_buf_simple_add(msg, 1);
-  *status = led_state() ? 0x01 : 0x00;
-
-  if (bt_mesh_model_send(model, ctx, msg, NULL, NULL)) {
-    console_printf("#mesh-onoff STATUS: send status failed\n");
-  }
-
-  os_mbuf_free_chain(msg);
+  return 0;
 }
 
-static void gen_onoff_get(struct bt_mesh_model *model,
-                struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf)
+static int led_model_gen_onoff_set(struct bt_mesh_model *model, u8_t state)
 {
-  console_printf("#mesh-onoff GET\n");
-
-  gen_onoff_status(model, ctx);
-}
-
-static void gen_onoff_set(struct bt_mesh_model *model,
-                struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf)
-{
-  console_printf("#mesh-onoff SET\n");
-
-  if (buf->om_data[0]) {
+  if (state) {
     led_on();
   } else {
     led_off();
   }
 
-  gen_onoff_status(model, ctx);
-}
-
-static void gen_onoff_set_unack(struct bt_mesh_model *model,
-                struct bt_mesh_msg_ctx *ctx, struct os_mbuf *buf)
-{
-  console_printf("#mesh-onoff SET-UNACK\n");
-
-  if (buf->om_data[0]) {
-    led_on();
-  } else {
-    led_off();
-  }
+  return 0;
 }
 
