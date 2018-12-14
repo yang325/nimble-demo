@@ -532,6 +532,10 @@
 #define MYNEWT_VAL_BLE_HCI_UART_STOP_BITS (1)
 #endif
 
+#ifndef MYNEWT_VAL_LOG_LEVEL
+#define MYNEWT_VAL_LOG_LEVEL (255)
+#endif
+
 /*** @apache-mynewt-nimble/nimble/host/mesh */
 #ifndef MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT
 #define MYNEWT_VAL_BLE_MESH_ADV_BUF_COUNT (10)

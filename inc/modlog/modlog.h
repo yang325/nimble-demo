@@ -24,6 +24,22 @@
 #include "log/log.h"
 #include "console/console.h"
 
+#define LOG_LEVEL_DEBUG    (0)
+#define LOG_LEVEL_INFO     (1)
+#define LOG_LEVEL_WARN     (2)
+#define LOG_LEVEL_ERROR    (3)
+#define LOG_LEVEL_CRITICAL (4)
+/* Up to 7 custom log levels. */
+#define LOG_LEVEL_MAX      (UINT8_MAX)
+
+#define LOG_LEVEL_STR(level) \
+    (LOG_LEVEL_DEBUG    == level ? "DEBUG"    :\
+    (LOG_LEVEL_INFO     == level ? "INFO"     :\
+    (LOG_LEVEL_WARN     == level ? "WARN"     :\
+    (LOG_LEVEL_ERROR    == level ? "ERROR"    :\
+    (LOG_LEVEL_CRITICAL == level ? "CRITICAL" :\
+     "UNKNOWN")))))
+
 #define MODLOG_DEBUG(ml_mod_, ml_msg_, ...) \
     console_printf((ml_msg_), ##__VA_ARGS__)
 
