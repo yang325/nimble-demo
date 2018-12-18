@@ -18,7 +18,6 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
-static int  output_number(bt_mesh_output_action_t action, uint32_t number);
 static void prov_complete(uint16_t net_idx, uint16_t addr);
 
 static int  fault_get_cur(struct bt_mesh_model *model, uint8_t *test_id,
@@ -73,8 +72,8 @@ static struct bt_mesh_health_srv health_srv = {
 static struct bt_mesh_model_pub health_pub;
 
 static struct bt_mesh_gen_onoff_srv_cb gen_onoff_srv_cb = {
-  .get = led_model_gen_onoff_get,
-  .set = led_model_gen_onoff_set,
+  .get = &led_model_gen_onoff_get,
+  .set = &led_model_gen_onoff_set,
 };
 
 static struct bt_mesh_model_pub gen_onoff_pub;
@@ -91,9 +90,6 @@ static struct bt_mesh_elem elements[] = {
 
 static const struct bt_mesh_prov prov = {
   .uuid = dev_uuid,
-  .output_size = 4,
-  .output_actions = BT_MESH_DISPLAY_NUMBER,
-  .output_number = output_number,
   .complete = prov_complete,
 };
 
@@ -130,13 +126,6 @@ void mesh_demo_init(uint8_t uuid[16])
 }
 
 /* Private functions ---------------------------------------------------------*/
-
-static int output_number(bt_mesh_output_action_t action, uint32_t number)
-{
-  console_printf("OOB Number: %lu\n", number);
-
-  return 0;
-}
 
 static void prov_complete(uint16_t net_idx, uint16_t addr)
 {
