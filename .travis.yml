@@ -1,2 +1,11 @@
 language: c
-script: make
+script: make clean && make all
+matrix:
+  include:
+    - os: linux
+      addons:
+        apt:
+          sources:
+            - team-gcc-arm-embedded
+          packages:
+            - gcc-arm-embedded
