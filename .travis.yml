@@ -1,11 +1,6 @@
 language: c
 script: make clean && make all
-matrix:
-  include:
-    - os: linux
-      addons:
-        apt:
-          sources:
-            - team-gcc-arm-embedded
-          packages:
-            - gcc-arm-embedded
+before_install:
+  - sudo add-apt-repository ppa:team-gcc-arm-embedded/ppa -y
+  - sudo apt-get update -q
+  - sudo apt-get install gcc-arm-embedded
