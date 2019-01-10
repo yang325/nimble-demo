@@ -95,6 +95,7 @@ nimble/nimble/host/src/ble_hs_misc.c \
 nimble/nimble/host/src/ble_hs_mqueue.c \
 nimble/nimble/host/src/ble_hs_pvcy.c \
 nimble/nimble/host/src/ble_hs_startup.c \
+nimble/nimble/host/src/ble_hs_stop.c \
 nimble/nimble/host/src/ble_hs.c \
 nimble/nimble/host/src/ble_ibeacon.c \
 nimble/nimble/host/src/ble_l2cap_coc.c \
