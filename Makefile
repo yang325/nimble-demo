@@ -77,7 +77,7 @@ nimble/porting/npl/freertos/src/nimble_port_freertos.c \
 nimble/porting/npl/freertos/src/npl_os_freertos.c \
 nimble/nimble/transport/uart/src/ble_hci_uart.c \
 $(NIMBLE_SRC) \
-$(TINYCRYPT_SRC) \
+$(TINYCRYPT_SRC)
 
 
 # ASM sources
@@ -126,8 +126,8 @@ AS_DEFS =
 
 # C defines
 C_DEFS =  \
--DUSE_HAL_DRIVER \
--DSTM32F103xE
+-D USE_HAL_DRIVER \
+-D STM32F103xE
 
 
 # AS includes
@@ -146,13 +146,13 @@ C_INCLUDES =  \
 -Inimble/porting/nimble/include \
 -Inimble/nimble/transport/uart/include \
 $(addprefix -I, $(NIMBLE_INCLUDE)) \
-$(addprefix -I, $(TINYCRYPT_INCLUDE)) \
+$(addprefix -I, $(TINYCRYPT_INCLUDE))
 
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
 
-CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
+CFLAGS = $(MCU) $(C_DEFS) $(C_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections $(NIMBLE_CFLAGS) $(TINYCRYPT_CFLAGS)
 
 ifeq ($(DEBUG), 1)
 CFLAGS += -g -gdwarf-2
