@@ -29,7 +29,7 @@ OPT = -Og
 # paths
 #######################################
 # Build path
-BUILD_DIR = build
+BUILD_DIR = _build
 
 # Configure NimBLE variables
 NIMBLE_ROOT := nimble
@@ -45,7 +45,7 @@ C_SOURCES =  \
 src/app.c \
 src/bsp.c \
 src/console_fmt.c \
-src/demo.c  \
+src/demo.c \
 src/hal_uart.c \
 src/hook.c \
 src/printk.c \
