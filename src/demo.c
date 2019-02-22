@@ -112,9 +112,16 @@ void mesh_demo_init(uint8_t uuid[16])
 
   /* Use NRPA */
   ret = ble_hs_id_gen_rnd(1, &addr);
-  assert(ret == 0);
+  if (ret) {
+    console_printf("Initializing random address failed (err %d)\n", ret);
+    return;
+  }
+
   ret = ble_hs_id_set_rnd(addr.val);
-  assert(ret == 0);
+  if (ret) {
+    console_printf("Setting random address failed (err %d)\n", ret);
+    return;
+  }
 
   ret = bt_mesh_init(addr.type, &prov, &comp);
   if (ret) {
