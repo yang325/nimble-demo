@@ -28,7 +28,8 @@
 #define UART_CNT           (sizeof(uarts) / sizeof(uarts[0]))
 
 struct hal_uart uarts[] = {
-    {.u_regs.Instance = USART3}
+    {.u_regs.Instance = USART3},
+    {.u_regs.Instance = USART1},
 };
 
 int
@@ -37,14 +38,16 @@ hal_uart_init_cbs(int port, hal_uart_tx_char tx_func, hal_uart_tx_done tx_done,
 {
     struct hal_uart *u;
 
-    u = &uarts[port];
     if (port >= UART_CNT) {
         return -1;
     }
+
+    u = &uarts[port];
     u->u_rx_func = rx_func;
     u->u_tx_func = tx_func;
     u->u_tx_done = tx_done;
     u->u_func_arg = arg;
+
     return 0;
 }
 
