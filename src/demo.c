@@ -104,12 +104,19 @@ static const struct bt_mesh_comp comp = {
 void mesh_demo_init(uint8_t uuid[16])
 {
   int ret;
+  ble_addr_t addr;
 
   memcpy(&dev_uuid[0], &uuid[0], 16);
 
   health_pub_init();
 
-  ret = bt_mesh_init(BLE_ADDR_PUBLIC, &prov, &comp);
+  /* Use NRPA */
+  ret = ble_hs_id_gen_rnd(1, &addr);
+  assert(ret == 0);
+  ret = ble_hs_id_set_rnd(addr.val);
+  assert(ret == 0);
+
+  ret = bt_mesh_init(addr.type, &prov, &comp);
   if (ret) {
     console_printf("Initializing mesh failed (err %d)\n", ret);
     return;
