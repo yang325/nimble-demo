@@ -44,6 +44,7 @@
 #include "timers.h"
 #include "semphr.h"
 
+#include "cmd.h"
 #include "demo.h"
 #include "bsp/bsp.h"
 
@@ -88,6 +89,13 @@ int main(void)
   /* NimBLE host task definition */
   if (pdPASS != xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
                             NULL, APP_TASK_BLE_HS_PRIORITY, NULL)) 
+  {
+    Error_Handler();
+  }
+
+  /* Command shell task definition */
+  if (pdPASS != xTaskCreate(cmd_shell_thread, "cmd", APP_TASK_CMD_SHELL_SIZE,
+                            NULL, APP_TASK_CMD_SHELL_PRIORITY, NULL)) 
   {
     Error_Handler();
   }
@@ -192,7 +200,6 @@ static void ble_app_on_sync(void)
   uint32_t uuid[4];
 
   console_printf("The host and controller are in sync\n");
-  led_on();
 
   HAL_GetUID(&uuid[0]);
   uuid[3] = SCB->CPUID;
