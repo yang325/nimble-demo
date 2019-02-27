@@ -43,6 +43,7 @@ include $(NIMBLE_ROOT)/porting/nimble/Makefile.defs
 # C sources
 C_SOURCES =  \
 src/app.c \
+src/app_fifo.c \
 src/bsp.c \
 src/cmd.c \
 src/console_fmt.c \
