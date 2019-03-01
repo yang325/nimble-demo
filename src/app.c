@@ -61,7 +61,6 @@
 /* Private function prototypes -----------------------------------------------*/
 
 static void system_clock_config(void);
-static void system_info_output(void);
 
 static void ble_controller_init(void);
 static void ble_controller_enable(void);
@@ -151,23 +150,6 @@ static void system_clock_config(void)
   __HAL_RCC_GPIOB_CLK_ENABLE();
 }
 
-/**
-  * @}
-  */
-static void system_info_output(void)
-{
-  uint8_t varient, revision;
-
-  console_printf("\n");
-
-  varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
-  revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
-  SystemCoreClockUpdate();
-
-  console_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  console_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
-}
-
 static void ble_controller_init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct;
@@ -218,11 +200,6 @@ static void ble_app_on_sync(void)
  */
 static void ble_host_thread(void * arg)
 {
-  int ret;
-
-  /* Output system information */
-  system_info_output();
-
   /* Initialize BLE controller */
   ble_controller_init();
 
@@ -241,7 +218,7 @@ static void ble_host_thread(void * arg)
   bt_mesh_register_gatt();
 
   /* Set the default device name. */
-  ret = ble_svc_gap_device_name_set(MYNEWT_VAL_BLE_SVC_GAP_DEVICE_NAME);
+  int ret = ble_svc_gap_device_name_set(MYNEWT_VAL(BLE_SVC_GAP_DEVICE_NAME));
   assert(ret == 0);
 
   /* Initialize the NimBLE host configuration */

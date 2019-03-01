@@ -1,5 +1,9 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdarg.h>
+#include <stdio.h>
+#include <stdbool.h>
+
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
@@ -23,8 +27,11 @@
 
 /* Private function prototypes -----------------------------------------------*/
 
+static void system_info_output(void);
+
 static int cmd_shell_uart_tx_char(void *arg);
 static int cmd_shell_uart_rx_char(void *arg, uint8_t data);
+static int cmd_shell_printf(const char *fmt, ...);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -36,6 +43,12 @@ void cmd_shell_thread(void * arg)
 {
     int ret;
     uint8_t tx_buf[64], rx_buf[4], data;
+
+    ret = app_fifo_init(&tx_fifo, tx_buf, sizeof(tx_buf));
+    assert_param(0 == ret);
+
+    ret = app_fifo_init(&rx_fifo, rx_buf, sizeof(rx_buf));
+    assert_param(0 == ret);
 
     ret = hal_uart_init_cbs(CMD_SHELL_UART_PORT,
                             cmd_shell_uart_tx_char, NULL,
@@ -50,11 +63,8 @@ void cmd_shell_thread(void * arg)
                           CMD_SHELL_UART_FLOW_CTRL);
     assert_param(0 == ret);
 
-    ret = app_fifo_init(&tx_fifo, tx_buf, sizeof(tx_buf));
-    assert_param(0 == ret);
-
-    ret = app_fifo_init(&rx_fifo, rx_buf, sizeof(rx_buf));
-    assert_param(0 == ret);
+    /* Output system information */
+    system_info_output();
 
     while (1) {
         taskENTER_CRITICAL();
@@ -67,6 +77,39 @@ void cmd_shell_thread(void * arg)
             vTaskDelay(100);
         }
     }
+}
+
+/**
+ * Prints the specified format string to the console.
+ *
+ * @return                      The number of characters that would have been
+ *                                  printed if the console buffer were
+ *                                  unlimited.  This return value is analogous
+ *                                  to that of snprintf.
+ */
+static int cmd_shell_printf(const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    va_start(args, fmt);
+    len = vprintf(fmt, args);
+    va_end(args);
+
+    if (len > 0) {
+        hal_uart_start_tx(CMD_SHELL_UART_PORT);
+    }
+
+    return len;
+}
+
+int _write(int file, char *ptr, int len)
+{
+    uint32_t size = len;
+
+    app_fifo_write(&tx_fifo, (uint8_t const *)ptr, &size);
+
+    return size;
 }
 
 static int cmd_shell_uart_tx_char(void *arg)
@@ -87,5 +130,22 @@ static int cmd_shell_uart_rx_char(void *arg, uint8_t data)
     taskEXIT_CRITICAL();
 
     return 0;
+}
+
+/**
+  * @}
+  */
+static void system_info_output(void)
+{
+    uint8_t varient, revision;
+
+    cmd_shell_printf("\n");
+
+    varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
+    revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
+    SystemCoreClockUpdate();
+
+    cmd_shell_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+    cmd_shell_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
 }
 
