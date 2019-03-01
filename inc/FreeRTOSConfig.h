@@ -42,6 +42,7 @@
 /* Ensure stdint is only used by the compiler, and not the assembler. */
 #if defined( __ICCARM__ ) || defined( __CC_ARM ) || defined( __GNUC__ )
     #include <stdint.h>
+    #include <assert.h>
     #include "stm32f103xe.h"
     extern uint32_t SystemCoreClock;
 #endif
@@ -49,8 +50,8 @@
 #define configSUPPORT_STATIC_ALLOCATION              0
 
 #define configUSE_PREEMPTION                         1
-#define configUSE_IDLE_HOOK                          0
-#define configUSE_TICK_HOOK                          0
+#define configUSE_IDLE_HOOK                          1
+#define configUSE_TICK_HOOK                          1
 #define configUSE_TICKLESS_IDLE                      0
 #define configUSE_DAEMON_TASK_STARTUP_HOOK           0
 #define configCPU_CLOCK_HZ                           ( SystemCoreClock )
@@ -124,9 +125,7 @@
 
 /* Normal assert() semantics without relying on the provision of an assert.h
  * header file. */
-#define configASSERT( x )                                        \
-    if( ( x ) == 0 ) { taskDISABLE_INTERRUPTS(); for( ; ; ) {; } \
-    }
+#define configASSERT( x )          assert( x )
 
 /* Logging task definitions. */
 extern void vMainUARTPrintString( char * pcString );
@@ -173,10 +172,7 @@ extern int iMainRand32( void );
 #define vPortSVCHandler               SVC_Handler
 #define xPortPendSVHandler            PendSV_Handler
 #define vHardFault_Handler            HardFault_Handler
-
-/* IMPORTANT: This define MUST be commented when used with STM32Cube firmware,
- *            to prevent overwriting SysTick_Handler defined within STM32Cube HAL. */
-/* #define xPortSysTickHandler SysTick_Handler */
+#define xPortSysTickHandler           SysTick_Handler
 
 /*********************************************
  * FreeRTOS specific demos

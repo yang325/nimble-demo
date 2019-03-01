@@ -52,7 +52,7 @@
 #endif
 void _Error_Handler(char *, int);
 
-#define Error_Handler() _Error_Handler(__FILE__, __LINE__)
+#define Error_Handler()                 assert(0)
 
 /**< Size of the BLE host task.*/
 #define HAL_TASK_HCI_UART_SIZE          (configMINIMAL_STACK_SIZE)

@@ -39,7 +39,6 @@
 
 /* External functions --------------------------------------------------------*/
 
-extern void xPortSysTickHandler( void );
 
 /* External variables --------------------------------------------------------*/
 
@@ -113,23 +112,6 @@ void DebugMon_Handler(void)
   /* USER CODE END DebugMonitor_IRQn 0 */
 }
 
-/**
- * @brief This function handles System tick timer.
- */
-void SysTick_Handler(void)
-{
-  HAL_IncTick();
-  HAL_SYSTICK_IRQHandler();
-}
-
-/* When using the ST HAL, we must implement their systick callback. So, here,
- * we simply call the RTOS systick handler that resides in the core level abstraction.
- */
-void HAL_SYSTICK_Callback( void )
-{
-  xPortSysTickHandler();
-}
-
 /******************************************************************************/
 /* STM32F1xx Peripheral Interrupt Handlers                                    */
 /* Add here the Interrupt Handlers for the used peripherals.                  */
@@ -145,6 +127,11 @@ void HAL_SYSTICK_Callback( void )
 void USART3_IRQHandler(void)
 {
   HAL_UART_IRQHandler(&uarts[0].u_regs);
+}
+
+void USART1_IRQHandler(void)
+{
+  HAL_UART_IRQHandler(&uarts[1].u_regs);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

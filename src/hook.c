@@ -1,11 +1,15 @@
 /* Includes ------------------------------------------------------------------*/
 
+#include "stm32f1xx_hal.h"
+
 #include "console/console.h"
 
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
 #include "semphr.h"
+
+#include "bsp/bsp.h"
 
 /**
  * @brief Loop forever if stack overflow is detected.
@@ -20,9 +24,18 @@
  */
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName)
 {
-  portDISABLE_INTERRUPTS();
   console_printf("Application %s stack overflow\n", pcTaskName);
-  /* Generate breakpoint if debugger is connected */
-  __BKPT(0);
+  assert(0);
+}
+
+void vApplicationTickHook(void)
+{
+  HAL_IncTick();
+}
+
+void vApplicationIdleHook(void)
+{
+  HAL_Delay(500);
+  led_toggle();
 }
 

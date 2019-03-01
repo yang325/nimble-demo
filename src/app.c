@@ -86,6 +86,9 @@ int main(void)
   /* Configure the system clock */
   system_clock_config();
 
+  /* Initialize LED */
+  led_init();
+
   /* NimBLE host task definition */
   if (pdPASS != xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
                             NULL, APP_TASK_BLE_HS_PRIORITY, NULL)) 
@@ -220,9 +223,6 @@ static void ble_host_thread(void * arg)
   /* Output system information */
   system_info_output();
 
-  /* Initialize LED */
-  led_init();
-
   /* Initialize BLE controller */
   ble_controller_init();
 
@@ -251,38 +251,6 @@ static void ble_host_thread(void * arg)
   nimble_port_run();
 }
 
-/**
-  * @brief  This function is executed in case of error occurrence.
-  * @param  file: The file name as string.
-  * @param  line: The line in file as a number.
-  * @retval None
-  */
-void _Error_Handler(char *file, int line)
-{
-  console_printf("Error occurred: file %s on line %d\n", file, line);
-  /* Generate breakpoint if debugger is connected */
-  __BKPT(0);
-}
-
-#ifdef  USE_FULL_ASSERT
-/**
-  * @brief  Reports the name of the source file and the source line number
-  *         where the assert_param error has occurred.
-  * @param  file: pointer to the source file name
-  * @param  line: assert_param error line source number
-  * @retval None
-  */
-void assert_failed(uint8_t* file, uint32_t line)
-{
-  vTaskSuspendAll();
-  console_printf("Wrong parameters value: file %s on line %u\n", file, line);
-  while(1)
-  {
-    led_toggle();
-    HAL_Delay(100);
-  }
-}
-#endif /* USE_FULL_ASSERT */
 
 /**
   * @}
@@ -293,14 +261,19 @@ void assert_failed(uint8_t* file, uint32_t line)
   */
 void __assert_func(const char *file, int line, const char *func, const char *condition)
 {
-  vTaskSuspendAll();
-  console_printf("Wrong parameters value: file %s on line %d\n", file, line);
+  taskDISABLE_INTERRUPTS();
+  console_printf("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
+  /* Generate breakpoint if debugger is connected */
+  __BKPT(0);
   while(1)
   {
     led_toggle();
-    HAL_Delay(100);
+    uint32_t delay = 500000;
+    while (delay --)
+    {
+      __asm("nop");
+    }
   }
 }
-
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
