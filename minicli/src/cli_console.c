@@ -16,7 +16,6 @@
 
 
 /*lint -e451*/
-#include "config.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +26,7 @@
 #ifdef CLI_OS_LINUX
 #include <termios.h>
 #endif
+#include "cli_config.h"
 #include "cli_api.h"
 #include "cli_server.h"
 

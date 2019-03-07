@@ -13,9 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-
-#include "config.h"
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,6 +20,7 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <string.h>
+#include "cli_config.h"
 #include "cli_api.h"
 #include "cli_server.h"
 /*lint -e611*/

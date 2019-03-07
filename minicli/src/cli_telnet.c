@@ -13,8 +13,6 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#include "config.h"
 #include <stdio.h>
 #include <errno.h>
 #ifdef CLI_OS_LINUX
@@ -35,6 +33,7 @@
 #include <network.h>
 #include <sys/time.h>
 #endif
+#include "cli_config.h"
 #include "cli_api.h"
 #include "cli_server.h"
 
