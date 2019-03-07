@@ -45,7 +45,7 @@ CLI_DEFINE(cli_node_enter_config,cli_cmd_enter_config,"config",
 
 cli_status_t cli_init(cli_uint32 max_node,cli_boolean auth)
 {
-    cli_status_t ret = CLI_CMD_OK;
+    cli_status_t ret = CLI_OK;
 
     ret = cli_shell_ctrl_init(max_node);
 
@@ -64,7 +64,7 @@ cli_status_t cli_init(cli_uint32 max_node,cli_boolean auth)
     cli_install_cmd(CLI_NODE_ID_VIEW,&cli_cmd_enter_enable);
     cli_install_cmd(CLI_NODE_ID_ENABLE,&cli_cmd_enter_config);
 
-    return CLI_CMD_OK;
+    return CLI_OK;
 }
 
 /*lint +e14*/

@@ -14,6 +14,9 @@
 #include "hal/hal_uart.h"
 #include "app_fifo.h"
 
+#include "cli_api.h"
+#include "cli_auth.h"
+
 #include "stm32f1xx_hal.h"
 
 /* Private define ------------------------------------------------------------*/
@@ -24,6 +27,8 @@
 #define CMD_SHELL_UART_STOP_BITS                 (1)
 #define CMD_SHELL_UART_PARITY                    (HAL_UART_PARITY_NONE)
 #define CMD_SHELL_UART_FLOW_CTRL                 (HAL_UART_FLOW_CTL_NONE)
+
+#define CMD_SHELL_MAX_NODE                       (20)
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -65,6 +70,9 @@ void cmd_shell_thread(void * arg)
 
     /* Output system information */
     system_info_output();
+
+    cli_status_t status = cli_init(CMD_SHELL_MAX_NODE, TRUE);
+    assert_param(CLI_OK == status);
 
     while (1) {
         taskENTER_CRITICAL();

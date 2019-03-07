@@ -19,6 +19,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -1307,7 +1308,7 @@ cli_status_t cli_session_idle_time_set(
 
 cli_status_t cli_shell_ctrl_init(cli_uint32 max_node)
 {
-    cli_status_t ret = CLI_CMD_OK;
+    cli_status_t ret = CLI_OK;
     cli_uint32 i = 0;
 
     ret = cli_node_data_init(max_node);

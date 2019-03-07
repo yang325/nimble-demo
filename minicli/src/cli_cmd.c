@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include "cli_api.h"
 #include "cli_utils.h"
 #include "cli_parser.h"

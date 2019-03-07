@@ -67,6 +67,22 @@ driver/src/stm32f1xx_hal_rcc_ex.c \
 driver/src/stm32f1xx_hal_tim.c \
 driver/src/stm32f1xx_hal_tim_ex.c \
 driver/src/stm32f1xx_hal_uart.c \
+minicli/src/cli_auth.c \
+minicli/src/cli_builtin_cmd.c \
+minicli/src/cli_cmd.c \
+minicli/src/cli_console.c \
+minicli/src/cli_error.c \
+minicli/src/cli_history_item.c \
+minicli/src/cli_history.c \
+minicli/src/cli_main.c \
+minicli/src/cli_node.c \
+minicli/src/cli_parser.c \
+minicli/src/cli_readline.c \
+minicli/src/cli_server.c \
+minicli/src/cli_shell.c \
+minicli/src/cli_tty.c \
+minicli/src/cli_utils.c \
+minicli/src/cli_vector.c \
 freertos/lib/FreeRTOS/event_groups.c \
 freertos/lib/FreeRTOS/list.c \
 freertos/lib/FreeRTOS/queue.c \
@@ -137,16 +153,17 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--Iinc \
--Idriver/inc \
--Icmsis/device \
--Icmsis/include \
--Ifreertos/lib/include \
--Ifreertos/lib/include/private \
--Ifreertos/lib/FreeRTOS/portable/GCC/ARM_CM3 \
--Inimble/porting/npl/freertos/include \
--Inimble/porting/nimble/include \
--Inimble/nimble/transport/uart/include \
+-I inc \
+-I driver/inc \
+-I minicli/inc \
+-I cmsis/device \
+-I cmsis/include \
+-I freertos/lib/include \
+-I freertos/lib/include/private \
+-I freertos/lib/FreeRTOS/portable/GCC/ARM_CM3 \
+-I nimble/porting/npl/freertos/include \
+-I nimble/porting/nimble/include \
+-I nimble/nimble/transport/uart/include \
 $(addprefix -I, $(NIMBLE_INCLUDE)) \
 $(addprefix -I, $(TINYCRYPT_INCLUDE))
 
