@@ -3,6 +3,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "FreeRTOS.h"
 #include "task.h"
@@ -28,7 +29,13 @@
 #define CMD_SHELL_UART_PARITY                    (HAL_UART_PARITY_NONE)
 #define CMD_SHELL_UART_FLOW_CTRL                 (HAL_UART_FLOW_CTL_NONE)
 
-#define CMD_SHELL_MAX_NODE                       (20)
+/* Private typedef -----------------------------------------------------------*/
+
+typedef enum {
+    CLI_NODE_ID_SDK = CLI_NODE_ID_USER_START,
+    CLI_NODE_ID_TEST,
+    CLI_NODE_ID_MAX,
+} cli_demo_node_id_t;
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -47,6 +54,7 @@ static app_fifo_t tx_fifo, rx_fifo;
 void cmd_shell_thread(void * arg)
 {
     int ret;
+    cli_status_t status;
     uint8_t tx_buf[64], rx_buf[4], data;
 
     ret = app_fifo_init(&tx_fifo, tx_buf, sizeof(tx_buf));
@@ -71,10 +79,19 @@ void cmd_shell_thread(void * arg)
     /* Output system information */
     system_info_output();
 
-    cli_status_t status = cli_init(CMD_SHELL_MAX_NODE, TRUE);
+    status = cli_init(CLI_NODE_ID_MAX, FALSE);
+    assert_param(CLI_OK == status);
+
+    cli_hostname_set("MINI-CLI", strlen("MINI-CLI"));
+
+    status = cli_global_cmd_node_list(CLI_NODE_ID_CONFIG,
+                                      CLI_NODE_ID_SDK,
+                                      CLI_NODE_ID_TEST,
+                                      CLI_NODE_ID_INVALID);
     assert_param(CLI_OK == status);
 
     while (1) {
+        cli_main(CLI_SESSION_CONSOLE, stdin, stdout);
         taskENTER_CRITICAL();
         ret = app_fifo_get(&rx_fifo, &data);
         taskEXIT_CRITICAL();
