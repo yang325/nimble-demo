@@ -55,7 +55,7 @@ void cmd_shell_thread(void * arg)
 {
     int ret;
     cli_status_t status;
-    uint8_t tx_buf[64], rx_buf[4], data;
+    uint8_t tx_buf[64], rx_buf[4];
 
     ret = app_fifo_init(&tx_fifo, tx_buf, sizeof(tx_buf));
     assert_param(0 == ret);
@@ -92,15 +92,6 @@ void cmd_shell_thread(void * arg)
 
     while (1) {
         cli_main(CLI_SESSION_CONSOLE, stdin, stdout);
-        taskENTER_CRITICAL();
-        ret = app_fifo_get(&rx_fifo, &data);
-        taskEXIT_CRITICAL();
-        if (0 == ret) {
-            app_fifo_put(&tx_fifo, data);
-            hal_uart_start_tx(CMD_SHELL_UART_PORT);
-        } else {
-            vTaskDelay(100);
-        }
     }
 }
 
@@ -121,20 +112,37 @@ static int cmd_shell_printf(const char *fmt, ...)
     len = vprintf(fmt, args);
     va_end(args);
 
-    if (len > 0) {
-        hal_uart_start_tx(CMD_SHELL_UART_PORT);
-    }
-
     return len;
 }
 
 int _write(int file, char *ptr, int len)
 {
-    uint32_t size = len;
+    uint32_t size = 0;
 
-    app_fifo_write(&tx_fifo, (uint8_t const *)ptr, &size);
+	if (len > 0) {
+		size = len;
+		app_fifo_write(&tx_fifo, (uint8_t const *)ptr, &size);
+		hal_uart_start_tx(CMD_SHELL_UART_PORT);
+	}
 
     return size;
+}
+
+int _read(int file, char *ptr, int len)
+{
+	uint32_t ret;
+	uint8_t data;
+
+	do {
+		taskENTER_CRITICAL();
+    	ret = app_fifo_get(&rx_fifo, &data);
+    	taskEXIT_CRITICAL();
+		if (0 != ret) {
+    		vTaskDelay(100);
+    	}
+	} while(0 != ret);
+
+	return 1;
 }
 
 static int cmd_shell_uart_tx_char(void *arg)
