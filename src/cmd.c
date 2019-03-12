@@ -43,7 +43,6 @@ static void system_info_output(void);
 
 static int cmd_shell_uart_tx_char(void *arg);
 static int cmd_shell_uart_rx_char(void *arg, uint8_t data);
-static int cmd_shell_printf(const char *fmt, ...);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -95,54 +94,34 @@ void cmd_shell_thread(void * arg)
     }
 }
 
-/**
- * Prints the specified format string to the console.
- *
- * @return                      The number of characters that would have been
- *                                  printed if the console buffer were
- *                                  unlimited.  This return value is analogous
- *                                  to that of snprintf.
- */
-static int cmd_shell_printf(const char *fmt, ...)
-{
-    va_list args;
-    int len;
-
-    va_start(args, fmt);
-    len = vprintf(fmt, args);
-    va_end(args);
-
-    return len;
-}
-
 int _write(int file, char *ptr, int len)
 {
     uint32_t size = 0;
 
-	if (len > 0) {
-		size = len;
-		app_fifo_write(&tx_fifo, (uint8_t const *)ptr, &size);
-		hal_uart_start_tx(CMD_SHELL_UART_PORT);
-	}
+    if (len > 0) {
+        size = len;
+        app_fifo_write(&tx_fifo, (uint8_t const *)ptr, &size);
+        hal_uart_start_tx(CMD_SHELL_UART_PORT);
+    }
 
     return size;
 }
 
 int _read(int file, char *ptr, int len)
 {
-	uint32_t ret;
-	uint8_t data;
+    uint32_t ret, size;
 
-	do {
-		taskENTER_CRITICAL();
-    	ret = app_fifo_get(&rx_fifo, &data);
-    	taskEXIT_CRITICAL();
-		if (0 != ret) {
-    		vTaskDelay(100);
-    	}
-	} while(0 != ret);
+    do {
+        size = len;
+        taskENTER_CRITICAL();
+        ret = app_fifo_read(&rx_fifo, (uint8_t *)ptr, &size);
+        taskEXIT_CRITICAL();
+        if (0 != ret) {
+            vTaskDelay(100);
+        }
+    } while(0 != ret);
 
-	return 1;
+    return size;
 }
 
 static int cmd_shell_uart_tx_char(void *arg)
@@ -172,13 +151,13 @@ static void system_info_output(void)
 {
     uint8_t varient, revision;
 
-    cmd_shell_printf("\n");
+    printf("\n");
 
     varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
     revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
     SystemCoreClockUpdate();
 
-    cmd_shell_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-    cmd_shell_printf("- Core Frequency = %u Hz -\n", SystemCoreClock);
+    printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+    printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
 }
 
