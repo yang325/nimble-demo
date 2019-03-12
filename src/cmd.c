@@ -151,13 +151,13 @@ static void system_info_output(void)
 {
     uint8_t varient, revision;
 
-    printf("\n");
+    printf("\r\n");
 
     varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
     revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
     SystemCoreClockUpdate();
 
-    printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-    printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+    printf("- ARM Cortex-M3 r%dp%d Core -\r\n", varient, revision);
+    printf("- Core Frequency = %lu Hz -\r\n", SystemCoreClock);
 }
 
