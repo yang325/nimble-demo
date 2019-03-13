@@ -39,8 +39,6 @@ typedef enum {
 
 /* Private function prototypes -----------------------------------------------*/
 
-static void system_info_output(void);
-
 static int cmd_shell_uart_tx_char(void *arg);
 static int cmd_shell_uart_rx_char(void *arg, uint8_t data);
 
@@ -49,6 +47,21 @@ static int cmd_shell_uart_rx_char(void *arg, uint8_t data);
 static app_fifo_t tx_fifo, rx_fifo;
 
 /* Exported functions --------------------------------------------------------*/
+
+CLI_DEFINE(cli_handle_system_info_handler, system_info_handler_cmd, "info",
+        "Output system infomation\n")
+{
+    uint8_t varient, revision;
+
+    varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
+    revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
+    SystemCoreClockUpdate();
+
+    cli_print(cli, "- ARM Cortex-M3 r%dp%d Core -\r\n", varient, revision);
+    cli_print(cli, "- Core Frequency = %lu Hz -\r\n", SystemCoreClock);
+
+    return CLI_OK;
+}
 
 void cmd_shell_thread(void * arg)
 {
@@ -75,9 +88,6 @@ void cmd_shell_thread(void * arg)
                           CMD_SHELL_UART_FLOW_CTRL);
     assert_param(0 == ret);
 
-    /* Output system information */
-    system_info_output();
-
     status = cli_init(CLI_NODE_ID_MAX, FALSE);
     assert_param(CLI_OK == status);
 
@@ -87,6 +97,15 @@ void cmd_shell_thread(void * arg)
                                       CLI_NODE_ID_SDK,
                                       CLI_NODE_ID_TEST,
                                       CLI_NODE_ID_INVALID);
+    assert_param(CLI_OK == status);
+
+    status = cli_install_global_cmd(&system_info_handler_cmd);
+    assert_param(CLI_OK == status);
+
+    status = cli_global_cmd_node_range(CLI_NODE_ID_CONFIG, CLI_NODE_ID_TEST);
+    assert_param(CLI_OK == status);
+
+    status = cli_add_node(CLI_NODE_ID_SDK);
     assert_param(CLI_OK == status);
 
     while (1) {
@@ -144,20 +163,4 @@ static int cmd_shell_uart_rx_char(void *arg, uint8_t data)
     return 0;
 }
 
-/**
-  * @}
-  */
-static void system_info_output(void)
-{
-    uint8_t varient, revision;
-
-    printf("\r\n");
-
-    varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
-    revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
-    SystemCoreClockUpdate();
-
-    printf("- ARM Cortex-M3 r%dp%d Core -\r\n", varient, revision);
-    printf("- Core Frequency = %lu Hz -\r\n", SystemCoreClock);
-}
 

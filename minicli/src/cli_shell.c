@@ -1203,8 +1203,7 @@ void cli_main(
 
             cli_loop(shell);
 
-            if(g_cli_ctrl.timer.timer_del != NULL && !shell->is_timeout
-              ){
+            if(g_cli_ctrl.timer.timer_del != NULL && !shell->is_timeout){
                 g_cli_ctrl.timer.timer_del(shell->timer);
             }
 

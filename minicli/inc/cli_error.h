@@ -19,7 +19,7 @@
 #define __CLI_ERROR_H__
 
 #define CLI_ERROR_DEF \
-    xx(CLI_CMD_OK,              0,  "") \
+    xx(CLI_CMD_OK,                  0,  "") \
     xx(CLI_CMD_E_PARAM,             1,  "Invalid parameter") \
     xx(CLI_CMD_E_AMBIGUOUS,         2,  "Ambiguous command") \
     xx(CLI_CMD_E_CMD_NOT_COMPLETE,  3,  "Command not complete") \
