@@ -259,6 +259,7 @@ void cli_rl_echo_enable(
 {
     this->echo_enabled = enable;
 }
+
 void cli_rl_display(cli_rl_t *  this)
 {
     cli_uint32 line_len = strlen(this->line);
@@ -316,9 +317,7 @@ void cli_rl_display(cli_rl_t *  this)
         }
     }
 
-
     /*for any edit line*/
-
     if(this->screen_point){ /* move the cursor to the start of the line*/
         cli_tty_cursor_back(this->term,this->screen_point);
     }
@@ -349,10 +348,8 @@ void cli_rl_readline_from_tty(
      cli_rl_t * this,
      cli_boolean isscanf)
 {
-    cli_uint32   key; 
+    cli_uint32  key; 
 
-
-   // cli_rl_tty_set_raw_mode(this);
     cli_rl_reset_line_state(this);
 
     while(!this->done){
@@ -384,12 +381,7 @@ void cli_rl_readline_from_tty(
         }
 
     }
-
-   // cli_rl_tty_restore_mode(this);
 }
-
-
-
 
 void cli_rl_crlf(cli_rl_t *this)
 {
@@ -493,15 +485,9 @@ cli_int8 * cli_rl_readline(
     this->prompt_size      = strlen(prompt);
     this->context          = context;
 
-   // if(this->isatty){
-        cli_rl_readline_from_tty(this,FALSE);
-    //}else{
-      //  cli_rl_readline_from_file(this);
-    //}
-
+    cli_rl_readline_from_tty(this,FALSE);
 
     result = this->line ? cli_strdup(this->line) : NULL;
-
 
     cli_strfree(this->buffer);
     this->buffer = NULL;
@@ -836,12 +822,9 @@ static void cli_rl_init(
     this->echo_enabled                  = TRUE;
     this->session_end                   = FALSE;
     /*this->isatty                        = isatty(fileno(instream)) ? TRUE : FALSE;*/
-    
     this->kill_str                      = NULL;
-
-    this->term = cli_tty_new(instream,outstream);
-
-    this->history = cli_history_new();
+    this->term                          = cli_tty_new(instream,outstream);
+    this->history                       = cli_history_new();
 }
 
 

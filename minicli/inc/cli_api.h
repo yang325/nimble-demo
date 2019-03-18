@@ -22,7 +22,7 @@
 typedef unsigned long long      cli_uint64;
 typedef long long               cli_int64;
 typedef unsigned int            cli_uint32;
-typedef int       	        cli_int32;
+typedef int                     cli_int32;
 typedef unsigned short          cli_uint16;
 typedef short	                cli_int16;
 typedef unsigned char       	cli_uint8;
