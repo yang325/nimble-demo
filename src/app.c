@@ -228,11 +228,6 @@ static void ble_host_thread(void * arg)
   nimble_port_run();
 }
 
-
-/**
-  * @}
-  */
-
 /**
   * @}
   */
@@ -251,6 +246,24 @@ void __assert_func(const char *file, int line, const char *func, const char *con
       __asm("nop");
     }
   }
+}
+
+/**
+  * @}
+  */
+void prvGetRegistersFromStack(uint32_t * pulFaultStackAddress)
+{
+  console_printf("R0 = 0x%08x\n", pulFaultStackAddress[0]);
+  console_printf("R1 = 0x%08x\n", pulFaultStackAddress[1]);
+  console_printf("R2 = 0x%08x\n", pulFaultStackAddress[2]);
+  console_printf("R3 = 0x%08x\n", pulFaultStackAddress[3]);
+
+  console_printf("R12 = 0x%08x\n", pulFaultStackAddress[4]);
+  console_printf("LR = 0x%08x\n", pulFaultStackAddress[5]);
+  console_printf("PC = 0x%08x\n", pulFaultStackAddress[6]);
+  console_printf("PSR = 0x%08x\n", pulFaultStackAddress[7]);
+
+  assert(0);
 }
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
