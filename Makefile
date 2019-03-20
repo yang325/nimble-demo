@@ -43,9 +43,7 @@ include $(NIMBLE_ROOT)/porting/nimble/Makefile.defs
 # C sources
 C_SOURCES =  \
 src/app.c \
-src/app_fifo.c \
 src/bsp.c \
-src/cmd.c \
 src/console_fmt.c \
 src/demo.c \
 src/hal_uart.c \
@@ -67,22 +65,6 @@ driver/src/stm32f1xx_hal_rcc_ex.c \
 driver/src/stm32f1xx_hal_tim.c \
 driver/src/stm32f1xx_hal_tim_ex.c \
 driver/src/stm32f1xx_hal_uart.c \
-minicli/src/cli_auth.c \
-minicli/src/cli_builtin_cmd.c \
-minicli/src/cli_cmd.c \
-minicli/src/cli_console.c \
-minicli/src/cli_error.c \
-minicli/src/cli_history_item.c \
-minicli/src/cli_history.c \
-minicli/src/cli_main.c \
-minicli/src/cli_node.c \
-minicli/src/cli_parser.c \
-minicli/src/cli_readline.c \
-minicli/src/cli_server.c \
-minicli/src/cli_shell.c \
-minicli/src/cli_tty.c \
-minicli/src/cli_utils.c \
-minicli/src/cli_vector.c \
 freertos/lib/FreeRTOS/event_groups.c \
 freertos/lib/FreeRTOS/list.c \
 freertos/lib/FreeRTOS/queue.c \
@@ -155,7 +137,6 @@ AS_INCLUDES =
 C_INCLUDES =  \
 -I inc \
 -I driver/inc \
--I minicli/inc \
 -I cmsis/device \
 -I cmsis/include \
 -I freertos/lib/include \

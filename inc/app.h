@@ -69,11 +69,6 @@ void _Error_Handler(char *, int);
 /**< Priority of the BLE host task. */
 #define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 3)
 
-/**< Size of the cmd shell task.*/
-#define APP_TASK_CMD_SHELL_SIZE         (configMINIMAL_STACK_SIZE * 2)
-/**< Priority of the cmd shell task. */
-#define APP_TASK_CMD_SHELL_PRIORITY     (configMAX_PRIORITIES - 4)
-
 #ifdef __cplusplus
 }
 #endif
