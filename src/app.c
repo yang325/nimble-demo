@@ -89,17 +89,15 @@ int main(void)
   led_init();
 
   /* NimBLE host task definition */
-  if (pdPASS != xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
-                            NULL, APP_TASK_BLE_HS_PRIORITY, NULL)) 
-  {
-    Error_Handler();
-  }
+  BaseType_t ret = xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
+                               NULL, APP_TASK_BLE_HS_PRIORITY, NULL);
+  assert(pdPASS == ret);
 
   /* Start scheduler */
   vTaskStartScheduler();
 
   /* We should never get here as control is now taken by the scheduler */
-  Error_Handler();
+  assert(0);
 }
 
 /**
@@ -110,6 +108,7 @@ static void system_clock_config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct;
   RCC_ClkInitTypeDef RCC_ClkInitStruct;
+  HAL_StatusTypeDef status;
 
   /**Initializes the CPU, AHB and APB busses clocks 
     */
@@ -120,10 +119,8 @@ static void system_clock_config(void)
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLMUL = RCC_PLL_MUL9;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  status = HAL_RCC_OscConfig(&RCC_OscInitStruct);
+  assert(HAL_OK == status);
 
   /**Initializes the CPU, AHB and APB busses clocks 
     */
@@ -133,10 +130,8 @@ static void system_clock_config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV2;
   RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
-  {
-    Error_Handler();
-  }
+  status = HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2);
+  assert(HAL_OK == status);
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();

@@ -50,9 +50,6 @@
 #ifdef __cplusplus
  extern "C" {
 #endif
-void _Error_Handler(char *, int);
-
-#define Error_Handler()                 assert(0)
 
 /**< Size of the BLE host task.*/
 #define HAL_TASK_HCI_UART_SIZE          (configMINIMAL_STACK_SIZE)
