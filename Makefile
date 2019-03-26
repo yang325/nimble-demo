@@ -35,6 +35,13 @@ BUILD_DIR = _build
 NIMBLE_ROOT := nimble
 NIMBLE_CFG_TINYCRYPT := 1
 NIMBLE_CFG_MESH := 1
+
+# Skip files that don't build for this port
+NIMBLE_IGNORE := $(NIMBLE_ROOT)/porting/nimble/src/hal_timer.c \
+	$(NIMBLE_ROOT)/porting/nimble/src/os_cputime.c \
+	$(NIMBLE_ROOT)/porting/nimble/src/os_cputime_pwr2.c \
+	$(NULL)
+
 include $(NIMBLE_ROOT)/porting/nimble/Makefile.defs
 
 ######################################
