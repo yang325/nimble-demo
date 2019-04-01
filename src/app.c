@@ -44,7 +44,7 @@
 #include "timers.h"
 #include "semphr.h"
 
-#include "demo.h"
+#include "service.h"
 #include "bsp/bsp.h"
 
 #include "transport/uart/ble_hci_uart.h"
@@ -53,7 +53,6 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "host/ble_hs.h"
 #include "host/util/util.h"
-#include "mesh/glue.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -188,13 +187,12 @@ static void ble_controller_enable(void)
   */
 static void ble_app_on_sync(void)
 {
-  uint32_t uuid[4];
+  uint32_t uuid[3];
 
   console_printf("The host and controller are in sync\n");
 
   HAL_GetUID(&uuid[0]);
-  uuid[3] = SCB->CPUID;
-  mesh_demo_init((void *)&uuid[0]);
+  
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
@@ -224,7 +222,7 @@ static void ble_host_thread(void * arg)
   /* Initialize GAP, GATT and Mesh related services */
   ble_svc_gap_init();
   ble_svc_gatt_init();
-  bt_mesh_register_gatt();
+  svc_demo_init();
 
   /* Set the default device name. */
   int ret = ble_svc_gap_device_name_set(MYNEWT_VAL(BLE_SVC_GAP_DEVICE_NAME));

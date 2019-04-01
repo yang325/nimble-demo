@@ -34,7 +34,6 @@ BUILD_DIR = _build
 # Configure NimBLE variables
 NIMBLE_ROOT := nimble
 NIMBLE_CFG_TINYCRYPT := 1
-NIMBLE_CFG_MESH := 1
 
 # Skip files that don't build for this port
 NIMBLE_IGNORE := $(NIMBLE_ROOT)/porting/nimble/src/hal_timer.c \
@@ -52,7 +51,7 @@ C_SOURCES =  \
 src/app.c \
 src/bsp.c \
 src/console_fmt.c \
-src/demo.c \
+src/service.c \
 src/hal_uart.c \
 src/hook.c \
 src/printk.c \
