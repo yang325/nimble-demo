@@ -220,15 +220,21 @@ static void ble_app_on_sync(void)
   memset(&fields, 0, sizeof fields);
 
   /* Advertise two flags:
-     *     o Discoverability in forthcoming advertisement (general)
-     *     o BLE-only (BR/EDR unsupported).
-     */
+   *     o Discoverability in forthcoming advertisement (general)
+   *     o BLE-only (BR/EDR unsupported).
+   */
   fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
 
   name = ble_svc_gap_device_name();
   fields.name = (uint8_t *)name;
   fields.name_len = strlen(name);
   fields.name_is_complete = 1;
+
+  fields.uuids16 = (ble_uuid16_t[]){
+    BLE_UUID16_INIT(SERVICE_DEMO_UUID)
+  };
+  fields.num_uuids16 = 1;
+  fields.uuids16_is_complete = 1;
 
   ret = ble_gap_adv_set_fields(&fields);
   if (ret) {

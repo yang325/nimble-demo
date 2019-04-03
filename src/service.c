@@ -1,26 +1,31 @@
 #include <assert.h>
 #include <string.h>
 
+#include "service.h"
+
 #include "sysinit/sysinit.h"
 #include "syscfg/syscfg.h"
 #include "host/ble_hs.h"
 #include "host/ble_gap.h"
+
+#include "stm32f1xx_hal.h"
 
 /* Private function prototypes -----------------------------------------------*/
 
 static int svc_demo_access(uint16_t conn_handle, uint16_t attr_handle,
                             struct ble_gatt_access_ctxt *ctxt,
                             void *arg);
+static int svc_demo_uid_read_access(struct ble_gatt_access_ctxt *ctxt);
 
 /* Private variables ---------------------------------------------------------*/
 
 static const struct ble_gatt_svc_def svc_demo_defs[] = {
     {
         .type = BLE_GATT_SVC_TYPE_PRIMARY,
-        .uuid = BLE_UUID16_DECLARE(0xFE95),
+        .uuid = BLE_UUID16_DECLARE(SERVICE_DEMO_UUID),
         .characteristics = (struct ble_gatt_chr_def[]) {
             {
-                .uuid = BLE_UUID16_DECLARE(0x0001),
+                .uuid = BLE_UUID16_DECLARE(SERVICE_CHAR_UID_UUID),
                 .flags = BLE_GATT_CHR_F_READ,
                 .access_cb = svc_demo_access,
             },
@@ -65,5 +70,35 @@ static int svc_demo_access(uint16_t conn_handle, uint16_t attr_handle,
                             struct ble_gatt_access_ctxt *ctxt,
                             void *arg)
 {
-    return 0;
+    int ret;
+    uint16_t uuid16;
+
+    uuid16 = ble_uuid_u16(ctxt->chr->uuid);
+    assert(uuid16 != 0);
+
+    switch (uuid16) {
+        case SERVICE_CHAR_UID_UUID:
+            if (ctxt->op == BLE_GATT_ACCESS_OP_READ_CHR) {
+                ret = svc_demo_uid_read_access(ctxt);
+            } else {
+                ret = BLE_ATT_ERR_REQ_NOT_SUPPORTED;
+            }
+            break;
+        default:
+            ret = BLE_ATT_ERR_REQ_NOT_SUPPORTED;
+            break;
+    }
+
+    return ret;
+}
+
+static int svc_demo_uid_read_access(struct ble_gatt_access_ctxt *ctxt)
+{
+    uint32_t uid[3];
+    int ret;
+
+    HAL_GetUID(uid);
+    ret = os_mbuf_append(ctxt->om, uid, sizeof(uid));
+
+    return (ret == 0) ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
 }
