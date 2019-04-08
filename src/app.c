@@ -271,7 +271,26 @@ static void ble_app_on_sync(void)
  */
 static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
 {
-  return 0;
+  int ret;
+
+  switch (event->type) {
+    case BLE_GAP_EVENT_CONNECT:
+      console_printf("connection %s; status = %d\n",
+                    event->connect.status == 0 ? "established" : "failed",
+                    event->connect.status);
+      ret = ble_gap_security_initiate(event->connect.conn_handle);
+      break;
+    case BLE_GAP_EVENT_DISCONNECT:
+      console_printf("disconnect; reason = %d\n", event->disconnect.reason);
+      ret = 0;
+      break;
+    default:
+      console_printf("un-handled event type = %d\n", event->type);
+      ret = 0;
+      break;
+  }
+  
+  return ret;
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
