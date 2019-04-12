@@ -278,6 +278,7 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
       console_printf("connection %s; status = %d\n",
                     event->connect.status == 0 ? "established" : "failed",
                     event->connect.status);
+      ret = ble_gap_security_initiate(event->connect.conn_handle);
       break;
     case BLE_GAP_EVENT_DISCONNECT:
       console_printf("disconnect; reason = %d\n", event->disconnect.reason);
@@ -285,10 +286,22 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
     case BLE_GAP_EVENT_CONN_UPDATE:
       console_printf("connection updated; status = %d\n",
                     event->conn_update.status);
-      ret = ble_gap_security_initiate(event->conn_update.conn_handle);
       break;
     case BLE_GAP_EVENT_CONN_UPDATE_REQ:
       console_printf("connection update request\n");
+      break;
+    case BLE_GAP_EVENT_ENC_CHANGE:
+      console_printf("encryption change event; status = %d\n",
+                    event->enc_change.status);
+      break;
+    case BLE_GAP_EVENT_PASSKEY_ACTION:
+      console_printf("passkey action event; action = %d",
+                    event->passkey.params.action);
+      if (BLE_SM_IOACT_NUMCMP == event->passkey.params.action) {
+        console_printf(" numcmp = %lu",
+                      (unsigned long)event->passkey.params.numcmp);
+      }
+      console_printf("\n");
       break;
     default:
       console_printf("un-handled event type = %d\n", event->type);
