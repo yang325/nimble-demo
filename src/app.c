@@ -278,7 +278,6 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
       console_printf("connection %s; status = %d\n",
                     event->connect.status == 0 ? "established" : "failed",
                     event->connect.status);
-      ret = ble_gap_security_initiate(event->connect.conn_handle);
       break;
     case BLE_GAP_EVENT_DISCONNECT:
       console_printf("disconnect; reason = %d\n", event->disconnect.reason);
