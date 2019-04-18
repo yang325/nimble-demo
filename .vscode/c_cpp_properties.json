@@ -5,7 +5,6 @@
             "includePath": [
                 "${workspaceFolder}/inc",
                 "${workspaceFolder}/driver/inc",
-                "${workspaceFolder}/minicli/inc",
                 "${workspaceFolder}/cmsis/include",
                 "${workspaceFolder}/cmsis/device",
                 "${workspaceFolder}/freertos/lib/include",
