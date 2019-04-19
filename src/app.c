@@ -37,6 +37,8 @@
   */
 /* Includes ------------------------------------------------------------------*/
 
+#include <stdlib.h>
+
 #include "stm32f1xx_hal.h"
 
 #include "FreeRTOS.h"
@@ -68,8 +70,10 @@ static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
 
 static int  ble_gap_event_handler(struct ble_gap_event *event, void *arg);
+static int  ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp);
 
 /* Private variables ---------------------------------------------------------*/
+
 
 /* Exported functions --------------------------------------------------------*/
 
@@ -190,6 +194,7 @@ static void ble_controller_enable(void)
 static void ble_app_on_sync(void)
 {
   int ret;
+  uint32_t seed;
   ble_addr_t addr;
   struct ble_gap_adv_params adv_params;
   struct ble_hs_adv_fields fields;
@@ -203,6 +208,10 @@ static void ble_app_on_sync(void)
     console_printf("Initializing random address failed (err %d)\n", ret);
     return;
   }
+
+  /* Use random address as PRNG seed */
+  memcpy(&seed, addr.val, sizeof(seed));
+  srand(seed);
 
   ret = ble_hs_id_set_rnd(addr.val);
   if (ret) {
@@ -294,16 +303,38 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
                     event->enc_change.status);
       break;
     case BLE_GAP_EVENT_PASSKEY_ACTION:
-      console_printf("passkey action event; action = %d",
-                    event->passkey.params.action);
-      if (BLE_SM_IOACT_NUMCMP == event->passkey.params.action) {
-        console_printf(" numcmp = %lu",
-                      (unsigned long)event->passkey.params.numcmp);
-      }
-      console_printf("\n");
+      ret = ble_gap_passkey_handler(event->passkey.conn_handle,
+                                    event->passkey.params.action,
+                                    event->passkey.params.numcmp);
       break;
     default:
       console_printf("un-handled event type = %d\n", event->type);
+      break;
+  }
+
+  return ret;
+}
+
+static int ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp)
+{
+  int ret = 0;
+  struct ble_sm_io pk;
+
+  switch (action) {
+    case BLE_SM_IOACT_OOB:
+      break;
+    case BLE_SM_IOACT_INPUT:
+      break;
+    case BLE_SM_IOACT_DISP:
+	    pk.passkey = rand() % 1000000;             /* Max value is 999999 */
+      pk.action = BLE_SM_IOACT_DISP;
+      console_printf("passkey display event, number = %06u\n", pk.passkey);
+      ret = ble_sm_inject_io(conn_handle, &pk);
+      break;
+    case BLE_SM_IOACT_NUMCMP:
+      console_printf("passkey number compare event, numcmp = %u\n", numcmp);
+      break;
+    default:
       break;
   }
 
