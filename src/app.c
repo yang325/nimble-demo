@@ -71,6 +71,7 @@ static void ble_host_thread(void * arg);
 
 static int  ble_gap_event_handler(struct ble_gap_event *event, void *arg);
 static int  ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp);
+static int  ble_gap_disconnect_handler(int reason);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -94,8 +95,8 @@ int main(void)
   led_init();
 
   /* NimBLE host task definition */
-  BaseType_t ret = xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HS_SIZE,
-                               NULL, APP_TASK_BLE_HS_PRIORITY, NULL);
+  BaseType_t ret = xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HOST_SIZE,
+                               NULL, APP_TASK_BLE_HOST_PRIORITY, NULL);
   assert(pdPASS == ret);
 
   /* Start scheduler */
@@ -289,7 +290,7 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
                     event->connect.status);
       break;
     case BLE_GAP_EVENT_DISCONNECT:
-      console_printf("disconnect; reason = %d\n", event->disconnect.reason);
+      ret = ble_gap_disconnect_handler(event->disconnect.reason);
       break;
     case BLE_GAP_EVENT_CONN_UPDATE:
       console_printf("connection updated; status = %d\n",
@@ -339,6 +340,61 @@ static int ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_
   }
 
   return ret;
+}
+
+static int ble_gap_disconnect_handler(int reason)
+{
+  int ret;
+  struct ble_gap_adv_params adv_params;
+  struct ble_hs_adv_fields fields;
+  const char *name;
+
+  console_printf("disconnect; reason = 0x%x\n", reason);
+
+  /**
+   *  Set the advertisement data included in our advertisements:
+   *     o Flags (indicates advertisement type and other general info).
+   *     o Advertising tx power.
+   *     o Device name.
+   *     o 16-bit service UUIDs (alert notifications).
+   */
+  memset(&fields, 0, sizeof fields);
+
+  /* Advertise two flags:
+   *     o Discoverability in forthcoming advertisement (general)
+   *     o BLE-only (BR/EDR unsupported).
+   */
+  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
+
+  name = ble_svc_gap_device_name();
+  fields.name = (uint8_t *)name;
+  fields.name_len = strlen(name);
+  fields.name_is_complete = 1;
+
+  fields.uuids16 = (ble_uuid16_t[]){
+    BLE_UUID16_INIT(SERVICE_DEMO_UUID)
+  };
+  fields.num_uuids16 = 1;
+  fields.uuids16_is_complete = 1;
+
+  ret = ble_gap_adv_set_fields(&fields);
+  if (ret) {
+    console_printf("Setting advertisement data failed (err %d)\n", ret);
+    return ret;
+  }
+
+  /* Begin advertising. */
+  memset(&adv_params, 0, sizeof adv_params);
+  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
+  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
+  ret = ble_gap_adv_start(BLE_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
+                          &adv_params, ble_gap_event_handler, NULL);
+  if (ret) {
+    console_printf("Enabling advertisement failed (err %d)\n", ret);
+    return ret;
+  }
+
+  return 0;
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.

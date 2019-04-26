@@ -57,14 +57,14 @@
 #define HAL_TASK_HCI_UART_PRIORITY      (configMAX_PRIORITIES - 1)
 
 /**< Size of the Mesh adv task.*/
-#define DEMO_TASK_MESH_ADV_SIZE         (configMINIMAL_STACK_SIZE * 4)
+#define APP_TASK_BLE_MESH_SIZE          (configMINIMAL_STACK_SIZE * 4)
 /**< Priority of the Mesh adv task. */
-#define DEMO_TASK_MESH_ADV_PRIORITY     (configMAX_PRIORITIES - 2)
+#define APP_TASK_BLE_MESH_PRIORITY      (configMAX_PRIORITIES - 2)
 
 /**< Size of the BLE host task.*/
-#define APP_TASK_BLE_HS_SIZE            (configMINIMAL_STACK_SIZE * 6)
+#define APP_TASK_BLE_HOST_SIZE          (configMINIMAL_STACK_SIZE * 6)
 /**< Priority of the BLE host task. */
-#define APP_TASK_BLE_HS_PRIORITY        (configMAX_PRIORITIES - 3)
+#define APP_TASK_BLE_HOST_PRIORITY      (configMAX_PRIORITIES - 3)
 
 #ifdef __cplusplus
 }
