@@ -327,7 +327,7 @@ static int ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_
     case BLE_SM_IOACT_INPUT:
       break;
     case BLE_SM_IOACT_DISP:
-	    pk.passkey = rand() % 1000000;             /* Max value is 999999 */
+      pk.passkey = rand() % 1000000;             /* Max value is 999999 */
       pk.action = BLE_SM_IOACT_DISP;
       console_printf("passkey display event, number = %06u\n", pk.passkey);
       ret = ble_sm_inject_io(conn_handle, &pk);
