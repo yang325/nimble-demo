@@ -385,7 +385,7 @@ static int ble_gap_disconnect_handler(int reason)
 
   /* Begin advertising. */
   memset(&adv_params, 0, sizeof adv_params);
-  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
+  adv_params.conn_mode = BLE_GAP_CONN_MODE_DIR;
   adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
   ret = ble_gap_adv_start(BLE_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
                           &adv_params, ble_gap_event_handler, NULL);
