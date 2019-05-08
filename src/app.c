@@ -71,7 +71,7 @@ static void ble_host_thread(void * arg);
 
 static int  ble_gap_event_handler(struct ble_gap_event *event, void *arg);
 static int  ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp);
-static int  ble_gap_disconnect_handler(int reason);
+static int  ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -290,7 +290,8 @@ static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
                     event->connect.status);
       break;
     case BLE_GAP_EVENT_DISCONNECT:
-      ret = ble_gap_disconnect_handler(event->disconnect.reason);
+      console_printf("disconnect; reason = 0x%x\n", event->disconnect.reason);
+      ret = ble_gap_disconnect_handler(&event->disconnect.conn);
       break;
     case BLE_GAP_EVENT_CONN_UPDATE:
       console_printf("connection updated; status = %d\n",
@@ -342,14 +343,20 @@ static int ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_
   return ret;
 }
 
-static int ble_gap_disconnect_handler(int reason)
+static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
 {
   int ret;
   struct ble_gap_adv_params adv_params;
   struct ble_hs_adv_fields fields;
   const char *name;
 
-  console_printf("disconnect; reason = 0x%x\n", reason);
+  console_printf("peer device address = %02x:%02x:%02x:%02x:%02x:%02x (type %d)\n",
+                conn_desc->peer_id_addr.val[5], conn_desc->peer_id_addr.val[4], conn_desc->peer_id_addr.val[3],
+                conn_desc->peer_id_addr.val[2], conn_desc->peer_id_addr.val[1], conn_desc->peer_id_addr.val[0],
+                conn_desc->peer_id_addr.type);
+  console_printf("key_size = %d, encrypted = %d, authenticated = %d, bonded = %d\n",
+                conn_desc->sec_state.key_size, conn_desc->sec_state.encrypted,
+                conn_desc->sec_state.authenticated, conn_desc->sec_state.bonded);
 
   /**
    *  Set the advertisement data included in our advertisements:
