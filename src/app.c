@@ -358,6 +358,11 @@ static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
                 conn_desc->sec_state.key_size, conn_desc->sec_state.encrypted,
                 conn_desc->sec_state.authenticated, conn_desc->sec_state.bonded);
 
+  if (0 == conn_desc->sec_state.bonded) {
+    console_printf("Need to reboot\n");
+    return 0;
+  }
+
   /**
    *  Set the advertisement data included in our advertisements:
    *     o Flags (indicates advertisement type and other general info).
