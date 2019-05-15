@@ -204,7 +204,7 @@ static void ble_app_on_sync(void)
   console_printf("The host and controller are in sync\n");
 
   /* Use NRPA */
-  ret = ble_hs_id_gen_rnd(0, &addr);
+  ret = ble_hs_id_gen_rnd(1, &addr);
   if (ret) {
     console_printf("Initializing random address failed (err %d)\n", ret);
     return;
