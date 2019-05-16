@@ -358,11 +358,6 @@ static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
                 conn_desc->sec_state.key_size, conn_desc->sec_state.encrypted,
                 conn_desc->sec_state.authenticated, conn_desc->sec_state.bonded);
 
-  if (0 == conn_desc->sec_state.bonded) {
-    console_printf("Need to reboot\n");
-    return 0;
-  }
-
   /**
    *  Set the advertisement data included in our advertisements:
    *     o Flags (indicates advertisement type and other general info).
@@ -397,11 +392,10 @@ static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
 
   /* Begin advertising. */
   memset(&adv_params, 0, sizeof adv_params);
-  adv_params.conn_mode = BLE_GAP_CONN_MODE_DIR;
+  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
   adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-  ret = ble_gap_adv_start(BLE_ADDR_RANDOM, &conn_desc->peer_id_addr,
-                          BLE_HS_FOREVER, &adv_params,
-                          ble_gap_event_handler, NULL);
+  ret = ble_gap_adv_start(BLE_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
+                          &adv_params, ble_gap_event_handler, NULL);
   if (ret) {
     console_printf("Enabling advertisement failed (err %d)\n", ret);
     return ret;
