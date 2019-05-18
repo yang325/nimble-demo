@@ -26,7 +26,7 @@ static const struct ble_gatt_svc_def svc_demo_defs[] = {
         .characteristics = (struct ble_gatt_chr_def[]) {
             {
                 .uuid = BLE_UUID16_DECLARE(SERVICE_CHAR_UID_UUID),
-                .flags = BLE_GATT_CHR_F_READ_ENC | BLE_GATT_CHR_F_READ_AUTHEN | BLE_GATT_CHR_F_READ_AUTHOR,
+                .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_READ_AUTHEN,
                 .access_cb = svc_demo_access,
             },
 
