@@ -7,6 +7,7 @@
 
 #define SERVICE_DEMO_UUID                                  0xFE95
 #define SERVICE_CHAR_UID_UUID                              0x0001
+#define SERVICE_CHAR_LED_UUID                              0x0002
 
 /* Exported functions --------------------------------------------------------*/
 

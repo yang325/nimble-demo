@@ -16,6 +16,7 @@ static int svc_demo_access(uint16_t conn_handle, uint16_t attr_handle,
                             struct ble_gatt_access_ctxt *ctxt,
                             void *arg);
 static int svc_demo_uid_read_access(struct ble_gatt_access_ctxt *ctxt);
+static int svc_demo_led_write_access(struct ble_gatt_access_ctxt *ctxt);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -27,6 +28,12 @@ static const struct ble_gatt_svc_def svc_demo_defs[] = {
             {
                 .uuid = BLE_UUID16_DECLARE(SERVICE_CHAR_UID_UUID),
                 .flags = BLE_GATT_CHR_F_READ | BLE_GATT_CHR_F_READ_AUTHEN,
+                .access_cb = svc_demo_access,
+            },
+
+            {
+                .uuid = BLE_UUID16_DECLARE(SERVICE_CHAR_LED_UUID),
+                .flags = BLE_GATT_CHR_F_WRITE,
                 .access_cb = svc_demo_access,
             },
 
@@ -84,6 +91,13 @@ static int svc_demo_access(uint16_t conn_handle, uint16_t attr_handle,
                 ret = BLE_ATT_ERR_REQ_NOT_SUPPORTED;
             }
             break;
+        case SERVICE_CHAR_LED_UUID:
+            if (ctxt->op == BLE_GATT_ACCESS_OP_WRITE_CHR) {
+                ret = svc_demo_led_write_access(ctxt);
+            } else {
+                ret = BLE_ATT_ERR_REQ_NOT_SUPPORTED;
+            }
+            break;
         default:
             ret = BLE_ATT_ERR_REQ_NOT_SUPPORTED;
             break;
@@ -101,4 +115,24 @@ static int svc_demo_uid_read_access(struct ble_gatt_access_ctxt *ctxt)
     ret = os_mbuf_append(ctxt->om, uid, sizeof(uid));
 
     return (ret == 0) ? 0 : BLE_ATT_ERR_INSUFFICIENT_RES;
+}
+
+static int svc_demo_led_write_access(struct ble_gatt_access_ctxt *ctxt)
+{
+    int ret;
+    uint8_t data[20];
+    uint16_t len;
+
+    ret = ble_hs_mbuf_to_flat(ctxt->om, &data[0], sizeof(data), &len);
+    if (ret) {
+        return BLE_ATT_ERR_INVALID_ATTR_VALUE_LEN;
+    }
+
+    console_printf("LED command: ");
+    for (int index = 0; index < len; ++index) {
+        console_printf("0x%02x ", data[index]);
+    }
+    console_printf("\n");
+
+    return 0;
 }
