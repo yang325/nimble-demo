@@ -152,14 +152,12 @@ static void system_info_output(void)
 {
   uint8_t varient, revision;
 
-  console_printf("\n");
-
   varient = (SCB->CPUID & SCB_CPUID_VARIANT_Msk) >> SCB_CPUID_VARIANT_Pos;
   revision = (SCB->CPUID & SCB_CPUID_REVISION_Msk) >> SCB_CPUID_REVISION_Pos;
   SystemCoreClockUpdate();
 
-  console_printf("- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
-  console_printf("- Core Frequency = %lu Hz -\n", SystemCoreClock);
+  console_printf("\n- ARM Cortex-M3 r%dp%d Core -\n", varient, revision);
+  console_printf("- Core Frequency = %lu Hz -\n\n", SystemCoreClock);
 }
 
 static void ble_controller_init(void)
@@ -210,15 +208,15 @@ static void ble_app_on_sync(void)
     return;
   }
 
-  /* Use random address as PRNG seed */
-  memcpy(&seed, addr.val, sizeof(seed));
-  srand(seed);
-
   ret = ble_hs_id_set_rnd(addr.val);
   if (ret) {
     console_printf("Setting random address failed (err %d)\n", ret);
     return;
   }
+
+  /* Use random address as PRNG seed */
+  memcpy(&seed, addr.val, sizeof(seed));
+  srand(seed);
 
   /**
    *  Set the advertisement data included in our advertisements:
@@ -234,6 +232,14 @@ static void ble_app_on_sync(void)
    *     o BLE-only (BR/EDR unsupported).
    */
   fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
+
+  /*
+   * Indicate that the TX power level field should be included; have the
+   * stack fill this value automatically.  This is done by assigning the
+   * special value BLE_HS_ADV_TX_PWR_LVL_AUTO.
+   */
+  fields.tx_pwr_lvl_is_present = 1;
+  fields.tx_pwr_lvl = BLE_HS_ADV_TX_PWR_LVL_AUTO;
 
   name = ble_svc_gap_device_name();
   fields.name = (uint8_t *)name;
@@ -347,8 +353,6 @@ static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
 {
   int ret;
   struct ble_gap_adv_params adv_params;
-  struct ble_hs_adv_fields fields;
-  const char *name;
 
   console_printf("peer device address = %02x:%02x:%02x:%02x:%02x:%02x (type %d)\n",
                 conn_desc->peer_id_addr.val[5], conn_desc->peer_id_addr.val[4], conn_desc->peer_id_addr.val[3],
@@ -357,38 +361,6 @@ static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
   console_printf("key_size = %d, encrypted = %d, authenticated = %d, bonded = %d\n",
                 conn_desc->sec_state.key_size, conn_desc->sec_state.encrypted,
                 conn_desc->sec_state.authenticated, conn_desc->sec_state.bonded);
-
-  /**
-   *  Set the advertisement data included in our advertisements:
-   *     o Flags (indicates advertisement type and other general info).
-   *     o Advertising tx power.
-   *     o Device name.
-   *     o 16-bit service UUIDs (alert notifications).
-   */
-  memset(&fields, 0, sizeof fields);
-
-  /* Advertise two flags:
-   *     o Discoverability in forthcoming advertisement (general)
-   *     o BLE-only (BR/EDR unsupported).
-   */
-  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
-
-  name = ble_svc_gap_device_name();
-  fields.name = (uint8_t *)name;
-  fields.name_len = strlen(name);
-  fields.name_is_complete = 1;
-
-  fields.uuids16 = (ble_uuid16_t[]){
-    BLE_UUID16_INIT(SERVICE_DEMO_UUID)
-  };
-  fields.num_uuids16 = 1;
-  fields.uuids16_is_complete = 1;
-
-  ret = ble_gap_adv_set_fields(&fields);
-  if (ret) {
-    console_printf("Setting advertisement data failed (err %d)\n", ret);
-    return ret;
-  }
 
   /* Begin advertising. */
   memset(&adv_params, 0, sizeof adv_params);
