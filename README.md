@@ -1,3 +1,5 @@
+[![Build Status](https://www.travis-ci.org/yang325/nimble-demo.svg?branch=master)](https://www.travis-ci.org/yang325/nimble-demo)
+
 # Overview
 Apache Mynewt offers the world’s first fully open-source Bluetooth Low Energy (BLE) or Bluetooth Smart stack fully compliant with Bluetooth 5 specifications with support for Bluetooth Mesh. It is called NimBLE.
 
