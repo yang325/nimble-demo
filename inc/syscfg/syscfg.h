@@ -545,7 +545,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_LOG_LEVEL
-#define MYNEWT_VAL_LOG_LEVEL (0)
+#define MYNEWT_VAL_LOG_LEVEL (1)
 #endif
 
 /*** @apache-mynewt-nimble/nimble/host/mesh */
