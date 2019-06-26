@@ -46,7 +46,7 @@
 #include "timers.h"
 #include "semphr.h"
 
-#include "service.h"
+#include "demo.h"
 #include "bsp/bsp.h"
 
 #include "transport/uart/ble_hci_uart.h"
@@ -68,10 +68,6 @@ static void ble_controller_enable(void);
 
 static void ble_app_on_sync(void);
 static void ble_host_thread(void * arg);
-
-static int  ble_gap_event_handler(struct ble_gap_event *event, void *arg);
-static int  ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp);
-static int  ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -192,188 +188,13 @@ static void ble_controller_enable(void)
   */
 static void ble_app_on_sync(void)
 {
-  int ret;
-  uint32_t seed;
-  ble_addr_t addr;
-  struct ble_gap_adv_params adv_params;
-  struct ble_hs_adv_fields fields;
-  const char *name;
+  uint32_t uuid[4];
 
   console_printf("The host and controller are in sync\n");
-
-  /* Use NRPA */
-  ret = ble_hs_id_gen_rnd(1, &addr);
-  if (ret) {
-    console_printf("Initializing random address failed (err %d)\n", ret);
-    return;
-  }
-
-  ret = ble_hs_id_set_rnd(addr.val);
-  if (ret) {
-    console_printf("Setting random address failed (err %d)\n", ret);
-    return;
-  }
-
-  /* Use random address as PRNG seed */
-  memcpy(&seed, addr.val, sizeof(seed));
-  srand(seed);
-
-  /**
-   *  Set the advertisement data included in our advertisements:
-   *     o Flags (indicates advertisement type and other general info).
-   *     o Advertising tx power.
-   *     o Device name.
-   *     o 16-bit service UUIDs (alert notifications).
-   */
-  memset(&fields, 0, sizeof fields);
-
-  /* Advertise two flags:
-   *     o Discoverability in forthcoming advertisement (general)
-   *     o BLE-only (BR/EDR unsupported).
-   */
-  fields.flags = BLE_HS_ADV_F_DISC_GEN | BLE_HS_ADV_F_BREDR_UNSUP;
-
-  /*
-   * Indicate that the TX power level field should be included; have the
-   * stack fill this value automatically.  This is done by assigning the
-   * special value BLE_HS_ADV_TX_PWR_LVL_AUTO.
-   */
-  fields.tx_pwr_lvl_is_present = 1;
-  fields.tx_pwr_lvl = BLE_HS_ADV_TX_PWR_LVL_AUTO;
-
-  name = ble_svc_gap_device_name();
-  fields.name = (uint8_t *)name;
-  fields.name_len = strlen(name);
-  fields.name_is_complete = 1;
-
-  fields.uuids16 = (ble_uuid16_t[]){
-    BLE_UUID16_INIT(SERVICE_DEMO_UUID)
-  };
-  fields.num_uuids16 = 1;
-  fields.uuids16_is_complete = 1;
-
-  ret = ble_gap_adv_set_fields(&fields);
-  if (ret) {
-    console_printf("Setting advertisement data failed (err %d)\n", ret);
-    return;
-  }
-
-  /* Begin advertising. */
-  memset(&adv_params, 0, sizeof adv_params);
-  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
-  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-  ret = ble_gap_adv_start(addr.type, NULL, BLE_HS_FOREVER,
-                          &adv_params, ble_gap_event_handler, NULL);
-  if (ret) {
-    console_printf("Enabling advertisement failed (err %d)\n", ret);
-    return;
-  }
-}
-
-/**
- * The nimble host executes this callback when a GAP event occurs.  The
- * application associates a GAP event callback with each connection that forms.
- * bleprph uses the same callback for all connections.
- *
- * @param event                 The type of event being signalled.
- * @param ctxt                  Various information pertaining to the event.
- * @param arg                   Application-specified argument; unuesd by
- *                                  bleprph.
- *
- * @return                      0 if the application successfully handled the
- *                                  event; nonzero on failure.  The semantics
- *                                  of the return code is specific to the
- *                                  particular GAP event being signalled.
- */
-static int ble_gap_event_handler(struct ble_gap_event *event, void *arg)
-{
-  int ret = 0;
-
-  switch (event->type) {
-    case BLE_GAP_EVENT_CONNECT:
-      console_printf("connection %s; status = %d\n",
-                    event->connect.status == 0 ? "established" : "failed",
-                    event->connect.status);
-      break;
-    case BLE_GAP_EVENT_DISCONNECT:
-      console_printf("disconnect; reason = 0x%x\n", event->disconnect.reason);
-      ret = ble_gap_disconnect_handler(&event->disconnect.conn);
-      break;
-    case BLE_GAP_EVENT_CONN_UPDATE:
-      console_printf("connection updated; status = %d\n",
-                    event->conn_update.status);
-      break;
-    case BLE_GAP_EVENT_CONN_UPDATE_REQ:
-      console_printf("connection update request\n");
-      break;
-    case BLE_GAP_EVENT_ENC_CHANGE:
-      console_printf("encryption change event; status = %d\n",
-                    event->enc_change.status);
-      break;
-    case BLE_GAP_EVENT_PASSKEY_ACTION:
-      ret = ble_gap_passkey_handler(event->passkey.conn_handle,
-                                    event->passkey.params.action,
-                                    event->passkey.params.numcmp);
-      break;
-    default:
-      console_printf("un-handled event type = %d\n", event->type);
-      break;
-  }
-
-  return ret;
-}
-
-static int ble_gap_passkey_handler(uint16_t conn_handle, uint8_t action, uint32_t numcmp)
-{
-  int ret = 0;
-  struct ble_sm_io pk;
-
-  switch (action) {
-    case BLE_SM_IOACT_OOB:
-      break;
-    case BLE_SM_IOACT_INPUT:
-      break;
-    case BLE_SM_IOACT_DISP:
-      pk.passkey = rand() % 1000000;             /* Max value is 999999 */
-      pk.action = BLE_SM_IOACT_DISP;
-      console_printf("passkey display event, number = %06u\n", pk.passkey);
-      ret = ble_sm_inject_io(conn_handle, &pk);
-      break;
-    case BLE_SM_IOACT_NUMCMP:
-      console_printf("passkey number compare event, numcmp = %u\n", numcmp);
-      break;
-    default:
-      break;
-  }
-
-  return ret;
-}
-
-static int ble_gap_disconnect_handler(struct ble_gap_conn_desc *conn_desc)
-{
-  int ret;
-  struct ble_gap_adv_params adv_params;
-
-  console_printf("peer device address = %02x:%02x:%02x:%02x:%02x:%02x (type %d)\n",
-                conn_desc->peer_id_addr.val[5], conn_desc->peer_id_addr.val[4], conn_desc->peer_id_addr.val[3],
-                conn_desc->peer_id_addr.val[2], conn_desc->peer_id_addr.val[1], conn_desc->peer_id_addr.val[0],
-                conn_desc->peer_id_addr.type);
-  console_printf("key_size = %d, encrypted = %d, authenticated = %d, bonded = %d\n",
-                conn_desc->sec_state.key_size, conn_desc->sec_state.encrypted,
-                conn_desc->sec_state.authenticated, conn_desc->sec_state.bonded);
-
-  /* Begin advertising. */
-  memset(&adv_params, 0, sizeof adv_params);
-  adv_params.conn_mode = BLE_GAP_CONN_MODE_UND;
-  adv_params.disc_mode = BLE_GAP_DISC_MODE_GEN;
-  ret = ble_gap_adv_start(BLE_ADDR_RANDOM, NULL, BLE_HS_FOREVER,
-                          &adv_params, ble_gap_event_handler, NULL);
-  if (ret) {
-    console_printf("Enabling advertisement failed (err %d)\n", ret);
-    return ret;
-  }
-
-  return 0;
+  HAL_GetUID(&uuid[0]);
+  uuid[3] = HAL_GetHalVersion();
+  console_printf("The device UUID: %08x-%08x-%08x-%08x\n", uuid[0], uuid[1], uuid[2], uuid[3]);
+  mesh_demo_init((uint8_t *)uuid);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.
@@ -403,7 +224,7 @@ static void ble_host_thread(void * arg)
   /* Initialize GAP, GATT and Mesh related services */
   ble_svc_gap_init();
   ble_svc_gatt_init();
-  svc_demo_init();
+  bt_mesh_register_gatt();
 
   /* Set the default device name. */
   int ret = ble_svc_gap_device_name_set(MYNEWT_VAL(BLE_SVC_GAP_DEVICE_NAME));

@@ -33,6 +33,7 @@ BUILD_DIR = _build
 
 # Configure NimBLE variables
 NIMBLE_ROOT := nimble
+NIMBLE_CFG_MESH := 1
 NIMBLE_CFG_TINYCRYPT := 1
 
 # Skip files that don't build for this port
@@ -51,7 +52,7 @@ C_SOURCES =  \
 src/app.c \
 src/bsp.c \
 src/console_fmt.c \
-src/service.c \
+src/demo.c \
 src/hal_uart.c \
 src/hook.c \
 src/printk.c \
