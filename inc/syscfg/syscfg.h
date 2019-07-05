@@ -545,7 +545,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_LOG_LEVEL
-#define MYNEWT_VAL_LOG_LEVEL (1)
+#define MYNEWT_VAL_LOG_LEVEL (0)
 #endif
 
 /*** @apache-mynewt-nimble/nimble/host/mesh */
@@ -562,7 +562,7 @@
 #endif
 
 #ifndef MYNEWT_VAL_BLE_MESH_CFG_CLI
-#define MYNEWT_VAL_BLE_MESH_CFG_CLI (0)
+#define MYNEWT_VAL_BLE_MESH_CFG_CLI (1)
 #endif
 
 #ifndef MYNEWT_VAL_BLE_MESH_CRPL
