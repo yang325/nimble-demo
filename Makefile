@@ -72,14 +72,14 @@ driver/src/stm32f1xx_hal_rcc_ex.c \
 driver/src/stm32f1xx_hal_tim.c \
 driver/src/stm32f1xx_hal_tim_ex.c \
 driver/src/stm32f1xx_hal_uart.c \
-freertos/lib/FreeRTOS/event_groups.c \
-freertos/lib/FreeRTOS/list.c \
-freertos/lib/FreeRTOS/queue.c \
-freertos/lib/FreeRTOS/stream_buffer.c \
-freertos/lib/FreeRTOS/tasks.c \
-freertos/lib/FreeRTOS/timers.c \
-freertos/lib/FreeRTOS/portable/MemMang/heap_4.c \
-freertos/lib/FreeRTOS/portable/GCC/ARM_CM3/port.c \
+freertos/freertos_kernel/event_groups.c \
+freertos/freertos_kernel/list.c \
+freertos/freertos_kernel/queue.c \
+freertos/freertos_kernel/stream_buffer.c \
+freertos/freertos_kernel/tasks.c \
+freertos/freertos_kernel/timers.c \
+freertos/freertos_kernel/portable/MemMang/heap_4.c \
+freertos/freertos_kernel/portable/GCC/ARM_CM3/port.c \
 nimble/porting/npl/freertos/src/nimble_port_freertos.c \
 nimble/porting/npl/freertos/src/npl_os_freertos.c \
 nimble/nimble/transport/uart/src/ble_hci_uart.c \
@@ -146,9 +146,8 @@ C_INCLUDES =  \
 -I driver/inc \
 -I cmsis/device \
 -I cmsis/include \
--I freertos/lib/include \
--I freertos/lib/include/private \
--I freertos/lib/FreeRTOS/portable/GCC/ARM_CM3 \
+-I freertos/freertos_kernel/include \
+-I freertos/freertos_kernel/portable/GCC/ARM_CM3 \
 -I nimble/porting/npl/freertos/include \
 -I nimble/porting/nimble/include \
 -I nimble/nimble/transport/uart/include \
