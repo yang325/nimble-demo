@@ -58,6 +58,25 @@ void NMI_Handler(void)
 /**
  * @brief This function handles Hard fault interrupt.
  */
+void prvGetRegistersFromStack(uint32_t * pulFaultStackAddress)
+{
+  console_printf("R0 = 0x%08x\n", pulFaultStackAddress[0]);
+  console_printf("R1 = 0x%08x\n", pulFaultStackAddress[1]);
+  console_printf("R2 = 0x%08x\n", pulFaultStackAddress[2]);
+  console_printf("R3 = 0x%08x\n", pulFaultStackAddress[3]);
+
+  console_printf("R12 = 0x%08x\n", pulFaultStackAddress[4]);
+  console_printf("LR = 0x%08x\n", pulFaultStackAddress[5]);
+  console_printf("PC = 0x%08x\n", pulFaultStackAddress[6]);
+  console_printf("PSR = 0x%08x\n", pulFaultStackAddress[7]);
+
+  assert(0);
+}
+
+/**
+ * The fault handler implementation calls a function called
+ * prvGetRegistersFromStack().
+ */
 void HardFault_Handler(void)
 {
   __asm volatile
