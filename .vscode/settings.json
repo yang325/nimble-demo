@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "hci_common.h": "c"
+        "hci_common.h": "c",
+        "mesh.h": "c"
     }
 }
