@@ -20,13 +20,28 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "FreeRTOS.h"
+#include "task.h"
+#include "timers.h"
+#include "semphr.h"
+
 #include "console/printk.h"
 #include "stm32f1xx_hal.h"
+
+static SemaphoreHandle_t console_mutex = NULL;
 
 static int console_output(int value)
 {
     ITM_SendChar(value);
     return value;
+}
+
+void console_init(void)
+{
+    __printk_hook_install(console_output);
+
+    console_mutex = xSemaphoreCreateMutex();
+    assert(NULL != console_mutex);
 }
 
 /**
@@ -42,14 +57,13 @@ int console_printf(const char *fmt, ...)
     va_list args;
     int len;
 
-    if (__printk_get_hook() != console_output) {
-        __printk_hook_install(console_output);
-    }
-
     va_start(args, fmt);
+
+    xSemaphoreTake(console_mutex, portMAX_DELAY);
     len = vprintk(fmt, args);
+    xSemaphoreGive(console_mutex);
+
     va_end(args);
 
     return len;
 }
-

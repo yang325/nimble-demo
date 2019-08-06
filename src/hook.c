@@ -2,14 +2,13 @@
 
 #include "stm32f1xx_hal.h"
 
-#include "console/console.h"
-
 #include "FreeRTOS.h"
 #include "task.h"
 #include "timers.h"
 #include "semphr.h"
 
 #include "bsp/bsp.h"
+#include "console/printk.h"
 
 /**
  * @brief Loop forever if stack overflow is detected.
@@ -24,8 +23,20 @@
  */
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName)
 {
-  console_printf("Application %s stack overflow\n", pcTaskName);
-  assert(0);
+  printk("Application %s stack overflow\n", pcTaskName);
+  /* Generate breakpoint if debugger is connected */
+  __BKPT(0);
+  /* Disable IRQ */
+  __disable_irq();
+  while(1)
+  {
+    led_toggle();
+    uint32_t delay = 500000;
+    while (delay --)
+    {
+      __asm("nop");
+    }
+  }
 }
 
 void vApplicationTickHook(void)
@@ -39,3 +50,23 @@ void vApplicationIdleHook(void)
   led_toggle();
 }
 
+/**
+  * @}
+  */
+void __assert_func(const char *file, int line, const char *func, const char *condition)
+{
+  printk("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
+  /* Generate breakpoint if debugger is connected */
+  __BKPT(0);
+  /* Disable IRQ */
+  __disable_irq();
+  while(1)
+  {
+    led_toggle();
+    uint32_t delay = 500000;
+    while (delay --)
+    {
+      __asm("nop");
+    }
+  }
+}

@@ -2,6 +2,7 @@
     "files.associations": {
         "hci_common.h": "c",
         "mesh.h": "c",
-        "model_cli.h": "c"
+        "model_cli.h": "c",
+        "semphr.h": "c"
     }
 }

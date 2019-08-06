@@ -90,6 +90,9 @@ int main(void)
   /* Initialize LED */
   led_init();
 
+  /* Initialize console */
+  console_init();
+
   /* NimBLE host task definition */
   BaseType_t ret = xTaskCreate(ble_host_thread, "host", APP_TASK_BLE_HOST_SIZE,
                                NULL, APP_TASK_BLE_HOST_PRIORITY, NULL);
@@ -235,27 +238,6 @@ static void ble_host_thread(void * arg)
 
   /* Handle NimBLE events */
   nimble_port_run();
-}
-
-/**
-  * @}
-  */
-void __assert_func(const char *file, int line, const char *func, const char *condition)
-{
-  console_printf("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
-  /* Generate breakpoint if debugger is connected */
-  __BKPT(0);
-  /* Disable IRQ */
-  __disable_irq();
-  while(1)
-  {
-    led_toggle();
-    uint32_t delay = 500000;
-    while (delay --)
-    {
-      __asm("nop");
-    }
-  }
 }
 
 /**
