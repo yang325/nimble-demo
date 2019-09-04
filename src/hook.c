@@ -46,8 +46,7 @@ void vApplicationTickHook(void)
 
 void vApplicationIdleHook(void)
 {
-  HAL_Delay(700);
-  led_toggle();
+  led_handler();
 }
 
 /**

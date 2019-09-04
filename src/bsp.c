@@ -4,6 +4,15 @@
 
 #include "stm32f1xx_hal.h"
 
+/* Private define ------------------------------------------------------------*/
+
+#define LED_ON_DELAY_DEFAULT                              600
+#define LED_OFF_DELAY_DEFAULT                             400
+
+/* Private variables ---------------------------------------------------------*/
+
+static uint32_t on_delay = LED_ON_DELAY_DEFAULT, off_delay = LED_OFF_DELAY_DEFAULT;
+
 /* Exported functions --------------------------------------------------------*/
 
 /** Configure pins as 
@@ -46,4 +55,17 @@ void led_toggle(void)
 bool led_state(void)
 {
   return GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
+}
+
+void led_handler(void)
+{
+  if (on_delay) {
+    led_on();
+    HAL_Delay(on_delay);
+  }
+
+  if (off_delay) {
+    led_off();
+    HAL_Delay(off_delay);
+  }
 }
