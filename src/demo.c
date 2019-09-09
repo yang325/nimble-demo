@@ -18,6 +18,8 @@
 static void health_pub_init(void);
 static int  gen_onoff_get(struct bt_mesh_model *model, u8_t *state);
 static int  gen_onoff_set(struct bt_mesh_model *model, u8_t state);
+static void node_complete(u16_t net_idx, u16_t addr);
+static void node_reset(void);
 
 /* Private variables ---------------------------------------------------------*/
 
@@ -72,6 +74,8 @@ static struct bt_mesh_elem elements[] = {
 
 static const struct bt_mesh_prov prov = {
   .uuid = dev_uuid,
+  .complete = node_complete,
+  .reset = node_reset,
 };
 
 static const struct bt_mesh_comp comp = {
@@ -145,4 +149,17 @@ static int gen_onoff_set(struct bt_mesh_model *model, u8_t state)
   }
 
   return 0;
+}
+
+static void node_complete(u16_t net_idx, u16_t addr)
+{
+  led_on();
+  console_printf("Node is provisioned with address 0x%04x in network 0x%04x\n",
+                  addr, net_idx);
+}
+
+static void node_reset(void)
+{
+  led_reset();
+  console_printf("Node is reset\n");
 }
