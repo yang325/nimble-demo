@@ -39,14 +39,14 @@ void led_init(void)
 
 void led_on(void)
 {
-  on_delay = 100;
+  on_delay = 10;
   off_delay = 0;
 }
 
 void led_off(void)
 {
   on_delay = 0;
-  off_delay = 100;
+  off_delay = 10;
 }
 
 void led_reset(void)

@@ -124,6 +124,8 @@ void mesh_demo_init(uint8_t uuid[16])
 
     console_printf("Creating mesh task failed\n");
     return;
+  } else {
+    console_printf("Creating mesh task succeed\n");
   }
 }
 
