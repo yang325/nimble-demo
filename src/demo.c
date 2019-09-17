@@ -138,7 +138,7 @@ static void health_pub_init(void)
 
 static int gen_onoff_get(struct bt_mesh_model *model, u8_t *state)
 {
-	*state = led_state();
+	*state = led_state() ? 0x01 : 0x00;
 	return 0;
 }
 
