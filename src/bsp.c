@@ -37,16 +37,14 @@ void led_init(void)
 
 void led_on(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
-  on_delay = 0;
+  on_delay = 100;
   off_delay = 0;
 }
 
 void led_off(void)
 {
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
   on_delay = 0;
-  off_delay = 0;
+  off_delay = 100;
 }
 
 void led_toggle(void)
@@ -61,10 +59,14 @@ bool led_state(void)
 
 void led_handler(void)
 {
-  if (on_delay && off_delay) {
+  if (on_delay) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
     HAL_Delay(on_delay);
+  }
+
+  if (off_delay) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
     HAL_Delay(off_delay);
   }
 }
+
