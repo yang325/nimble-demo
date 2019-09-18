@@ -191,13 +191,13 @@ static void ble_controller_enable(void)
   */
 static void ble_app_on_sync(void)
 {
-  uint32_t uuid[4];
+  uint32_t device_id[4];
 
   console_printf("The host and controller are in sync\n");
-  HAL_GetUID(&uuid[0]);
-  uuid[3] = HAL_GetHalVersion();
-  console_printf("The device UUID: %08x-%08x-%08x-%08x\n", uuid[0], uuid[1], uuid[2], uuid[3]);
-  mesh_demo_init((uint8_t *)uuid);
+  HAL_GetUID(&device_id[0]);
+  console_printf("The device ID: %08x-%08x-%08x\n", device_id[0], device_id[1], device_id[2]);
+  device_id[3] = device_id[0] ^ device_id[1] ^ device_id[2];
+  mesh_demo_init((uint8_t *)device_id);
 }
 
 /**@brief Thread for handling the Application's BLE Stack events.

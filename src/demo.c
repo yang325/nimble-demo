@@ -162,6 +162,7 @@ static void node_complete(u16_t net_idx, u16_t addr)
 
 static void node_reset(void)
 {
-  led_reset();
-  console_printf("Node is reset\n");
+  console_printf("Node is reset and will reboot\n");
+  led_off();
+  NVIC_SystemReset();
 }

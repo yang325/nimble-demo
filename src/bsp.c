@@ -9,7 +9,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-static uint32_t on_delay, off_delay;
+static uint32_t on_delay = 600, off_delay = 400;
 
 /* Exported functions --------------------------------------------------------*/
 
@@ -33,26 +33,20 @@ void led_init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-  led_reset();
 }
 
 void led_on(void)
 {
-  on_delay = 10;
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
+  on_delay = 0;
   off_delay = 0;
 }
 
 void led_off(void)
 {
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
   on_delay = 0;
-  off_delay = 10;
-}
-
-void led_reset(void)
-{
-  on_delay = 600;
-  off_delay = 400;
+  off_delay = 0;
 }
 
 void led_toggle(void)
@@ -67,12 +61,9 @@ bool led_state(void)
 
 void led_handler(void)
 {
-  if (on_delay) {
+  if (on_delay && off_delay) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_RESET);
     HAL_Delay(on_delay);
-  }
-
-  if (off_delay) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, GPIO_PIN_SET);
     HAL_Delay(off_delay);
   }
