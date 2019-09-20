@@ -162,7 +162,7 @@ static void node_complete(u16_t net_idx, u16_t addr)
 
 static void node_reset(void)
 {
-  console_printf("Node is reset and will reboot\n");
-  led_off();
-  NVIC_SystemReset();
+  led_reset();
+  console_printf("Node is reset and wait for provision\n");
+  bt_mesh_prov_enable(BT_MESH_PROV_ADV | BT_MESH_PROV_GATT);
 }

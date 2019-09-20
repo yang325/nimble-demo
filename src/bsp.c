@@ -9,7 +9,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-static uint32_t on_delay = 600, off_delay = 400;
+static uint32_t on_delay, off_delay;
 
 /* Exported functions --------------------------------------------------------*/
 
@@ -45,6 +45,12 @@ void led_off(void)
 {
   on_delay = 0;
   off_delay = 100;
+}
+
+void led_reset(void)
+{
+  on_delay = 600;
+  off_delay = 400;
 }
 
 void led_toggle(void)

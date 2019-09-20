@@ -87,8 +87,9 @@ int main(void)
   /* Configure the system clock */
   system_clock_config();
 
-  /* Initialize LED */
+  /* Initialize LED and reset */
   led_init();
+  led_reset();
 
   /* Initialize console */
   console_init();
