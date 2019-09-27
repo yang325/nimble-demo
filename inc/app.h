@@ -68,8 +68,6 @@
 
 /* Exported functions --------------------------------------------------------*/
 
-void error_handler(const char *fmt, ...);
-
 #ifdef __cplusplus
 }
 #endif

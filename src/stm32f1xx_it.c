@@ -52,8 +52,7 @@
  */
 void NMI_Handler(void)
 {
-  /* USER CODE BEGIN NonMaskableInt_IRQn 1 */
-  /* USER CODE END NonMaskableInt_IRQn 1 */
+  error_handler("%s\n", __FUNCTION__);
 }
 
 /**
@@ -93,11 +92,7 @@ void HardFault_Handler(void)
  */
 void MemManage_Handler(void)
 {
-  while (1)
-  {
-    /* USER CODE BEGIN W1_MemoryManagement_IRQn 0 */
-    /* USER CODE END W1_MemoryManagement_IRQn 0 */
-  }
+  error_handler("%s\n", __FUNCTION__);
 }
 
 /**
@@ -105,11 +100,7 @@ void MemManage_Handler(void)
  */
 void BusFault_Handler(void)
 {
-  while (1)
-  {
-    /* USER CODE BEGIN W1_BusFault_IRQn 0 */
-    /* USER CODE END W1_BusFault_IRQn 0 */
-  }
+  error_handler("%s\n", __FUNCTION__);
 }
 
 /**
@@ -117,11 +108,7 @@ void BusFault_Handler(void)
  */
 void UsageFault_Handler(void)
 {
-  while (1)
-  {
-    /* USER CODE BEGIN W1_UsageFault_IRQn 0 */
-    /* USER CODE END W1_UsageFault_IRQn 0 */
-  }
+  error_handler("%s\n", __FUNCTION__);
 }
 
 /**
@@ -129,8 +116,7 @@ void UsageFault_Handler(void)
  */
 void DebugMon_Handler(void)
 {
-  /* USER CODE BEGIN DebugMonitor_IRQn 0 */
-  /* USER CODE END DebugMonitor_IRQn 0 */
+  error_handler("%s\n", __FUNCTION__);
 }
 
 /******************************************************************************/

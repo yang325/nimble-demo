@@ -244,5 +244,11 @@ static void ble_host_thread(void * arg)
 /**
   * @}
   */
+void __assert_func(const char *file, int line, const char *func, const char *condition)
+{
+  while(1) {
+    error_handler("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
+  }
+}
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

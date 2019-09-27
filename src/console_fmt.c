@@ -25,6 +25,7 @@
 #include "timers.h"
 #include "semphr.h"
 
+#include "bsp/bsp.h"
 #include "console/printk.h"
 #include "stm32f1xx_hal.h"
 
@@ -57,13 +58,41 @@ int console_printf(const char *fmt, ...)
     va_list args;
     int len;
 
-    va_start(args, fmt);
-
     xSemaphoreTake(console_mutex, portMAX_DELAY);
-    len = vprintk(fmt, args);
-    xSemaphoreGive(console_mutex);
 
+    va_start(args, fmt);
+    len = vprintk(fmt, args);
     va_end(args);
 
+    xSemaphoreGive(console_mutex);
+
     return len;
+}
+
+/**
+  * @}
+  */
+void error_handler(const char *fmt, ...)
+{
+    va_list args;
+
+    /* Disable IRQ */
+    __disable_irq();
+    /* Output information */
+	va_start(args, fmt);
+	vprintk(fmt, args);
+	va_end(args);
+
+    /* Generate breakpoint if debugger is connected */
+    __BKPT(0);
+    /* Toggle the LED if no debugger connected */
+    while(1)
+    {
+        led_toggle();
+        uint32_t delay = 500000;
+        while (-- delay)
+        {
+            __asm("nop");
+        }
+    }
 }
