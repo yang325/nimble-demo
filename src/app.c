@@ -103,7 +103,7 @@ int main(void)
   vTaskStartScheduler();
 
   /* We should never get here as control is now taken by the scheduler */
-  assert(0);
+  error_handler("Should never get here\n");
 }
 
 /**

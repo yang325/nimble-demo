@@ -3,6 +3,9 @@
         "hci_common.h": "c",
         "mesh.h": "c",
         "model_cli.h": "c",
-        "semphr.h": "c"
+        "semphr.h": "c",
+        "stm32f1xx_hal.h": "c",
+        "stm32f1xx_it.h": "c",
+        "stm32f1xx.h": "c"
     }
 }

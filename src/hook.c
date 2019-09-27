@@ -23,20 +23,7 @@
  */
 void vApplicationStackOverflowHook(TaskHandle_t xTask, char * pcTaskName)
 {
-  printk("Application %s stack overflow\n", pcTaskName);
-  /* Generate breakpoint if debugger is connected */
-  __BKPT(0);
-  /* Disable IRQ */
-  __disable_irq();
-  while(1)
-  {
-    led_toggle();
-    uint32_t delay = 500000;
-    while (delay --)
-    {
-      __asm("nop");
-    }
-  }
+  error_handler("Application %s stack overflow\n", pcTaskName);
 }
 
 void vApplicationTickHook(void)
@@ -54,11 +41,28 @@ void vApplicationIdleHook(void)
   */
 void __assert_func(const char *file, int line, const char *func, const char *condition)
 {
-  printk("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
-  /* Generate breakpoint if debugger is connected */
-  __BKPT(0);
+  while(1) {
+    error_handler("Assert failed in %s, %s:%d (%s)", func, file, line, condition);
+  }
+}
+
+/**
+  * @}
+  */
+void error_handler(const char *fmt, ...)
+{
+  va_list ap;
+
   /* Disable IRQ */
   __disable_irq();
+  /* Output information */
+	va_start(ap, fmt);
+	vprintk(fmt, ap);
+	va_end(ap);
+
+  /* Generate breakpoint if debugger is connected */
+  __BKPT(0);
+  /* Toggle the LED if no debugger connected */
   while(1)
   {
     led_toggle();

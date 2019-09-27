@@ -35,6 +35,7 @@
 #include "stm32f1xx_hal.h"
 #include "stm32f1xx.h"
 #include "stm32f1xx_it.h"
+
 #include "hal/hal_uart.h"
 
 /* External functions --------------------------------------------------------*/
@@ -60,17 +61,12 @@ void NMI_Handler(void)
  */
 void prvGetRegistersFromStack(uint32_t * pulFaultStackAddress)
 {
-  console_printf("R0 = 0x%08x\n", pulFaultStackAddress[0]);
-  console_printf("R1 = 0x%08x\n", pulFaultStackAddress[1]);
-  console_printf("R2 = 0x%08x\n", pulFaultStackAddress[2]);
-  console_printf("R3 = 0x%08x\n", pulFaultStackAddress[3]);
-
-  console_printf("R12 = 0x%08x\n", pulFaultStackAddress[4]);
-  console_printf("LR = 0x%08x\n", pulFaultStackAddress[5]);
-  console_printf("PC = 0x%08x\n", pulFaultStackAddress[6]);
-  console_printf("PSR = 0x%08x\n", pulFaultStackAddress[7]);
-
-  assert(0);
+  error_handler("R0 = 0x%08x\n" "R1 = 0x%08x\n" "R2 = 0x%08x\n" "R3 = 0x%08x\n"
+                "R12 = 0x%08x\n" "LR = 0x%08x\n" "PC = 0x%08x\n" "PSR = 0x%08x\n",
+                pulFaultStackAddress[0], pulFaultStackAddress[1],
+                pulFaultStackAddress[2], pulFaultStackAddress[3],
+                pulFaultStackAddress[4], pulFaultStackAddress[5],
+                pulFaultStackAddress[6], pulFaultStackAddress[7]);
 }
 
 /**

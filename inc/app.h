@@ -66,6 +66,10 @@
 /**< Priority of the BLE host task. */
 #define APP_TASK_BLE_HOST_PRIORITY      (configMAX_PRIORITIES - 3)
 
+/* Exported functions --------------------------------------------------------*/
+
+void error_handler(const char *fmt, ...);
+
 #ifdef __cplusplus
 }
 #endif
