@@ -37,8 +37,6 @@
   */
 /* Includes ------------------------------------------------------------------*/
 
-#include <stdlib.h>
-
 #include "stm32f1xx_hal.h"
 
 #include "FreeRTOS.h"
@@ -47,6 +45,7 @@
 #include "semphr.h"
 
 #include "demo.h"
+#include "flash.h"
 #include "bsp/bsp.h"
 
 #include "transport/uart/ble_hci_uart.h"
@@ -212,6 +211,10 @@ static void ble_host_thread(void * arg)
 {
   /* Output System Information */
   system_info_output();
+
+  /* Initialize flash */
+  flash_init();
+  flash_test();
 
   /* Initialize BLE controller */
   ble_controller_init();

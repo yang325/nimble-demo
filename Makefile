@@ -55,6 +55,7 @@ src/console_fmt.c \
 src/demo.c \
 src/hal_uart.c \
 src/hook.c \
+src/flash.c \
 src/printk.c \
 src/stm32f1xx_hal_msp.c \
 src/stm32f1xx_it.c \

@@ -6,6 +6,7 @@
         "semphr.h": "c",
         "stm32f1xx_hal.h": "c",
         "stm32f1xx_it.h": "c",
-        "stm32f1xx.h": "c"
+        "stm32f1xx.h": "c",
+        "flash.h": "c"
     }
 }
