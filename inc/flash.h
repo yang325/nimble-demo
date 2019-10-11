@@ -25,7 +25,6 @@ enum
 /* Exported functions --------------------------------------------------------*/
 
 void flash_init(void);
-void flash_test(void);
 int  flash_page_erase(uint32_t address);
 int  flash_write(uint32_t destination, uint32_t *p_source, uint32_t length);
 int  flash_write_protection_config(bool enable);

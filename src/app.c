@@ -214,7 +214,6 @@ static void ble_host_thread(void * arg)
 
   /* Initialize flash */
   flash_init();
-  flash_test();
 
   /* Initialize BLE controller */
   ble_controller_init();

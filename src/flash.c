@@ -21,16 +21,6 @@ void flash_init(void)
 }
 
 /**
-  * @brief  Test Flash for write access and read access
-  * @param  None
-  * @retval None
-  */
-void flash_test(void)
-{
-  
-}
-
-/**
   * @brief  This function does an erase of all user flash area
   * @param  start: start of user flash area
   * @retval FLASHIF_OK : user flash area successfully erased
