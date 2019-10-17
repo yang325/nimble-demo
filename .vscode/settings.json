@@ -7,6 +7,15 @@
         "stm32f1xx_hal.h": "c",
         "stm32f1xx_it.h": "c",
         "stm32f1xx.h": "c",
-        "flash.h": "c"
+        "flash.h": "c",
+        "lfs.h": "c",
+        "deque": "c",
+        "list": "c",
+        "string": "c",
+        "unordered_map": "c",
+        "unordered_set": "c",
+        "vector": "c",
+        "streambuf": "c",
+        "ble_store_ram.h": "c"
     }
 }

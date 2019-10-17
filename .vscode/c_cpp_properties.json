@@ -4,6 +4,7 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/inc",
+                "${workspaceFolder}/littlefs",
                 "${workspaceFolder}/driver/inc",
                 "${workspaceFolder}/cmsis/include",
                 "${workspaceFolder}/cmsis/device",

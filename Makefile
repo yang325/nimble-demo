@@ -56,10 +56,13 @@ src/demo.c \
 src/hal_uart.c \
 src/hook.c \
 src/flash.c \
+src/store_flash.c \
 src/printk.c \
 src/stm32f1xx_hal_msp.c \
 src/stm32f1xx_it.c \
 src/system_stm32f1xx.c \
+littlefs/lfs.c \
+littlefs/lfs_util.c \
 driver/src/stm32f1xx_hal.c \
 driver/src/stm32f1xx_hal_cortex.c \
 driver/src/stm32f1xx_hal_dma.c \
@@ -144,6 +147,7 @@ AS_INCLUDES =
 # C includes
 C_INCLUDES =  \
 -I inc \
+-I littlefs \
 -I driver/inc \
 -I cmsis/device \
 -I cmsis/include \

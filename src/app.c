@@ -45,7 +45,7 @@
 #include "semphr.h"
 
 #include "demo.h"
-#include "flash.h"
+#include "store_flash.h"
 #include "bsp/bsp.h"
 
 #include "transport/uart/ble_hci_uart.h"
@@ -213,7 +213,7 @@ static void ble_host_thread(void * arg)
   system_info_output();
 
   /* Initialize flash */
-  flash_init();
+  store_flash_init();
 
   /* Initialize BLE controller */
   ble_controller_init();
@@ -238,6 +238,9 @@ static void ble_host_thread(void * arg)
 
   /* Initialize the NimBLE host configuration */
   ble_hs_cfg.sync_cb = ble_app_on_sync;
+  ble_hs_cfg.store_read_cb = store_flash_read;
+  ble_hs_cfg.store_write_cb = store_flash_write;
+  ble_hs_cfg.store_delete_cb = store_flash_delete;
 
   /* Handle NimBLE events */
   nimble_port_run();
