@@ -27,7 +27,7 @@ extern "C" {
 #include "console/console.h"
 #include "syscfg/syscfg.h"
 
-#define printf(_fmt, ...)  console_printf(_fmt, ##__VA_ARGS__)             
+#define printf(_fmt, ...)  console_printf(_fmt, ##__VA_ARGS__)
 
 struct log {
 };

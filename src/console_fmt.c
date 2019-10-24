@@ -98,9 +98,9 @@ void error_handler(const char *fmt, ...)
     /* Disable IRQ */
     __disable_irq();
     /* Output information */
-	va_start(args, fmt);
-	vprintk(fmt, args);
-	va_end(args);
+    va_start(args, fmt);
+    vprintk(fmt, args);
+    va_end(args);
 
     /* Generate breakpoint if debugger is connected */
     __BKPT(0);
