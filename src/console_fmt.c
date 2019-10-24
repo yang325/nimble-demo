@@ -72,6 +72,25 @@ int console_printf(const char *fmt, ...)
 /**
   * @}
   */
+int printf(const char *fmt, ...)
+{
+    va_list args;
+    int len;
+
+    xSemaphoreTake(console_mutex, portMAX_DELAY);
+
+    va_start(args, fmt);
+    len = vprintk(fmt, args);
+    va_end(args);
+
+    xSemaphoreGive(console_mutex);
+
+    return len;
+}
+
+/**
+  * @}
+  */
 void error_handler(const char *fmt, ...)
 {
     va_list args;
