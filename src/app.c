@@ -238,9 +238,6 @@ static void ble_host_thread(void * arg)
 
   /* Initialize the NimBLE host configuration */
   ble_hs_cfg.sync_cb = ble_app_on_sync;
-  ble_hs_cfg.store_read_cb = store_flash_read;
-  ble_hs_cfg.store_write_cb = store_flash_write;
-  ble_hs_cfg.store_delete_cb = store_flash_delete;
 
   /* Handle NimBLE events */
   nimble_port_run();
