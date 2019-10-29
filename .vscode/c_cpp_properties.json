@@ -3,7 +3,10 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/inc",
+                "${workspaceFolder}/include",
+                "${workspaceFolder}/bsp/include",
+                "${workspaceFolder}/hal/include",
+                "${workspaceFolder}/console/include",
                 "${workspaceFolder}/littlefs",
                 "${workspaceFolder}/driver/inc",
                 "${workspaceFolder}/cmsis/include",

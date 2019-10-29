@@ -50,17 +50,17 @@ include $(NIMBLE_ROOT)/porting/nimble/Makefile.defs
 # C sources
 C_SOURCES =  \
 src/app.c \
-src/bsp.c \
-src/console_fmt.c \
 src/demo.c \
-src/hal_uart.c \
 src/hook.c \
 src/flash.c \
 src/store_flash.c \
-src/printk.c \
 src/stm32f1xx_hal_msp.c \
 src/stm32f1xx_it.c \
 src/system_stm32f1xx.c \
+bsp/src/bsp.c \
+hal/src/hal_uart.c \
+console/src/console_fmt.c \
+console/src/printk.c \
 littlefs/lfs.c \
 littlefs/lfs_util.c \
 driver/src/stm32f1xx_hal.c \
@@ -146,7 +146,10 @@ AS_INCLUDES =
 
 # C includes
 C_INCLUDES =  \
--I inc \
+-I include \
+-I bsp/include \
+-I hal/include \
+-I console/include \
 -I littlefs \
 -I driver/inc \
 -I cmsis/device \
