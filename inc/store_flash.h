@@ -9,6 +9,26 @@
 
 /* Exported functions --------------------------------------------------------*/
 
-void store_flash_init(void);
+int store_flash_init(void);
+
+/**
+ * Write a single configuration value to persisted storage (if it has
+ * changed value).
+ *
+ * @param name Name/key of the configuration item.
+ * @param var Value of the configuration item.
+ *
+ * @return 0 on success, non-zero on failure.
+ */
+int conf_save_one(const char *name, char *var);
+
+/**
+ * Load configuration from registered persistence sources. Handlers for
+ * configuration subtrees registered earlier will be called for encountered
+ * values.
+ *
+ * @return 0 on success, non-zero on failure.
+ */
+int conf_load(void);
 
 #endif
