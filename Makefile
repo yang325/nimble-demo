@@ -61,6 +61,8 @@ bsp/src/bsp.c \
 hal/src/hal_uart.c \
 console/src/console_fmt.c \
 console/src/printk.c \
+base64/src/base64.c \
+base64/src/hex.c \
 littlefs/lfs.c \
 littlefs/lfs_util.c \
 driver/src/stm32f1xx_hal.c \
@@ -150,6 +152,7 @@ C_INCLUDES =  \
 -I bsp/include \
 -I hal/include \
 -I console/include \
+-I base64/include \
 -I littlefs \
 -I driver/inc \
 -I cmsis/device \
