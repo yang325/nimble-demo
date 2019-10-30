@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "stm32f1xx_hal.h"
+#include "config_store_priv.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -49,7 +50,7 @@ int block_device_init(void)
   /* Program new option */
   status = HAL_FLASHEx_OBProgram(&OBProgramInit);
   if (HAL_OK != status) {
-    console_printf("Can not erase program OB\n");
+    console_printf("Can not program flash OB\n");
     goto end;
   }
 
