@@ -5,7 +5,6 @@
 #include <string.h>
 
 #include "stm32f1xx_hal.h"
-#include "flash.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -26,7 +25,7 @@
   * @param  None
   * @retval The handle of file system
   */
-int flash_init(void)
+int block_device_init(void)
 {
   HAL_StatusTypeDef status;
   FLASH_OBProgramInitTypeDef OBProgramInit = {

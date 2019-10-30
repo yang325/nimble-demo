@@ -52,8 +52,6 @@ C_SOURCES =  \
 src/app.c \
 src/demo.c \
 src/hook.c \
-src/flash.c \
-src/store_flash.c \
 src/stm32f1xx_hal_msp.c \
 src/stm32f1xx_it.c \
 src/system_stm32f1xx.c \

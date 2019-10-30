@@ -26,23 +26,23 @@ static void node_reset(void);
 static u8_t dev_uuid[16];
 
 static struct bt_mesh_cfg_srv cfg_srv = {
-	.relay = BT_MESH_RELAY_ENABLED,
-	.beacon = BT_MESH_BEACON_ENABLED,
+  .relay = BT_MESH_RELAY_ENABLED,
+  .beacon = BT_MESH_BEACON_ENABLED,
 #if MYNEWT_VAL(BLE_MESH_FRIEND)
-	.frnd = BT_MESH_FRIEND_DISABLED,
+  .frnd = BT_MESH_FRIEND_DISABLED,
 #else
-	.frnd = BT_MESH_FRIEND_NOT_SUPPORTED,
+  .frnd = BT_MESH_FRIEND_NOT_SUPPORTED,
 #endif
 #if MYNEWT_VAL(BLE_MESH_GATT_PROXY)
-	.gatt_proxy = BT_MESH_GATT_PROXY_ENABLED,
+  .gatt_proxy = BT_MESH_GATT_PROXY_ENABLED,
 #else
-	.gatt_proxy = BT_MESH_GATT_PROXY_NOT_SUPPORTED,
+  .gatt_proxy = BT_MESH_GATT_PROXY_NOT_SUPPORTED,
 #endif
-	.default_ttl = 7,
+  .default_ttl = 7,
 
-	/* 3 transmissions with 20ms interval */
-	.net_transmit = BT_MESH_TRANSMIT(2, 20),
-	.relay_retransmit = BT_MESH_TRANSMIT(2, 20),
+  /* 3 transmissions with 20ms interval */
+  .net_transmit = BT_MESH_TRANSMIT(2, 20),
+  .relay_retransmit = BT_MESH_TRANSMIT(2, 20),
 };
 
 static const struct bt_mesh_health_srv_cb health_srv_cb = {
@@ -56,8 +56,8 @@ static struct bt_mesh_health_srv health_srv = {
 static struct bt_mesh_model_pub health_pub;
 
 static struct bt_mesh_gen_onoff_srv_cb gen_onoff_srv_cb = {
-	.get = gen_onoff_get,
-	.set = gen_onoff_set,
+  .get = gen_onoff_get,
+  .set = gen_onoff_set,
 };
 
 static struct bt_mesh_model_pub gen_onoff_pub;
@@ -138,13 +138,13 @@ static void health_pub_init(void)
 
 static int gen_onoff_get(struct bt_mesh_model *model, u8_t *state)
 {
-	*state = led_state() ? 0x01 : 0x00;
-	return 0;
+  *state = led_state() ? 0x01 : 0x00;
+  return 0;
 }
 
 static int gen_onoff_set(struct bt_mesh_model *model, u8_t state)
 {
-	if (state) {
+  if (state) {
     led_on();
   } else {
     led_off();

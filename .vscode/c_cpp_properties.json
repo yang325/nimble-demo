@@ -5,8 +5,10 @@
             "includePath": [
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/bsp/include",
+                "${workspaceFolder}/config/include",
                 "${workspaceFolder}/hal/include",
                 "${workspaceFolder}/console/include",
+                "${workspaceFolder}/base64/include",
                 "${workspaceFolder}/littlefs",
                 "${workspaceFolder}/driver/inc",
                 "${workspaceFolder}/cmsis/include",

@@ -45,7 +45,6 @@
 #include "semphr.h"
 
 #include "demo.h"
-#include "store_flash.h"
 #include "bsp/bsp.h"
 
 #include "transport/uart/ble_hci_uart.h"
@@ -213,7 +212,7 @@ static void ble_host_thread(void * arg)
   system_info_output();
 
   /* Initialize flash */
-  store_flash_init();
+  //store_flash_init();
 
   /* Initialize BLE controller */
   ble_controller_init();

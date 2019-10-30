@@ -8,7 +8,7 @@
 
 /* Exported functions --------------------------------------------------------*/
 
-int flash_init(void);
+int block_device_init(void);
 int block_device_read(const struct lfs_config *c, lfs_block_t block,
                             lfs_off_t off, void *buffer, lfs_size_t size);
 int block_device_prog(const struct lfs_config *c, lfs_block_t block,

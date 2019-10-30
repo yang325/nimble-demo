@@ -16,6 +16,9 @@
         "unordered_set": "c",
         "vector": "c",
         "streambuf": "c",
-        "ble_store_ram.h": "c"
+        "ble_store_ram.h": "c",
+        "base64.h": "c",
+        "os.h": "c",
+        "nimble_npl.h": "c"
     }
 }
