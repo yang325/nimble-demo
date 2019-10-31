@@ -46,6 +46,7 @@
 
 #include "demo.h"
 #include "bsp/bsp.h"
+#include "config/config.h"
 
 #include "transport/uart/ble_hci_uart.h"
 #include "nimble/nimble_port.h"
@@ -212,7 +213,7 @@ static void ble_host_thread(void * arg)
   system_info_output();
 
   /* Initialize flash */
-  //store_flash_init();
+  conf_init();
 
   /* Initialize BLE controller */
   ble_controller_init();

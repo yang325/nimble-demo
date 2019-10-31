@@ -4,8 +4,8 @@
 #include <stdbool.h>
 #include <string.h>
 
+#include "lfs.h"
 #include "stm32f1xx_hal.h"
-#include "config_store_priv.h"
 
 /* Private define ------------------------------------------------------------*/
 
@@ -57,7 +57,7 @@ int block_device_init(void)
 end:
   /* Lock the Options Bytes */
   HAL_FLASH_OB_Lock();
-  /* Unlock the Program memory */
+  /* Lock the Program memory */
   HAL_FLASH_Lock();
   return (HAL_OK == status) ? LFS_ERR_OK : LFS_ERR_IO;
 }

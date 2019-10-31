@@ -24,8 +24,8 @@
 extern "C" {
 #endif
 
-int conf_cli_register(void);
-int conf_mgmt_register(void);
+#include "lfs.h"
+#include "stm32f1xx_hal.h"
 
 /*
  * Lock config subsystem.
@@ -33,18 +33,20 @@ int conf_mgmt_register(void);
 void conf_lock(void);
 void conf_unlock(void);
 
-struct mgmt_cbuf;
-int conf_line_parse(char *buf, char **namep, char **valp);
-int conf_line_make(char *dst, int dlen, const char *name, const char *val);
-int conf_line_make2(char *dst, int dlen, const char *name, const char *value);
+int block_device_init(void);
+int block_device_read(const struct lfs_config *c, lfs_block_t block,
+                            lfs_off_t off, void *buffer, lfs_size_t size);
+int block_device_prog(const struct lfs_config *c, lfs_block_t block,
+                            lfs_off_t off, const void *buffer, lfs_size_t size);
+int block_device_erase(const struct lfs_config *c, lfs_block_t block);
+int block_device_sync(const struct lfs_config *c);
+
 struct conf_handler *conf_parse_and_lookup(char *name, int *name_argc,
                                            char *name_argv[]);
 
-SLIST_HEAD(conf_store_head, conf_store);
-extern struct conf_store_head conf_load_srcs;
+
 SLIST_HEAD(conf_handler_head, conf_handler);
 extern struct conf_handler_head conf_handlers;
-extern struct conf_store *conf_save_dst;
 
 #ifdef __cplusplus
 }

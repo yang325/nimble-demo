@@ -189,47 +189,6 @@ int conf_register(struct conf_handler *cf);
 int conf_load(void);
 
 /**
- * Load configuration from a specific registered persistence source.
- * Handlers will be called for configuration subtree for
- * encountered values.
- *
- * @param name of the configuration subtree.
- * @return 0 on success, non-zero on failure.
- */
-int conf_load_one(char *name);
-
-/**
- * @brief Loads the configuration if it hasn't been loaded since reboot.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_ensure_loaded(void);
-
-/**
- * Config setting comes as a result of conf_load().
- *
- * @return 1 if yes, 0 if not.
- */
-int conf_set_from_storage(void);
-
-/**
- * Save currently running configuration. All configuration which is different
- * from currently persisted values will be saved.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_save(void);
-
-/**
- * Save currently running configuration for configuration subtree.
- *
- * @param name Name of the configuration subtree.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_save_tree(char *name);
-
-/**
  * Write a single configuration value to persisted storage (if it has
  * changed value).
  *
@@ -270,21 +229,6 @@ int conf_set_value(char *name, char *val_str);
 char *conf_get_value(char *name, char *buf, int buf_len);
 
 /**
- * Get stored value of configuration item identified by @p name.
- * This traverses the configuration area(s), and copies the value
- * of the latest value.
- *
- * Value is copied to @p buf, the maximum number of bytes it will copy is
- * limited by @p buf_len.
- *
- * @param name Name/key of the configuration item.
- * @param val_str Value of the configuration item.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_get_stored_value(char *name, char *buf, int buf_len);
-
-/**
  * Call commit for all configuration handler. This should apply all
  * configuration which has been set, but not applied yet.
  *
@@ -293,67 +237,6 @@ int conf_get_stored_value(char *name, char *buf, int buf_len);
  * @return 0 on success, non-zero on failure.
  */
 int conf_commit(char *name);
-
-/**
- * Convenience routine for converting value passed as a string to native
- * data type.
- *
- * @param val_str Value of the configuration item as string.
- * @param type Type of the value to convert to.
- * @param vp Pointer to variable to fill with the decoded value.
- * @param vp Size of that variable.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_value_from_str(char *val_str, enum conf_type type, void *vp,
-  int maxlen);
-
-/**
- * Convenience routine for converting byte array passed as a base64
- * encoded string.
- *
- * @param val_str Value of the configuration item as string.
- * @param vp Pointer to variable to fill with the decoded value.
- * @param len Size of that variable. On return the number of bytes in the array.
- *
- * @return 0 on success, non-zero on failure.
- */
-int conf_bytes_from_str(char *val_str, void *vp, int *len);
-
-/**
- * Convenience routine for converting native data type to a string.
- *
- * @param type Type of the value to convert from.
- * @param vp Pointer to variable to convert.
- * @param buf Buffer where string value will be stored.
- * @param buf_len Size of the buffer.
- *
- * @return 0 on success, non-zero on failure.
- */
-char *conf_str_from_value(enum conf_type type, void *vp, char *buf,
-  int buf_len);
-
-/** Return the length of a configuration string from buffer length. */
-#define CONF_STR_FROM_BYTES_LEN(len) (((len) * 4 / 3) + 4)
-
-/**
- * Convenience routine for converting byte array into a base64
- * encoded string.
- *
- * @param vp Pointer to variable to convert.
- * @param vp_len Number of bytes to convert.
- * @param buf Buffer where string value will be stored.
- * @param buf_len Size of the buffer.
- *
- * @return 0 on success, non-zero on failure.
- */
-char *conf_str_from_bytes(void *vp, int vp_len, char *buf, int buf_len);
-
-/**
- * Convert a string into a value of type
- */
-#define CONF_VALUE_SET(str, type, val)                                  \
-    conf_value_from_str((str), (type), &(val), sizeof(val))
 
 #ifdef __cplusplus
 }

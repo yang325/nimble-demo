@@ -21,8 +21,6 @@
 #include <stdio.h>
 
 #include "os/os.h"
-#include "base64/base64.h"
-
 #include "config/config.h"
 #include "config_priv.h"
 
@@ -82,16 +80,15 @@ int
 conf_parse_name(char *name, int *name_argc, char *name_argv[])
 {
     char *tok;
-    char *tok_ptr;
     char *sep = CONF_NAME_SEPARATOR;
     int i;
 
-    tok = strtok_r(name, sep, &tok_ptr);
+    tok = strtok(name, sep);
 
     i = 0;
     while (tok) {
         name_argv[i++] = tok;
-        tok = strtok_r(NULL, sep, &tok_ptr);
+        tok = strtok(NULL, sep);
     }
     *name_argc = i;
 
@@ -108,124 +105,6 @@ conf_parse_and_lookup(char *name, int *name_argc, char *name_argv[])
         return NULL;
     }
     return conf_handler_lookup(name_argv[0]);
-}
-
-int
-conf_value_from_str(char *val_str, enum conf_type type, void *vp, int maxlen)
-{
-    int32_t val;
-    int64_t val64;
-    char *eptr;
-
-    if (!val_str) {
-        goto err;
-    }
-    switch (type) {
-    case CONF_INT8:
-    case CONF_INT16:
-    case CONF_INT32:
-    case CONF_BOOL:
-        val = strtol(val_str, &eptr, 0);
-        if (*eptr != '\0') {
-            goto err;
-        }
-        if (type == CONF_BOOL) {
-            if (val < 0 || val > 1) {
-                goto err;
-            }
-            *(bool *)vp = val;
-        } else if (type == CONF_INT8) {
-            if (val < INT8_MIN || val > UINT8_MAX) {
-                goto err;
-            }
-            *(int8_t *)vp = val;
-        } else if (type == CONF_INT16) {
-            if (val < INT16_MIN || val > UINT16_MAX) {
-                goto err;
-            }
-            *(int16_t *)vp = val;
-        } else if (type == CONF_INT32) {
-            *(int32_t *)vp = val;
-        }
-        break;
-    case CONF_INT64:
-        val64 = strtoll(val_str, &eptr, 0);
-        if (*eptr != '\0') {
-            goto err;
-        }
-        *(int64_t *)vp = val64;
-        break;
-    case CONF_STRING:
-        val = strlen(val_str);
-        if (val + 1 > maxlen) {
-            goto err;
-        }
-        strcpy(vp, val_str);
-        break;
-    default:
-        goto err;
-    }
-    return 0;
-err:
-    return OS_INVALID_PARM;
-}
-
-int
-conf_bytes_from_str(char *val_str, void *vp, int *len)
-{
-    int tmp;
-
-    if (base64_decode_len(val_str) > *len) {
-        return OS_INVALID_PARM;
-    }
-    tmp = base64_decode(val_str, vp);
-    if (tmp < 0) {
-        return OS_INVALID_PARM;
-    }
-    *len = tmp;
-    return 0;
-}
-
-char *
-conf_str_from_value(enum conf_type type, void *vp, char *buf, int buf_len)
-{
-    int32_t val;
-
-    if (type == CONF_STRING) {
-        return vp;
-    }
-    switch (type) {
-    case CONF_INT8:
-    case CONF_INT16:
-    case CONF_INT32:
-    case CONF_BOOL:
-        if (type == CONF_BOOL) {
-            val = *(bool *)vp;
-        } else if (type == CONF_INT8) {
-            val = *(int8_t *)vp;
-        } else if (type == CONF_INT16) {
-            val = *(int16_t *)vp;
-        } else {
-            val = *(int32_t *)vp;
-        }
-        snprintf(buf, buf_len, "%ld", (long)val);
-        return buf;
-    case CONF_INT64:
-        snprintf(buf, buf_len, "%lld", *(long long *)vp);
-        return buf;
-    default:
-        return NULL;
-    }
-}
-
-char *
-conf_str_from_bytes(void *vp, int vp_len, char *buf, int buf_len)
-{
-    if (BASE64_ENCODE_SIZE(vp_len) > buf_len) {
-        return NULL;
-    }
-    base64_encode(vp, vp_len, buf, 1);
-    return buf;
 }
 
 int
