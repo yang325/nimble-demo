@@ -71,10 +71,12 @@ conf_save_one(const char *name, char *value)
         return OS_INVALID_PARM;
     }
 
+    conf_lock();
+
     err = lfs_file_open(&lfs, &file, name, LFS_O_WRONLY | LFS_O_CREAT | LFS_O_APPEND);
     if (err) {
         console_printf("Can't open the file %s (err %d)\n", name, err);
-        return OS_ERROR;
+        goto out;
     }
 
     if (value) {
@@ -90,7 +92,13 @@ conf_save_one(const char *name, char *value)
     }
 
     // remember the storage is not updated until the file is closed successfully
-    lfs_file_close(&lfs, &file);
+    err = lfs_file_close(&lfs, &file);
+    if (err) {
+        console_printf("Can't close the file %s (err %d)\n", name, err);
+    }
+
+out:
+    conf_unlock();
     return (LFS_ERR_OK == err) ? OS_OK : OS_ERROR;
 }
 
@@ -99,11 +107,12 @@ conf_store_init(void)
 {
     int err;
 
+    conf_lock();
     /* Initilize flash as block device */
     err = block_device_init();
     if (err) {
         console_printf("Can't initilize the flash (err %d)\n", err);
-        return;
+        goto out;
     }
     /* Mount the filesystem */
     err = lfs_mount(&lfs, &cfg);
@@ -114,7 +123,10 @@ conf_store_init(void)
         err = lfs_mount(&lfs, &cfg);
         if (err) {
             console_printf("Something is wrong, abort it (err %d)\n", err);
-            return;
+            goto out;
         }
     }
+
+out:
+    conf_unlock();
 }
