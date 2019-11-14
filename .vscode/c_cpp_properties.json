@@ -5,11 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/include",
                 "${workspaceFolder}/bsp/include",
-                "${workspaceFolder}/config/include",
                 "${workspaceFolder}/hal/include",
                 "${workspaceFolder}/console/include",
-                "${workspaceFolder}/base64/include",
-                "${workspaceFolder}/littlefs",
                 "${workspaceFolder}/driver/inc",
                 "${workspaceFolder}/cmsis/include",
                 "${workspaceFolder}/cmsis/device",
@@ -39,7 +36,8 @@
             ],
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
             "cStandard": "c11",
-            "cppStandard": "c++14"
+            "cppStandard": "c++14",
+            "intelliSenseMode": "gcc-x64"
         }
     ],
     "version": 4

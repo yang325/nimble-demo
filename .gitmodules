@@ -4,6 +4,3 @@
 [submodule "freertos"]
 	path = freertos
 	url = https://github.com/aws/amazon-freertos.git
-[submodule "littlefs"]
-	path = littlefs
-	url = https://github.com/ARMmbed/littlefs.git
