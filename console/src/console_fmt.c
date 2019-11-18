@@ -75,6 +75,7 @@ int console_printf(const char *fmt, ...)
 void error_handler(const char *fmt, ...)
 {
     va_list args;
+    uint32_t delay;
 
     /* Disable IRQ */
     __disable_irq();
@@ -89,7 +90,8 @@ void error_handler(const char *fmt, ...)
     while(1)
     {
         led_toggle();
-        uint32_t delay = 500000;
+        /* Delay for a while */
+        delay = 500000;
         while (-- delay)
         {
             __asm("nop");
