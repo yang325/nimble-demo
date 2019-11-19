@@ -2,7 +2,7 @@
 
 #include "app.h"
 #include "bsp/bsp.h"
-
+#include "stm32f1xx_hal.h"
 #include "mesh/mesh.h"
 #include "mesh/main.h"
 #include "mesh/glue.h"
@@ -23,7 +23,7 @@ static void node_reset(void);
 
 /* Private variables ---------------------------------------------------------*/
 
-static u8_t dev_uuid[16];
+static u32_t dev_uuid[4];
 
 static struct bt_mesh_cfg_srv cfg_srv = {
   .relay = BT_MESH_RELAY_ENABLED,
@@ -73,7 +73,7 @@ static struct bt_mesh_elem elements[] = {
 };
 
 static const struct bt_mesh_prov prov = {
-  .uuid = dev_uuid,
+  .uuid = (u8_t *)dev_uuid,
   .complete = node_complete,
   .reset = node_reset,
 };
@@ -86,12 +86,11 @@ static const struct bt_mesh_comp comp = {
 
 /* Exported functions --------------------------------------------------------*/
 
-void mesh_demo_init(uint8_t uuid[16])
+void mesh_demo_init(void)
 {
   int ret;
   ble_addr_t addr;
 
-  memcpy(&dev_uuid[0], &uuid[0], 16);
   health_pub_init();
 
   /* Use NRPA */
@@ -104,6 +103,9 @@ void mesh_demo_init(uint8_t uuid[16])
                       addr.val[5], addr.val[4], addr.val[3], addr.val[2],
                       addr.val[1], addr.val[0], addr.type);
   }
+
+  HAL_GetUID(&dev_uuid[0]);
+  memcpy(&dev_uuid[3], addr.val, sizeof(u32_t));
 
   ret = ble_hs_id_set_rnd(addr.val);
   if (ret) {

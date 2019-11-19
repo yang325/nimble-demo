@@ -6,6 +6,6 @@
 
 /* Exported functions --------------------------------------------------------*/
 
-void mesh_demo_init(uint8_t uuid[16]);
+void mesh_demo_init(void);
 
 #endif
