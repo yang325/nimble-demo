@@ -80,9 +80,9 @@ freertos/freertos_kernel/tasks.c \
 freertos/freertos_kernel/timers.c \
 freertos/freertos_kernel/portable/MemMang/heap_4.c \
 freertos/freertos_kernel/portable/GCC/ARM_CM3/port.c \
+nimble/nimble/transport/uart/src/ble_hci_uart.c \
 nimble/porting/npl/freertos/src/nimble_port_freertos.c \
 nimble/porting/npl/freertos/src/npl_os_freertos.c \
-nimble/nimble/transport/uart/src/ble_hci_uart.c \
 $(NIMBLE_SRC) \
 $(TINYCRYPT_SRC)
 
