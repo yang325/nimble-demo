@@ -91,8 +91,6 @@ void mesh_demo_init(void)
   int ret;
   ble_addr_t addr;
 
-  health_pub_init();
-
   /* Use NRPA */
   ret = ble_hs_id_gen_rnd(1, &addr);
   if (ret) {
@@ -104,14 +102,16 @@ void mesh_demo_init(void)
                       addr.val[1], addr.val[0], addr.type);
   }
 
-  HAL_GetUID(&dev_uuid[0]);
-  memcpy(&dev_uuid[3], addr.val, sizeof(u32_t));
-
   ret = ble_hs_id_set_rnd(addr.val);
   if (ret) {
     console_printf("Setting random address failed (err %d)\n", ret);
     return;
   }
+
+  /* Init the mesh stack */
+  health_pub_init();
+  HAL_GetUID(&dev_uuid[0]);
+  memcpy(&dev_uuid[3], addr.val, sizeof(u32_t));
 
   ret = bt_mesh_init(addr.type, &prov, &comp);
   if (ret) {

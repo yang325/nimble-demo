@@ -20,5 +20,6 @@
         "base64.h": "c",
         "os.h": "c",
         "nimble_npl.h": "c"
-    }
+    },
+    "cmake.configureOnOpen": false
 }
