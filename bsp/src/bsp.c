@@ -9,7 +9,7 @@
 
 /* Private variables ---------------------------------------------------------*/
 
-static uint32_t on_delay, off_delay;
+static uint16_t on_delay, off_delay;
 
 /* Exported functions --------------------------------------------------------*/
 
@@ -60,7 +60,15 @@ void led_toggle(void)
 
 bool led_state(void)
 {
-  return GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
+  if (on_delay > 0) {
+    if (off_delay > 0) {
+      return GPIO_PIN_RESET == HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2);
+    } else {
+      return true;
+    }
+  } else {
+    return false;
+  }
 }
 
 void led_handler(void)
