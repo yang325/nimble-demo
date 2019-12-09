@@ -53,6 +53,7 @@
 #include "services/gatt/ble_svc_gatt.h"
 #include "host/ble_hs.h"
 #include "host/util/util.h"
+#include "mesh/glue.h"
 
 /* Private define ------------------------------------------------------------*/
 

@@ -19,7 +19,12 @@
         "ble_store_ram.h": "c",
         "base64.h": "c",
         "os.h": "c",
-        "nimble_npl.h": "c"
+        "nimble_npl.h": "c",
+        "demo.h": "c",
+        "glue.h": "c",
+        "logcfg.h": "c",
+        "modlog.h": "c",
+        "log_common.h": "c"
     },
     "cmake.configureOnOpen": false
 }
